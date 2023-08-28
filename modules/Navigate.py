@@ -1,4 +1,5 @@
 
+# ----------------- INTERNAL -----------------
 
 class _Field:
     def __init__(self,parent_dir):
@@ -198,16 +199,19 @@ class _PIG:
         self.BlackHole  = _BlackHole(self.path)
         self.FOFGroups  = _FOF(self.path)
 
-# ------------------------------------------------------------
+# -------------------- USER LEVEL-----------------------------
 
 class BaseDirectory:
-    def __init__(self,output_dir):
+    def __init__(self,output_dir:str):
+        if not isinstance(output_dir,str):raise TypeError
         self.path = output_dir
 
-    def PART(self,snap_num):
+    def PART(self,snap_num:int):
+        if not isinstance(snap_num,int):raise TypeError
         return _PART(snap_num,self.path)
 
-    def PIG(self,snap_num):
+    def PIG(self,snap_num:int):
+        if not isinstance(snap_num,int):raise TypeError
         return _PIG(snap_num,self.path)
 
 
