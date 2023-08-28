@@ -1,202 +1,202 @@
 
 
-class Field:
+class _Field:
     def __init__(self,parent_dir):
         self.fieldName  =   self.__class__.__name__     # str
         self.path   = parent_dir + "\\" + self.fieldName
 
 # --------------------------------------------
 
-class DelayTime(Field): pass
-class Density(Field): pass
-class EgyWtDensity(Field): pass
-class ElectronAbundance(Field): pass
-class Generation(Field): pass
-class GroupID(Field): pass
-class HeIIIIonized(Field): pass
-class ID(Field): pass
-class InternalEnergy(Field): pass
-class Mass(Field): pass
-class Metallicity(Field): pass
-class Metals(Field): pass
-class NeutralHydrogenFraction(Field): pass
-class Position(Field): pass
-class Potential(Field): pass
-class SmoothingLength(Field): pass
-class StarFormationRate(Field): pass
-class Velocity(Field): pass
-class BirthDensity(Field): pass
-class LastEnrichmentMyr(Field): pass
-class StarFormationTime(Field): pass
-class TotalMassReturned(Field): pass
-class BlackholeAccretionRate(Field): pass
-class BlackholeDensity(Field): pass
-class BlackholeJumpToMinPot(Field): pass
-class BlackholeKineticFdbkEnergy(Field): pass
-class BlackholeMass(Field): pass
-class BlackholeMinPotPos(Field): pass
-class BlackholeMseed(Field): pass
-class BlackholeMtrack(Field): pass
-class BlackholeProgenitors(Field): pass
-class BlackholeSwallowID(Field): pass
-class BlackholeSwallowTime(Field): pass
-class Swallowed(Field): pass
-class FirstPos(Field): pass
-class GasMetalElemMass(Field): pass
-class GasMetalMass(Field): pass
-class Imom(Field): pass
-class Jmom(Field): pass
-class LengthByType(Field): pass
-class MassByType(Field): pass
-class MassCenterPosition(Field): pass
-class MassCenterVelocity(Field): pass
-class MassHeIonized(Field): pass
-class MinID(Field): pass
-class StellarMetalElemMass(Field): pass
-class StellarMetalMass(Field): pass
+class _DelayTime(_Field): pass
+class _Density(_Field): pass
+class _EgyWtDensity(_Field): pass
+class _ElectronAbundance(_Field): pass
+class _Generation(_Field): pass
+class _GroupID(_Field): pass
+class _HeIIIIonized(_Field): pass
+class _ID(_Field): pass
+class _InternalEnergy(_Field): pass
+class _Mass(_Field): pass
+class _Metallicity(_Field): pass
+class _Metals(_Field): pass
+class _NeutralHydrogenFraction(_Field): pass
+class _Position(_Field): pass
+class _Potential(_Field): pass
+class _SmoothingLength(_Field): pass
+class _StarFormationRate(_Field): pass
+class _Velocity(_Field): pass
+class _BirthDensity(_Field): pass
+class _LastEnrichmentMyr(_Field): pass
+class _StarFormationTime(_Field): pass
+class _TotalMassReturned(_Field): pass
+class _BlackholeAccretionRate(_Field): pass
+class _BlackholeDensity(_Field): pass
+class _BlackholeJumpToMinPot(_Field): pass
+class _BlackholeKineticFdbkEnergy(_Field): pass
+class _BlackholeMass(_Field): pass
+class _BlackholeMinPotPos(_Field): pass
+class _BlackholeMseed(_Field): pass
+class _BlackholeMtrack(_Field): pass
+class _BlackholeProgenitors(_Field): pass
+class _BlackholeSwallowID(_Field): pass
+class _BlackholeSwallowTime(_Field): pass
+class _Swallowed(_Field): pass
+class _FirstPos(_Field): pass
+class _GasMetalElemMass(_Field): pass
+class _GasMetalMass(_Field): pass
+class _Imom(_Field): pass
+class _Jmom(_Field): pass
+class _LengthByType(_Field): pass
+class _MassByType(_Field): pass
+class _MassCenterPosition(_Field): pass
+class _MassCenterVelocity(_Field): pass
+class _MassHeIonized(_Field): pass
+class _MinID(_Field): pass
+class _StellarMetalElemMass(_Field): pass
+class _StellarMetalMass(_Field): pass
 
 # --------------------------------------------------------
 
-class Gas:
+class _Gas:
     def __init__(self,parent_dir):
         self.path = parent_dir + "\\0"
-        
-        self.DelayTime                   = DelayTime(self.path)
-        self.Density                     = Density(self.path)
-        self.EgyWtDensity                = EgyWtDensity(self.path)
-        self.ElectronAbundance           = ElectronAbundance(self.path)
-        self.Generation                  = Generation(self.path)
-        self.GroupID                     = GroupID(self.path)
-        self.HeIIIIonized                = HeIIIIonized(self.path)
-        self.ID                          = ID(self.path)
-        self.InternalEnergy              = InternalEnergy(self.path)
-        self.Mass                        = Mass(self.path)
-        self.Metallicity                 = Metallicity(self.path)
-        self.Metals                      = Metals(self.path)
-        self.NeutralHydrogenFraction     = NeutralHydrogenFraction(self.path)
-        self.Position                    = Position(self.path)
-        self.Potential                   = Potential(self.path)
-        self.SmoothingLength             = SmoothingLength(self.path)
-        self.StarFormationRate           = StarFormationRate(self.path)
-        self.Velocity                    = Velocity(self.path)
 
-class DarkMatter:
+        self.DelayTime                   = _DelayTime(self.path)
+        self.Density                     = _Density(self.path)
+        self.EgyWtDensity                = _EgyWtDensity(self.path)
+        self.ElectronAbundance           = _ElectronAbundance(self.path)
+        self.Generation                  = _Generation(self.path)
+        self.GroupID                     = _GroupID(self.path)
+        self.HeIIIIonized                = _HeIIIIonized(self.path)
+        self.ID                          = _ID(self.path)
+        self.InternalEnergy              = _InternalEnergy(self.path)
+        self.Mass                        = _Mass(self.path)
+        self.Metallicity                 = _Metallicity(self.path)
+        self.Metals                      = _Metals(self.path)
+        self.NeutralHydrogenFraction     = _NeutralHydrogenFraction(self.path)
+        self.Position                    = _Position(self.path)
+        self.Potential                   = _Potential(self.path)
+        self.SmoothingLength             = _SmoothingLength(self.path)
+        self.StarFormationRate           = _StarFormationRate(self.path)
+        self.Velocity                    = _Velocity(self.path)
+
+class _DarkMatter:
     def __init__(self,parent_dir):
         self.path = parent_dir + "\\1"
 
-        self.GroupID                     = GroupID(self.path)
-        self.ID                          = ID(self.path)
-        self.Mass                        = Mass(self.path)
-        self.Position                    = Position(self.path)
-        self.Potential                   = Potential(self.path)
-        self.Velocity                    = Velocity(self.path)
+        self.GroupID                     = _GroupID(self.path)
+        self.ID                          = _ID(self.path)
+        self.Mass                        = _Mass(self.path)
+        self.Position                    = _Position(self.path)
+        self.Potential                   = _Potential(self.path)
+        self.Velocity                    = _Velocity(self.path)
 
-class Neutrino:
+class _Neutrino:
     def __init__(self,parent_dir):
         self.path = parent_dir + "\\2"
 
-        self.GroupID                     = GroupID(self.path)
-        self.ID                          = ID(self.path)
-        self.Mass                        = Mass(self.path)
-        self.Position                    = Position(self.path)
-        self.Potential                   = Potential(self.path)
-        self.Velocity                    = Velocity(self.path)
+        self.GroupID                     = _GroupID(self.path)
+        self.ID                          = _ID(self.path)
+        self.Mass                        = _Mass(self.path)
+        self.Position                    = _Position(self.path)
+        self.Potential                   = _Potential(self.path)
+        self.Velocity                    = _Velocity(self.path)
 
-class Star:
+class _Star:
     def __init__(self,parent_dir):
         self.path = parent_dir + "\\4"
 
-        self.BirthDensity                = BirthDensity(self.path)
-        self.Generation                  = Generation(self.path)
-        self.GroupID                     = GroupID(self.path)
-        self.ID                          = ID(self.path)
-        self.LastEnrichmentMyr           = LastEnrichmentMyr(self.path)
-        self.Mass                        = Mass(self.path)
-        self.Metallicity                 = Metallicity(self.path)
-        self.Metals                      = Metals(self.path)
-        self.Position                    = Position(self.path)
-        self.Potential                   = Potential(self.path)
-        self.SmoothingLength             = SmoothingLength(self.path)
-        self.StarFormationTime           = StarFormationTime(self.path)
-        self.TotalMassReturned           = TotalMassReturned(self.path)
-        self.Velocity                    = Velocity(self.path)
+        self.BirthDensity                = _BirthDensity(self.path)
+        self.Generation                  = _Generation(self.path)
+        self.GroupID                     = _GroupID(self.path)
+        self.ID                          = _ID(self.path)
+        self.LastEnrichmentMyr           = _LastEnrichmentMyr(self.path)
+        self.Mass                        = _Mass(self.path)
+        self.Metallicity                 = _Metallicity(self.path)
+        self.Metals                      = _Metals(self.path)
+        self.Position                    = _Position(self.path)
+        self.Potential                   = _Potential(self.path)
+        self.SmoothingLength             = _SmoothingLength(self.path)
+        self.StarFormationTime           = _StarFormationTime(self.path)
+        self.TotalMassReturned           = _TotalMassReturned(self.path)
+        self.Velocity                    = _Velocity(self.path)
 
-class BlackHole:
+class _BlackHole:
     def __init__(self,parent_dir):
         self.path = parent_dir + "\\5"
 
-        self.BlackholeAccretionRate      = BlackholeAccretionRate(self.path)
-        self.BlackholeDensity            = BlackholeDensity(self.path)
-        self.BlackholeJumpToMinPot       = BlackholeJumpToMinPot(self.path)
-        self.BlackholeKineticFdbkEnergy  = BlackholeKineticFdbkEnergy(self.path)
-        self.BlackholeMass               = BlackholeMass(self.path)
-        self.BlackholeMinPotPos          = BlackholeMinPotPos(self.path)
-        self.BlackholeMseed              = BlackholeMseed(self.path)
-        self.BlackholeMtrack             = BlackholeMtrack(self.path)
-        self.BlackholeProgenitors        = BlackholeProgenitors(self.path)
-        self.BlackholeSwallowID          = BlackholeSwallowID(self.path)
-        self.BlackholeSwallowTime        = BlackholeSwallowTime(self.path)
-        self.Generation                  = Generation(self.path)
-        self.GroupID                     = GroupID(self.path)
-        self.ID                          = ID(self.path)
-        self.Mass                        = Mass(self.path)
-        self.Position                    = Position(self.path)
-        self.Potential                   = Potential(self.path)
-        self.SmoothingLength             = SmoothingLength(self.path)
-        self.StarFormationTime           = StarFormationTime(self.path)
-        self.Swallowed                   = Swallowed(self.path)
-        self.Velocity                    = Velocity(self.path)
+        self.BlackholeAccretionRate      = _BlackholeAccretionRate(self.path)
+        self.BlackholeDensity            = _BlackholeDensity(self.path)
+        self.BlackholeJumpToMinPot       = _BlackholeJumpToMinPot(self.path)
+        self.BlackholeKineticFdbkEnergy  = _BlackholeKineticFdbkEnergy(self.path)
+        self.BlackholeMass               = _BlackholeMass(self.path)
+        self.BlackholeMinPotPos          = _BlackholeMinPotPos(self.path)
+        self.BlackholeMseed              = _BlackholeMseed(self.path)
+        self.BlackholeMtrack             = _BlackholeMtrack(self.path)
+        self.BlackholeProgenitors        = _BlackholeProgenitors(self.path)
+        self.BlackholeSwallowID          = _BlackholeSwallowID(self.path)
+        self.BlackholeSwallowTime        = _BlackholeSwallowTime(self.path)
+        self.Generation                  = _Generation(self.path)
+        self.GroupID                     = _GroupID(self.path)
+        self.ID                          = _ID(self.path)
+        self.Mass                        = _Mass(self.path)
+        self.Position                    = _Position(self.path)
+        self.Potential                   = _Potential(self.path)
+        self.SmoothingLength             = _SmoothingLength(self.path)
+        self.StarFormationTime           = _StarFormationTime(self.path)
+        self.Swallowed                   = _Swallowed(self.path)
+        self.Velocity                    = _Velocity(self.path)
 
 
 # -------------------------------------------------------
 
-class FOF:
+class _FOF:
     def __init__(self,parent_dir):
         self.path = parent_dir + "\\FOFGroups"
 
-        self.BlackholeAccretionRate      = BlackholeAccretionRate(self.path)
-        self.BlackholeMass               = BlackholeMass(self.path)
-        self.FirstPos                    = FirstPos(self.path)
-        self.GasMetalElemMass            = GasMetalElemMass(self.path)
-        self.GasMetalMass                = GasMetalMass(self.path)
-        self.GroupID                     = GroupID(self.path)
-        self.Imom                        = Imom(self.path)
-        self.Jmom                        = Jmom(self.path)
-        self.LengthByType                = LengthByType(self.path)
-        self.Mass                        = Mass(self.path)
-        self.MassByType                  = MassByType(self.path)
-        self.MassCenterPosition          = MassCenterPosition(self.path)
-        self.MassCenterVelocity          = MassCenterVelocity(self.path)
-        self.MassHeIonized               = MassHeIonized(self.path)
-        self.MinID                       = MinID(self.path)
-        self.StarFormationRate           = StarFormationRate(self.path)
-        self.StellarMetalElemMass        = StellarMetalElemMass(self.path)
-        self.StellarMetalMass            = StellarMetalMass(self.path)
+        self.BlackholeAccretionRate      = _BlackholeAccretionRate(self.path)
+        self.BlackholeMass               = _BlackholeMass(self.path)
+        self.FirstPos                    = _FirstPos(self.path)
+        self.GasMetalElemMass            = _GasMetalElemMass(self.path)
+        self.GasMetalMass                = _GasMetalMass(self.path)
+        self.GroupID                     = _GroupID(self.path)
+        self.Imom                        = _Imom(self.path)
+        self.Jmom                        = _Jmom(self.path)
+        self.LengthByType                = _LengthByType(self.path)
+        self.Mass                        = _Mass(self.path)
+        self.MassByType                  = _MassByType(self.path)
+        self.MassCenterPosition          = _MassCenterPosition(self.path)
+        self.MassCenterVelocity          = _MassCenterVelocity(self.path)
+        self.MassHeIonized               = _MassHeIonized(self.path)
+        self.MinID                       = _MinID(self.path)
+        self.StarFormationRate           = _StarFormationRate(self.path)
+        self.StellarMetalElemMass        = _StellarMetalElemMass(self.path)
+        self.StellarMetalMass            = _StellarMetalMass(self.path)
 
 # --------------------------------------------------------
 
-class PART:
+class _PART:
     def __init__(self,snap_num,base_dir):
         snap_num_fix='{:03}'.format(snap_num)
         self.path       = base_dir + "\\" + "PART_" + snap_num_fix
 
-        self.Gas        = Gas(self.path)
-        self.DarkMatter = DarkMatter(self.path)
-        self.Neutrino   = Neutrino(self.path)
-        self.Star       = Star(self.path)
-        self.BlackHole  = BlackHole(self.path)
+        self.Gas        = _Gas(self.path)
+        self.DarkMatter = _DarkMatter(self.path)
+        self.Neutrino   = _Neutrino(self.path)
+        self.Star       = _Star(self.path)
+        self.BlackHole  = _BlackHole(self.path)
 
-class PIG:
+class _PIG:
     def __init__(self,snap_num,base_dir):
         snap_num_fix='{:03}'.format(snap_num)
         self.path       = base_dir + "\\" + "PIG_" + snap_num_fix
 
-        self.Gas        = Gas(self.path)
-        self.DarkMatter = DarkMatter(self.path)
-        self.Neutrino   = Neutrino(self.path)
-        self.Star       = Star(self.path)
-        self.BlackHole  = BlackHole(self.path)
-        self.FOFGroups  = FOF(self.path)
+        self.Gas        = _Gas(self.path)
+        self.DarkMatter = _DarkMatter(self.path)
+        self.Neutrino   = _Neutrino(self.path)
+        self.Star       = _Star(self.path)
+        self.BlackHole  = _BlackHole(self.path)
+        self.FOFGroups  = _FOF(self.path)
 
 # ------------------------------------------------------------
 
@@ -205,10 +205,10 @@ class BaseDirectory:
         self.path = output_dir
 
     def PART(self,snap_num):
-        return PART(snap_num,self.path)
+        return _PART(snap_num,self.path)
 
     def PIG(self,snap_num):
-        return PIG(snap_num,self.path)
+        return _PIG(snap_num,self.path)
 
 
 
