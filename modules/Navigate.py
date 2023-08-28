@@ -2,7 +2,7 @@
 
 class _Field:
     def __init__(self,parent_dir):
-        self.fieldName  =   self.__class__.__name__     # str
+        self.fieldName  =   self.__class__.__name__.split("_")[-1]     # str
         self.path   = parent_dir + "\\" + self.fieldName
 
 # --------------------------------------------
