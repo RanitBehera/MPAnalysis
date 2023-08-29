@@ -30,7 +30,7 @@ class ReadHeader:
 # ------------------------ SNAPSHOT
 from pathlib import Path        # For PART and PIG folder size
 
-class Snapshot:
+class ReadSnapshot:
     def __init__(self,base_dir,snapshot_file="Snapshots.txt"):
         # Always make working base directory field
         self.BaseDirectory=base_dir
