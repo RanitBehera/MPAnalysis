@@ -137,7 +137,8 @@ def ReadField(field:_Field):
     data=np.zeros(head.dataLength*head.memberLength)
         
     for i in range(0,head.fileLength):
-        filename='{:06}'.format(i)
+        # filename='{:06}'.format(i)
+        filename=("{:x}".format(i)).capitalize().rjust(6,'0')
         filepath=field.path+"\\"+filename
         with open (filepath, mode='rb') as file:   # b is important -> binary
             fileContent = file.read ()
