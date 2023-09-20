@@ -123,46 +123,24 @@ def ReadField(field:_Field):
 
     # Extract Header information
     head=ReadHeader(field)
-    def ConvertChar(mpchar):
-        if mpchar=='f4':return 'f'          # float
-        elif mpchar=='f8':return 'd'        # double
-        elif mpchar=='u8':return 'Q'        # unsigned long int
-        elif mpchar=='u4':return 'I'        # unsigned int
-        # elif mpchar=='u1':return 'I'        # 
-        # elif mpchar=='i4':return 'I'        # 
-    char=ConvertChar(head.dataTypeString)                  # data type character for struct
+    type_map={'f4':np.float32,'f8':np.float64,'u8':np.uint64,'u4':np.uint32,'u1':np.uint8,'i4':None}        
 
     # Extract Data
     # Can be optimsed to read only relavant files if array range is specified
-    data=np.zeros(head.dataLength*head.memberLength)
-        
+    data=np.zeros(head.dataLength*head.memberLength,type_map[head.dataTypeString])
     for i in range(0,head.fileLength):
         # filename='{:06}'.format(i)
         filename=("{:x}".format(i)).capitalize().rjust(6,'0')
         filepath=field.path+"\\"+filename
         with open (filepath, mode='rb') as file:   # b is important -> binary
-            fileContent = file.read ()
-            # data = unpack ("f", fileContent [0:4])
-            filedata=np.array([x[0] for x in iter_unpack (char, fileContent)])
-            # fill current file data
             fill_start_index = sum(head.dataLengthPerFile[0:i])   * head.memberLength
             fill_end_index   = sum(head.dataLengthPerFile[0:i+1]) * head.memberLength
-            data[fill_start_index:fill_end_index]=filedata
-    
+            data[fill_start_index:fill_end_index]=np.fromfile(file,type_map[head.dataTypeString])
+
+    # Reshape
     if head.memberLength>1:data=data.reshape(head.dataLength,head.memberLength)
 
-    # Convert to integer if needed
-    intlist=['u4','u8']
-    if head.dataTypeString in intlist:
-        data=np.array([int(d) for d in data])
-
     return data
-
-
-
-
-
-
 
 
 

@@ -1,3 +1,4 @@
+from typing import Any
 import numpy as np
 import sys
 import os
@@ -12,9 +13,11 @@ class _Field:
         # Knowling field name is required to take different actions based on field under same name
         self.fieldName  =   self.__class__.__name__.split("_")[-1]     # str
         self.path   = parent_dir + "\\" + self.fieldName
+        # self.value  = None
 
-    def __str__(self):
-        return np.str(mp.ReadField(self))
+    # def __str__(self):
+        # return np.str(mp.ReadField(self))
+    
 
 # --------------------------------------------
 
