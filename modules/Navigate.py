@@ -1,10 +1,20 @@
+import numpy as np
+import sys
+import os
+
+sys.path.append(os.getcwd())
+import modules as mp
 
 # ----------------- INTERNAL -----------------
 
 class _Field:
     def __init__(self,parent_dir):
+        # Knowling field name is required to take different actions based on field under same name
         self.fieldName  =   self.__class__.__name__.split("_")[-1]     # str
         self.path   = parent_dir + "\\" + self.fieldName
+
+    def __str__(self):
+        return np.str(mp.ReadField(self))
 
 # --------------------------------------------
 
