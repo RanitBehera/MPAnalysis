@@ -70,10 +70,12 @@ def PlotBox(ax,L,x,y,z,s,color='k',fids=None,fcolor='r'):
         return fgid_1d,fcid_1d
                 
 
-    fgid,fcid=ValidateFidColorArray()
-    clr[fgid]=fcid    
+    
+    if not fids==None: 
+        fgid,fcid=ValidateFidColorArray()    
+        clr[fgid]=fcid    
         
-
+    
     #------------------------------------------------------------
     ax.scatter(x,y,z,s=s,color=clr,ec='none')
     #------------------------------------------------------------
