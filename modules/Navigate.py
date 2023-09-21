@@ -62,7 +62,16 @@ class _Imom(_Field): pass
 class _Jmom(_Field): pass
 class _LengthByType(_Field): pass
 class _MassByType(_Field): pass
-class _MassCenterPosition(_Field): pass
+class _MassCenterPosition(_Field):
+    def showInCube(self):
+        pos=self.ReadValues()
+        x,y,z=np.transpose(pos)
+        m=_Mass(self.parentpath).ReadValues()
+        fig = plt.figure()
+        ax = plt.axes(projection='3d')
+        mp.PlotBox(ax,10000,x,y,z,10*m**(1/3),fids=[[1,2,3],[4,5],[6,7]],fcolor=['r','g','b'])
+        plt.show()
+
 class _MassCenterVelocity(_Field): pass
 class _MassHeIonized(_Field): pass
 class _MinID(_Field): pass

@@ -1,43 +1,78 @@
 import numpy as np
+from matplotlib.colors import is_color_like
 
 #Box
 # ax            : handle of plot
 # x,y,z         : position of points 
 # L             : size of box
 # s             : size of points
-# f             : loc of size to focus, takes value from 0-1, mapped to min(size)-max(size)
-# df            : span of size to focus
-def PlotBox(ax,L,x,y,z,s,f=0.5,df=0,color='k',fcolor='r',ftype='focus'):
+
+def PlotBox(ax,L,x,y,z,s,color='k',fids=None,fcolor='r'):
     # Validation
     if L==0:raise Exception("ERROR : Box Size=0.")
     for si in s:
         if si==0: raise Exception("ERROR : Size zero point detected.")
-    if f<0:f=0
-    if f>1:f=1
 
-    # Points to focus maspping
-    # if df>0:
-    #     s_max=max(s)
-    #     s_min=min(s)
-    #     s_span=s_max-s_min
-    #     s_loc=s_min   + ( f        *s_span)
-    #     s_loc_l=s_min + ((f - df/2)*s_span)
-    #     s_loc_u=s_min + ((f + df/2)*s_span)
-    #     # Color assignment
-    #     clr=['' for i in range(0,len(x))]
-    #     for i in range(0,len(x)):
-    #         if ((s[i]>s_loc_l) and (s[i]<s_loc_u)):
-    #             clr[i]=fcolor
-    #         else:
-    #             clr[i]=color
-    # else: clr=color
+    
 
-    clr=[color for i in range(0,len(x))]
-    try:
-        clr[0]=fcolor
-    except:
-        pass
+    clr=np.array([color for i in range(0,len(x))],dtype=object)
 
+    # Validate Fids Array
+    
+
+    # Validate Color
+
+    def ValidateFidColorArray():
+        # for each list in fids one correponding valid color in fcolors
+        # so fids must be at max 2d array
+        # fcolors must be at max 1d array
+
+        fgid_1d=np.array([],dtype=int)
+        fcid_1d=np.array([],dtype=object)       # change to rgb tuple append
+
+        if fids==None:return
+
+        if not type(fids) in [int,list,np.ndarray]:
+            raise Exception("ERROR : fids must be of type between int,list or numpy array")
+        
+        if type(fids)==int:
+            if not is_color_like(fcolor):
+                raise Exception("ERROR : fcolor must be a valid color.")
+            else:
+                fgid_1d=np.append(fgid_1d,fids)
+                fcid_1d=np.append(fcid_1d,fcolor)   # change to rgb tuple append
+            return
+        
+        if type(fids) in [list,np.ndarray]:
+            if not len(fids)==len(fcolor): raise Exception("ERROR : Length of fids and fcolors must be same")
+            for c in fcolor:
+                if not is_color_like(c): raise Exception("ERROR : Elements of fcolors must be a valid color")
+
+            for i in range(len(fids)):
+                lv1_elm=fids[i] 
+                if not type(lv1_elm) in [int,list,np.ndarray]:
+                    raise Exception("ERROR : Level 1 Elements of fids must be int,list or numpy array")
+                
+                if type(lv1_elm)==int:
+                        fgid_1d=np.append(fgid_1d,lv1_elm)
+                        fcid_1d=np.append(fcid_1d,fcolor[i])# change to rgb tuple append
+                        continue
+
+                if type(lv1_elm) in [list,np.ndarray]:
+                    for lv2_elm in lv1_elm:
+                        if not type(lv2_elm)==int:
+                            raise Exception("ERROR : Level 2 Elements of fids must be int")
+                    
+                carray=[fcolor[i] for e in lv1_elm]
+                fgid_1d=np.append(fgid_1d,np.array(lv1_elm))
+                fcid_1d=np.append(fcid_1d,np.array(carray)) # change to rgb tuple append
+
+        return fgid_1d,fcid_1d
+                
+
+    fgid,fcid=ValidateFidColorArray()
+    clr[fgid]=fcid    
+        
 
     #------------------------------------------------------------
     ax.scatter(x,y,z,s=s,color=clr,ec='none')
