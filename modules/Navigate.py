@@ -1,8 +1,9 @@
-from typing import Any
+# from typing import Any
 import numpy as np
+import matplotlib.pyplot as plt
+
 import sys
 import os
-
 sys.path.append(os.getcwd())
 import modules as mp
 
@@ -12,15 +13,14 @@ class _Field:
     def __init__(self,parent_dir):
         # Knowling field name is required to take different actions based on field under same name
         self.fieldName  =   self.__class__.__name__.split("_")[-1]     # str
-        self.path   = parent_dir + "\\" + self.fieldName
+        self.path       = parent_dir + os.sep + self.fieldName
+        self.parentpath = parent_dir
         # self.value  = None
 
-    # def __str__(self):
-        # return np.str(mp.ReadField(self))
+    def ReadValues(self):
+        return mp.ReadField(self)
     
-
-# --------------------------------------------
-
+#---------------------------------------------
 class _DelayTime(_Field): pass
 class _Density(_Field): pass
 class _EgyWtDensity(_Field): pass
@@ -73,7 +73,8 @@ class _StellarMetalMass(_Field): pass
 
 class _Gas:
     def __init__(self,parent_dir):
-        self.path = parent_dir + "\\0"
+        self.path = parent_dir + os.sep + "0"
+        self.parentpath = parent_dir
 
         self.DelayTime                   = _DelayTime(self.path)
         self.Density                     = _Density(self.path)
@@ -96,7 +97,8 @@ class _Gas:
 
 class _DarkMatter:
     def __init__(self,parent_dir):
-        self.path = parent_dir + "\\1"
+        self.path = parent_dir + os.sep + "1"
+        self.parentpath = parent_dir
 
         self.GroupID                     = _GroupID(self.path)
         self.ID                          = _ID(self.path)
@@ -107,7 +109,8 @@ class _DarkMatter:
 
 class _Neutrino:
     def __init__(self,parent_dir):
-        self.path = parent_dir + "\\2"
+        self.path = parent_dir + os.sep + "2"
+        self.parentpath = parent_dir
 
         self.GroupID                     = _GroupID(self.path)
         self.ID                          = _ID(self.path)
@@ -118,7 +121,8 @@ class _Neutrino:
 
 class _Star:
     def __init__(self,parent_dir):
-        self.path = parent_dir + "\\4"
+        self.path = parent_dir + os.sep + "4"
+        self.parentpath = parent_dir
 
         self.BirthDensity                = _BirthDensity(self.path)
         self.Generation                  = _Generation(self.path)
@@ -137,7 +141,8 @@ class _Star:
 
 class _BlackHole:
     def __init__(self,parent_dir):
-        self.path = parent_dir + "\\5"
+        self.path = parent_dir + os.sep + "5"
+        self.parentpath = parent_dir
 
         self.BlackholeAccretionRate      = _BlackholeAccretionRate(self.path)
         self.BlackholeDensity            = _BlackholeDensity(self.path)
@@ -166,7 +171,8 @@ class _BlackHole:
 
 class _FOF:
     def __init__(self,parent_dir):
-        self.path = parent_dir + "\\FOFGroups"
+        self.path = parent_dir + os.sep + "FOFGroups"
+        self.parentpath = parent_dir
 
         self.BlackholeAccretionRate      = _BlackholeAccretionRate(self.path)
         self.BlackholeMass               = _BlackholeMass(self.path)
@@ -192,7 +198,8 @@ class _FOF:
 class _PART:
     def __init__(self,snap_num,base_dir):
         snap_num_fix='{:03}'.format(snap_num)
-        self.path       = base_dir + "\\" + "PART_" + snap_num_fix
+        self.path       = base_dir + os.sep + "PART_" + snap_num_fix
+        self.parentpath = base_dir
 
         self.Gas        = _Gas(self.path)
         self.DarkMatter = _DarkMatter(self.path)
@@ -203,7 +210,8 @@ class _PART:
 class _PIG:
     def __init__(self,snap_num,base_dir):
         snap_num_fix='{:03}'.format(snap_num)
-        self.path       = base_dir + "\\" + "PIG_" + snap_num_fix
+        self.path       = base_dir + os.sep + "PIG_" + snap_num_fix
+        self.parentpath = base_dir
 
         self.Gas        = _Gas(self.path)
         self.DarkMatter = _DarkMatter(self.path)
