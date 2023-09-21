@@ -5,25 +5,19 @@ sys.path.append(os.getcwd())
 import numpy as np
 import modules as mp
 
+def GetSiblingSnapshots(basedir:mp.BaseDirectory,fgid):
+    sibs=[d for d in os.listdir(basedir.path) if os.path.isdir(os.path.join(basedir.path,d))]
+    return np.array([int(d.split("PIG_")[-1]) for d in sibs if 'PIG_' in d])
 
-class HaloIDChain:
-    def __init__(self,basedir,sid,gid):
-        self.basedir=basedir
-        self.sid=sid
-        self.gid=gid
-        self._CreateChain()
+def GetStarsInGroup(basedir:mp.BaseDirectory,sid,fgid):
+    id_stars=mp.ReadField(basedir.PIG(sid).Star.ID)
+    gid_stars=mp.ReadField(basedir.PIG(sid).Star.GroupID)
+    return id_stars[np.where(gid_stars==fgid)]   #fid_stars
 
-    def _CreateChain(self):
-        # find sibling snapshot numbers
-        sibs=[d for d in os.listdir(self.basedir.path) if os.path.isdir(os.path.join(self.basedir.path,d))]
-        sibs=[int(d.split("PIG_")[-1]) for d in sibs if 'PIG_' in d]
-        
-        # get all stars in given halo
-        stars_id=mp.ReadField(self.basedir.PIG(17).Star.ID)
-        stars_gid=mp.ReadField(self.basedir.PIG(17).Star.GroupID)
-        fids=np.where(stars_gid==self.gid)
-        stars_fid=stars_id[fids]
-        
-        # for each sibling get all the star ids with group ids gid
-        # for sib in sibs:
-        print(stars_fid)
+def GetOverlapingStars(basedir:mp.BaseDirectory,sid1,fgid1,sid2,fgid2):
+    fid_stars1=GetStarsInGroup(basedir,sid1,fgid1)
+    fid_stars2=GetStarsInGroup(basedir,sid2,fgid2)
+    return np.intersect1d(fid_stars1,fid_stars2) #cid_stars
+
+def GetNearbyHalos():
+    pass

@@ -28,16 +28,15 @@ op=mp.BaseDirectory(r"d:\Ubuntu Back\Desktop\Sim\hydro\std_hydro\seed_181170\fg1
 #     plt.savefig(r"D:\\frm\\fr"+str(i)+".png",dpi=300)
 #     print(i)
 
-# print(op.PIG(17).FOFGroups.MassCenterPosition)
+
 
 # gid=mp.ReadField(op.PIG(17).FOFGroups.GroupID)
-
-stars=mp.ReadField(op.PIG(17).Star.ID)
-
-
-
-print(stars)
-print(len(stars),len(np.unique(stars)))
+# stars=mp.ReadField(op.PIG(17).Star.ID)
 
 # a=mp.HaloIDChain(op,17,1)
-# print(a.sib)
+
+
+# a=mp.GetStarsInGroup(op,17,1)
+
+
+
