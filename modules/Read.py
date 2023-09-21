@@ -1,6 +1,6 @@
 
 import numpy as np
-
+import os
 # -------------------------------- HEADER
 from .Navigate import _Field
 
@@ -9,7 +9,7 @@ class ReadHeader:
         if not isinstance(field,_Field):raise TypeError
 
         # Always make working base directory field
-        self.path=field.path + "\\" + "header"
+        self.path=field.path + os.sep + "header"
 
         # Read file
         with open(self.path) as f:
@@ -36,7 +36,7 @@ class ReadSnapshot:
     def __init__(self,base_dir,snapshot_file="Snapshots.txt"):
         # Always make working base directory field
         self.BaseDirectory=base_dir
-        self.Path=base_dir + "\\" + snapshot_file
+        self.Path=base_dir + os.sep + snapshot_file
         # Read file
         f=open(self.Path)
         text=f.readlines()
@@ -108,15 +108,14 @@ class ReadSnapshot:
         self.DiscSizePIGs  = np.zeros(self.SnapshotLength,dtype=int)
         for i in range(0,self.SnapshotLength):
             snap_num_fix='{:03}'.format(i)
-            dir_part=self.BaseDirectory + "\\" + "PART_"+snap_num_fix
-            dir_pig=self.BaseDirectory + "\\" + "PIG_"+snap_num_fix
+            dir_part=self.BaseDirectory + os.sep + "PART_"+snap_num_fix
+            dir_pig=self.BaseDirectory + os.sep + "PIG_"+snap_num_fix
             self.DiscSizePARTs[i] = sum(file.stat().st_size for file in Path(dir_part).rglob('*'))
             self.DiscSizePIGs[i]  = sum(file.stat().st_size for file in Path(dir_pig).rglob('*'))
 
 
 
 # --------------------------------- BINARY DATA
-from struct import iter_unpack
 
 def ReadField(field:_Field):
     if not isinstance(field,_Field):raise TypeError
@@ -131,7 +130,7 @@ def ReadField(field:_Field):
     for i in range(0,head.fileLength):
         # filename='{:06}'.format(i)
         filename=("{:x}".format(i)).capitalize().rjust(6,'0')
-        filepath=field.path+"\\"+filename
+        filepath=field.path + os.sep + filename
         with open (filepath, mode='rb') as file:   # b is important -> binary
             fill_start_index = sum(head.dataLengthPerFile[0:i])   * head.memberLength
             fill_end_index   = sum(head.dataLengthPerFile[0:i+1]) * head.memberLength
