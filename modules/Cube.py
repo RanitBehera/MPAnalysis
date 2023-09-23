@@ -10,9 +10,12 @@ from matplotlib.colors import is_color_like
 def PlotBox(ax,L,x,y,z,s,color='k',fids=None,fcolor='r'):
     # Validation
     if L==0:raise Exception("ERROR : Box Size=0.")
-    for si in s:
-        if si==0: raise Exception("ERROR : Size zero point detected.")
 
+    try: # accepts [1] not 1. dirty fix 
+        for si in s:
+            if si==0: raise Exception("ERROR : Size zero point detected.")
+    except:
+        pass
     
 
     clr=np.array([color for i in range(0,len(x))],dtype=object)
@@ -44,6 +47,7 @@ def PlotBox(ax,L,x,y,z,s,color='k',fids=None,fcolor='r'):
             return
         
         if type(fids) in [list,np.ndarray]:
+            # print(len(fids),len(fcolor))
             if not len(fids)==len(fcolor): raise Exception("ERROR : Length of fids and fcolors must be same")
             for c in fcolor:
                 if not is_color_like(c): raise Exception("ERROR : Elements of fcolors must be a valid color")
@@ -67,18 +71,21 @@ def PlotBox(ax,L,x,y,z,s,color='k',fids=None,fcolor='r'):
                 fgid_1d=np.append(fgid_1d,np.array(lv1_elm))
                 fcid_1d=np.append(fcid_1d,np.array(carray)) # change to rgb tuple append
 
-        return fgid_1d,fcid_1d
+        return [fgid_1d,fcid_1d]
                 
 
-    
-    if not fids==None: 
-        fgid,fcid=ValidateFidColorArray()    
-        clr[fgid]=fcid    
-        
-    
-    #------------------------------------------------------------
-    ax.scatter(x,y,z,s=s,color=clr,ec='none')
-    #------------------------------------------------------------
+    try:
+        if not fids==None: # Issue when no halo in the begginning
+            fgid,fcid=ValidateFidColorArray()
+            clr[fgid]=fcid    
+            # for i in range(len(fgid)):
+            #     clr[fgid[i]]=fcid[i] 
+        #------------------------------------------------------------
+        ax.scatter(x,y,z,s=s,color=clr,ec='none')
+        #------------------------------------------------------------
+    except:
+        print("passed")
+        pass
     # Limit Range
     ax.set_xlim(0,L)
     ax.set_ylim(0,L)

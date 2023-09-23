@@ -8,35 +8,39 @@ import matplotlib.pyplot as plt
 op=mp.BaseDirectory(r"d:\Ubuntu Back\Desktop\Sim\hydro\std_hydro\seed_181170\fg11\output")
 # op=mp.BaseDirectory(r"D:\Ubuntu Back\Desktop\Sim_640")
 
-## Out - 0
+# ## Out - 0
 # for i in range(18):
-#     g=op.PIG(i).FOFGroups
-#     gc=mp.ReadField(g.MassCenterPosition)
-#     mass=mp.ReadField(g.Mass)
-
-#     x=gc[:,0]
-#     y=gc[:,1]
-#     z=gc[:,2]
-
-#     # print(x)
-
-#     fig=plt.figure()
-#     ax = plt.axes(projection='3d')
-
-#     mp.PlotBox(ax,10000,x,y,z,10*(mass**(1/2)))
-
+#     ax=op.PIG(i).FOFGroups.MassCenterPosition.showInCube([0],['r'])
 #     plt.savefig(r"D:\\frm\\fr"+str(i)+".png",dpi=300)
 #     print(i)
 
 
+## Out - 0
+focus=0
+# chain=mp.GetChain(op,17,focus+1)
+chain=[[4],[9],[4],[6],[17],[2],[0],[0],[0],[0],[0],[0]]
+for i in range(6,18):
+    print(i)
+    # print(type(chain[i]))
+    # if not chain[i]==nan:
+    #     c=[int(chain[i])]
+    #     print(c)
 
-# gid=mp.ReadField(op.PIG(17).FOFGroups.GroupID)
-# stars=mp.ReadField(op.PIG(17).Star.ID)
-
-# a=mp.HaloIDChain(op,17,1)
-
-
-# a=mp.GetStarsInGroup(op,17,1)
+    ax=op.PIG(i).FOFGroups.MassCenterPosition.showInCube(chain[i-6],['r'])
+    plt.savefig(r"D:\\frm\\fr"+str(i)+".png",dpi=300)
 
 
 
+
+# #5.0
+# 10.0
+# 5.0
+# 7.0
+# 18.0
+# 3.0
+# 1.0
+# 1.0
+# 1.0
+# 1.0
+# 1.0
+# 1.0
