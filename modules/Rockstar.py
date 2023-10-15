@@ -21,7 +21,7 @@ def OutputRockstarHDF5(snap:_PART,filepath:str,include_gas:bool,include_dm:bool,
         head.attrs["BoxSize"]=attr.BoxSize # Rockstar accepts in Mpc/h, Might get handelled via Length conversion
 
         head.attrs["NumPart_ThisFile"]=attr.TotNumPart
-        head.attrs["NumPart_Total"]=attr.TotNumPart
+        head.attrs["NumPart_Total"]=attr.TotNumPartInit
         head.attrs["NumPart_Total_HighWord"]=[0,0,0,0,0,0]
         head.attrs["MassTable"]=attr.MassTable
 
