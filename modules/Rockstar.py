@@ -44,7 +44,7 @@ def OutputRockstarHDF5(snap:_PART,filepath:str,include_gas:bool,include_dm:bool,
             star.create_dataset("Velocities",data=snap.Star.Velocity.ReadValues())
 
         if include_bh:
-            bh=hdf5.create_group("PartType4")
+            bh=hdf5.create_group("PartType5")
             bh.create_dataset("ParticleIDs",data=snap.Star.ID.ReadValues())
             bh.create_dataset("Coordinates",data=snap.Star.Position.ReadValues())
             bh.create_dataset("Velocities",data=snap.Star.Velocity.ReadValues())
