@@ -2,7 +2,7 @@
 import numpy as np
 import os
 # -------------------------------- HEADER
-from .Navigate import _Field
+from .Navigate import _Field, _PART, _PIG
 
 class ReadHeader:
     def __init__(self,field:_Field):
@@ -27,6 +27,64 @@ class ReadHeader:
             self.dataLengthPerFile[i-3]=int(lines[i].split(":")[1])
 
         self.dataLength=sum(self.dataLengthPerFile)
+
+# ------------------------------------- SNAPSHOT ATTRIBUTE
+class ReadAttribute:
+    def __init__(self,snap:_PART|_PIG):
+        if not (isinstance(snap,_PART) or isinstance(snap,_PIG)):
+            print("[ERROR] Only PART and PIG have attributes")
+            raise TypeError
+
+        if (type(snap)==_PART):
+            self.ReadAttribute_PART(snap)
+        elif(type(snap)==_PIG):
+            self.ReadAttribute_PIG(snap)
+
+    def ReadAttribute_PART(self,snap:_PART):
+        if not isinstance(snap,_PART):raise TypeError
+
+        self.path = snap.path + os.sep + "Header" + os.sep + "attr-v2"
+
+        # Read file
+        with open(self.path) as f:
+            self.text=f.read()
+
+        # Extract data
+        lines=self.text.split("\n")[:-1]
+
+        self.BoxSize=float(lines[0].split("[")[-1].split("]")[0])
+        self.BoxSizeUnit="Kilo-parsec"          #<---get thse from paramgadegt file
+
+        self.CMBTemperature=float(lines[1].split("[")[-1].split("]")[0])
+        self.CMBTemperatureUnit="Kelvin"
+
+        self.HubbleParam=float(lines[5].split("[")[-1].split("]")[0])
+        self.Omega0=float(lines[7].split("[")[-1].split("]")[0])
+        self.OmegaBaryon=float(lines[8].split("[")[-1].split("]")[0])
+        self.OmegaLambda=float(lines[9].split("[")[-1].split("]")[0])
+
+        self.RSDFactor=float(lines[10].split("[")[-1].split("]")[0])
+        self.Time=float(lines[11].split("[")[-1].split("]")[0])
+        
+        self.UnitLength_in_cm=float(lines[15].split("[")[-1].split("]")[0])
+        self.UnitMass_in_g=float(lines[16].split("[")[-1].split("]")[0])
+        self.UnitVelocity_in_cm_per_s=float(lines[17].split("[")[-1].split("]")[0])
+        self.UsePeculiarVelocity=bool(lines[18].split("[")[-1].split("]")[0])
+
+        self.MassTable=lines[6].split("[")[-1].split("]")[0].split(" ")[1:-1]
+        self.MassTable=np.array([float(self.MassTable[i]) for i in range(len(self.MassTable))])
+
+        self.MassTable=lines[6].split("[")[-1].split("]")[0].split(" ")[1:-1]
+        self.MassTable=np.array([float(self.MassTable[i]) for i in range(len(self.MassTable))])
+
+        self.TotNumPart=lines[13].split("[")[-1].split("]")[0].split(" ")[1:-1]
+        self.TotNumPart=np.array([int(self.TotNumPart[i]) for i in range(len(self.TotNumPart))])
+
+        self.TotNumPartInit=lines[14].split("[")[-1].split("]")[0].split(" ")[1:-1]
+        self.TotNumPartInit=np.array([int(self.TotNumPartInit[i]) for i in range(len(self.TotNumPartInit))])
+
+    def ReadAttribute_PIG(self,snap:_PIG):
+        pass
 
 
 # ------------------------ SNAPSHOT

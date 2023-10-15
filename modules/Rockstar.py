@@ -7,30 +7,49 @@ import sys
 import os
 sys.path.append(os.getcwd())
 import modules as mp
+from .Navigate import _PART
 
+def OutputRockstarHDF5(snap:_PART,filepath:str,include_gas:bool,include_dm:bool,include_star:bool,include_bh:bool):
+    attr=snap.ReadAttribute()
 
-def SaveRockstarHDF5(id,pos,vel,name):
-    file=h5py.File(name,"w")
-    head=file.create_group("Header")
-    head.attrs["OmegaLambda"]=0.7186
-    head.attrs["Omega0"]=0.2814
-    head.attrs["HubbleParam"]=0.697
-    head.attrs["Time"]=1
-    head.attrs["BoxSize"]=10
+    with h5py.File(filepath,"w") as hdf5:
+        head=hdf5.create_group("Header")
+        head.attrs["OmegaLambda"]=attr.OmegaLambda
+        head.attrs["Omega0"]=attr.Omega0
+        head.attrs["HubbleParam"]=attr.HubbleParam
+        head.attrs["Time"]=attr.Time
+        head.attrs["BoxSize"]=attr.BoxSize # Rockstar accepts in Mpc/h, Might get handelled via Length conversion
 
-    head.attrs["NumPart_ThisFile"]=[0,len(id),0,0,0,0]  # Number of particles of each type in current file
-    head.attrs["NumPart_Total"]=[0,len(id),0,0,0,0]     # Number of particles of each type in simulation file
-    head.attrs["NumPart_Total_HighWord"]=[0,0,0,0,0,0]  # High-32bit of total particle in simulation. Whats that?
-    head.attrs["MassTable"]=[0.00491269,0.0248811,0,0,0.00122817,0.00122817]
+        head.attrs["NumPart_ThisFile"]=attr.TotNumPart
+        head.attrs["NumPart_Total"]=attr.TotNumPart
+        head.attrs["NumPart_Total_HighWord"]=[0,0,0,0,0,0]
+        head.attrs["MassTable"]=attr.MassTable
 
-    dm=file.create_group("PartType1")
-    dm.create_dataset("ParticleIDs",data=id)
-    dm.create_dataset("Coordinates",data=pos)
-    dm.create_dataset("Velocities",data=vel)
-    
-    file.close()
-    
+        if include_gas:
+            gas=hdf5.create_group("PartType0")
+            gas.create_dataset("ParticleIDs",data=snap.Gas.ID.ReadValues())
+            gas.create_dataset("Coordinates",data=snap.Gas.Position.ReadValues())
+            gas.create_dataset("Velocities",data=snap.Gas.Velocity.ReadValues())
 
+        if include_dm:
+            dm=hdf5.create_group("PartType1")
+            dm.create_dataset("ParticleIDs",data=snap.DarkMatter.ID.ReadValues())
+            dm.create_dataset("Coordinates",data=snap.DarkMatter.Position.ReadValues())
+            dm.create_dataset("Velocities",data=snap.DarkMatter.Velocity.ReadValues())
+
+        if include_star:
+            star=hdf5.create_group("PartType4")
+            star.create_dataset("ParticleIDs",data=snap.Star.ID.ReadValues())
+            star.create_dataset("Coordinates",data=snap.Star.Position.ReadValues())
+            star.create_dataset("Velocities",data=snap.Star.Velocity.ReadValues())
+
+        if include_bh:
+            bh=hdf5.create_group("PartType4")
+            bh.create_dataset("ParticleIDs",data=snap.Star.ID.ReadValues())
+            bh.create_dataset("Coordinates",data=snap.Star.Position.ReadValues())
+            bh.create_dataset("Velocities",data=snap.Star.Velocity.ReadValues())
+
+        
 
 class RockstarConfig:
     def __init__(self):
