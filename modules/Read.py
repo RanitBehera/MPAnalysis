@@ -187,7 +187,7 @@ def ReadField(field:_Field):
     data=np.zeros(head.dataLength*head.memberLength,type_map[head.dataTypeString])
     for i in range(0,head.fileLength):
         # filename='{:06}'.format(i)
-        filename=("{:x}".format(i)).capitalize().rjust(6,'0')
+        filename=("{:X}".format(i)).upper().rjust(6,'0')  
         filepath=field.path + os.sep + filename
         with open (filepath, mode='rb') as file:   # b is important -> binary
             fill_start_index = sum(head.dataLengthPerFile[0:i])   * head.memberLength
