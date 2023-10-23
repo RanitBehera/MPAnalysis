@@ -5,7 +5,7 @@ sys.path.append(os.getcwd())
 import numpy as np
 import modules as mp
 import matplotlib.pyplot as plt
-op=mp.BaseDirectory(r"d:\Ubuntu Back\Desktop\Sim\hydro\std_hydro\seed_181170\fg11\output")
+op=mp.BaseDirectory("/home/ranitbehera/MyDrive/Data/MP-Gadget/Sim_L10N64/")
 # op=mp.BaseDirectory(r"D:\Ubuntu Back\Desktop\Sim_640")
 
 # ## Out - 0
@@ -27,7 +27,7 @@ for i in range(6,18):
     #     print(c)
 
     ax=op.PIG(i).FOFGroups.MassCenterPosition.showInCube(chain[i-6],['r'])
-    plt.savefig(r"D:\\frm\\fr"+str(i)+".png",dpi=300)
+    plt.savefig("/home/ranitbehera/MyDrive/Results/"+str(i)+".png",dpi=300)
 
 
 
