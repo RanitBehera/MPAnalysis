@@ -54,3 +54,18 @@ Hence, always finish the chain with a small letter chain.
 
 ## Reading Files
 
+
+## VS Code intellisense not working
+Command palette > Open Workspace Settings (JSON) 
+```json
+{
+
+    "python.analysis.extraPaths": [
+        "/home/ranitbehera/MyDrive/Repos/MPAnalysis/"
+    ],
+    "python.autoComplete.extraPaths": [
+        "/home/ranitbehera/MyDrive/Repos/MPAnalysis/"
+    ]
+
+}
+```
