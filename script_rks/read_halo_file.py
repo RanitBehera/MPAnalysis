@@ -17,9 +17,9 @@ mvir = data[:,2]
 # vmax = data[:,5]
 # rvmax = data[:,6]
 # vrms = data[:,7]
-# x = data[:,8]
-# y = data[:,9]
-# z = data[:,10]
+x = data[:,8]
+y = data[:,9]
+z = data[:,10]
 # vx = data[:,11]
 # vy = data[:,12]
 # vz = data[:,13]
@@ -69,4 +69,11 @@ mvir = data[:,2]
 
 
 # print(sum(num_p))
-print(id[np.where(mvir==max(mvir))])
+mvir_sorted=np.sort(mvir)[::-1]
+
+# print(mvir_sorted)
+
+# print(id[np.where(mvir==mvir_sorted[4])]) #3972,2088,7444,6143,1250
+
+fid=3972
+print(x[fid],y[fid],z[fid])
