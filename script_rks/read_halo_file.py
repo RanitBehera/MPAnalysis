@@ -1,6 +1,6 @@
 import numpy as np
 import os
-
+import modules as mp
 
 bd="/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2"
 # fl="halos_PART_017.0.ascii"
@@ -12,7 +12,7 @@ data=np.loadtxt(file)
 id = data[:,0]
 num_p = data[:,1]
 mvir = data[:,2]
-# mbound_vir = data[:,3]
+mbound_vir = data[:,3]
 # rvir = data[:,4]
 # vmax = data[:,5]
 # rvmax = data[:,6]
@@ -35,10 +35,10 @@ z = data[:,10]
 # bulk_vz = data[:,23]
 # BulkVelUnc = data[:,24]
 # n_core = data[:,25]
-# m200b = data[:,26]
-# m200c = data[:,27]
-# m500c = data[:,28]
-# m2500c = data[:,29]
+m200b = data[:,26]
+m200c = data[:,27]
+m500c = data[:,28]
+m2500c = data[:,29]
 # Xoff = data[:,30]
 # Voff = data[:,31]
 # spin_bullock = data[:,32]
@@ -69,11 +69,21 @@ z = data[:,10]
 
 
 # print(sum(num_p))
-mvir_sorted=np.sort(mvir)[::-1]
+# mvir_sorted=np.sort(mvir)[::-1]
+# mbound_sorted=np.sort(mbound_vir)[::-1]
+# m200b_sorted=np.sort(m200b)[::-1]
+# m200c_sorted=np.sort(m200c)[::-1]
+# m500c_sorted=np.sort(m500c)[::-1]
+# m2500c_sorted=np.sort(m2500c)[::-1]
 
-# print(mvir_sorted)
+import matplotlib.pyplot as plt
+# plt.plot(mvir_sorted)
+# plt.plot(mbound_sorted)
+# plt.plot(m200b_sorted)
+# plt.plot(m200c_sorted)
+# plt.plot(m500c_sorted)
+plt.plot(num_p,m2500c,'.k',ms=2)
 
-# print(id[np.where(mvir==mvir_sorted[4])]) #3972,2088,7444,6143,1250
-
-fid=3972
-print(x[fid],y[fid],z[fid])
+plt.xscale("log")
+plt.yscale("log")
+plt.show()
