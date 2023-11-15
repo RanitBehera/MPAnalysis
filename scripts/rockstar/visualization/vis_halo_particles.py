@@ -26,7 +26,7 @@ def GetPositionOf(type):
     x,y,z=data[:,X][f_ehid][f_type],data[:,Y][f_ehid][f_type],data[:,Z][f_ehid][f_type]
     return numpy.column_stack((x,y,z))
 
-# --- OPEN3D
+# --- OPEN3D : POINT CLOUD
 vis = open3d.visualization.Visualizer()
 vis.create_window()
 vis.get_render_option().background_color = numpy.asarray(BGCOLOR)

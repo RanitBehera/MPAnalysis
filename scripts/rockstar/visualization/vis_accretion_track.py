@@ -1,4 +1,8 @@
-import os, numpy, open3d
+import sys,os, numpy, open3d
+
+
+sys.path.append(os.getcwd())
+import modules as mp
 
 # --- CONFIG PARAMETERS
 OUTPUTDIR   = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2"  # Output directory of rockstar where ".ascii" and ".particles" files are present.
@@ -12,7 +16,8 @@ DMCOLOR     = [1,0,1]                                               # Color of D
 GASCOLOR    = [0,1,1]                                               # Color of Gas particle type
 STARCOLOR   = [1,1,0]                                               # Color of Star particle type
 BHCOLOR     = [1,0,0]                                               # Color of BH particle type
-
+PID         = 8
+SNAPDIR     = "/home/ranitbehera/MyDrive/Data/MP-Gadget/L10N64/"
 
 
 # --- DERIVED PARAMETERS
@@ -27,10 +32,20 @@ def GetPositionOf(type):
     return numpy.column_stack((x,y,z))
 
 # --- GET TRACKS
+star_type=numpy.where(data[:,TYPE][f_ehid]==2)
+f_ids=data[:,PID][f_ehid][star_type]
+track_id=f_ids[0]
+track=[]
 
 
 
-# --- OPEN3D
+track=[[1,2,3],[3,4,5],[5,6,7]]
+
+
+
+
+
+# --- OPEN3D : POINT CLOUD
 vis = open3d.visualization.Visualizer()
 vis.create_window()
 vis.get_render_option().background_color = numpy.asarray(BGCOLOR)
@@ -46,6 +61,9 @@ if SHOWTYPE[0]: AddPointCloud(0,DMCOLOR)
 if SHOWTYPE[1]: AddPointCloud(1,GASCOLOR)
 if SHOWTYPE[2]: AddPointCloud(2,STARCOLOR)
 if SHOWTYPE[3]: AddPointCloud(3,BHCOLOR)
+
+
+# --- OPEN3d : TRACKS
 
 
 
