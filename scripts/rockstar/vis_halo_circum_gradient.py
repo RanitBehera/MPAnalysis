@@ -11,7 +11,7 @@ EHID,TYPE   = 12,9                                                  # Column num
 X,Y,Z       = 0,1,2                                                 # Column number (0-based) of "x", "y", "z".
 VX,VY,VZ    = 3,4,5
 MASS        = 6
-FOCUSTO     = 2088  # most massive : 3972,2088,7444,6143,1250       # The "external_halo_id" to focus for child particles.
+FOCUSTO     = 1250  # most massive : 3972,2088,7444,6143,1250       # The "external_halo_id" to focus for child particles.
 SHOWTYPE    = 1                                                     # Which particles types to render (dark-matter:0, gas:1, star:2, black-hole:3).
 BGCOLOR     = [0,0,0]                                               # Render window background color 
 
@@ -71,9 +71,9 @@ def GetColorMatrix(type):
 
     colors=numpy.ones((len(mass),3))
     for i in range(len(mass)):
-        colors[i]=numpy.asarray([angf[i][0],0,1-angf[i][0]])
-        # rgb=numpy.asarray(colorsys.hsv_to_rgb(angf[i][0],magf[i][0],1))
-        # colors[i]=numpy.asarray(rgb)
+        # colors[i]=numpy.asarray([angf[i][0],0,1-angf[i][0]])
+        rgb=numpy.asarray(colorsys.hsv_to_rgb(angf[i][0],magf[i][0],1))
+        colors[i]=numpy.asarray(rgb)
 
     return colors
 

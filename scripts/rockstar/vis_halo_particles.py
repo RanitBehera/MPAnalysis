@@ -4,8 +4,9 @@ sys.path.append(os.getcwd())
 import modules as mp
 
 # --- CONFIG PARAMETERS
-OUTPUTDIR   = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2"  # Output directory of rockstar where ".ascii" and ".particles" files are present.
-FILENAME    = "halos_0.0.particles"                                 # Name of ".particles" files. Add ".particles" extension.
+OUTPUTDIR               = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2"  # Output directory of rockstar where ".ascii" and ".particles" files are present.
+HALO_FILENAME           = "halos_0.0.ascii"                                 # Name of ".ascii" files. Add ".ascii" extension.
+PARTICLES_FILENAME      = "halos_0.0.particles"                                 # Name of ".particles" files. Add ".particles" extension.
 EHID,TYPE   = 12,9                                                  # Column number (0-based) of "external_halo_id", "type".
 X,Y,Z       = 0,1,2                                                 # Column number (0-based) of "x", "y", "z".
 FOCUSTO     = 2088  # most massive : 3972,2088,7444,6143,1250       # The "external_halo_id" to focus for child particles.
@@ -15,101 +16,46 @@ DMCOLOR     = [1,0,1]                                               # Color of D
 GASCOLOR    = [0,1,1]                                               # Color of Gas particle type
 STARCOLOR   = [1,1,0]                                               # Color of Star particle type
 BHCOLOR     = [1,0,0]                                               # Color of BH particle type
-CAMMODE     = "FLY"                                                 # FLY or ORBIT
 
 
 # --- DERIVED PARAMETERS
-FILEPATH=OUTPUTDIR + os.sep + FILENAME
+HFILEPATH=OUTPUTDIR + os.sep + HALO_FILENAME
+PFILEPATH=OUTPUTDIR + os.sep + PARTICLES_FILENAME
 
 # --- DATA FILTER
-data=numpy.loadtxt(FILEPATH)        
+data=numpy.loadtxt(PFILEPATH)        
 f_ehid=numpy.where(data[:,EHID]==FOCUSTO)               
 def GetPositionOf(type):
     f_type=numpy.where(data[:,TYPE][f_ehid]==type)              
     x,y,z=data[:,X][f_ehid][f_type],data[:,Y][f_ehid][f_type],data[:,Z][f_ehid][f_type]
     return numpy.column_stack((x,y,z))
 
-# --- OPEN3D : POINT CLOUD
-# vis = open3d.visualization.Visualizer()
-# vis.create_window()
-# vis.get_render_option().background_color = numpy.asarray(BGCOLOR)
+datah=numpy.loadtxt(HFILEPATH)
+halo_row=datah[FOCUSTO]
+rvir=halo_row[mp.ascii.rvir]
+x,y,z=halo_row[mp.ascii.x:mp.ascii.z+1]
 
-# def AddPointCloud(ptype,pcolor):
-#     pcd = open3d.geometry.PointCloud()
-#     pcd.points = open3d.utility.Vector3dVector(GetPositionOf(ptype))
-#     # pcd.colors=o3d.utility.Vector3dVector(numpy.tile([1,1,1],(len(pos),1)))
-#     pcd.paint_uniform_color(pcolor)
-#     vis.add_geometry(pcd)
-    
-# if SHOWTYPE[0]: AddPointCloud(0,DMCOLOR)
-# if SHOWTYPE[1]: AddPointCloud(1,GASCOLOR)
-# if SHOWTYPE[2]: AddPointCloud(2,STARCOLOR)
-# if SHOWTYPE[3]: AddPointCloud(3,BHCOLOR)
+h=0.697000
+rvir/=1000*h
 
+print(x,y,z)
 
-# mp.DrawBox(vis,[0,0,0],[10,10,10],[1,1,1])
+# --- OPEN3D :
+win=mp.Open3DWindow()
+win.SetBackgroundColor(BGCOLOR)
+win.SetLookAt([x,y,z])
 
-# # --- OPEN3D : CAMERA
-# # if CAMMODE == "FLY" : sw.set_view_controls(open3d.visualization.gui.SceneWidget.FLY)
+if SHOWTYPE[0]: win.AddPointCloud(GetPositionOf(0),[DMCOLOR])
+if SHOWTYPE[1]: win.AddPointCloud(GetPositionOf(1),[GASCOLOR])
+if SHOWTYPE[2]: win.AddPointCloud(GetPositionOf(2),[STARCOLOR])
+if SHOWTYPE[3]: win.AddPointCloud(GetPositionOf(3),[BHCOLOR])
 
 
-# # vis.run()
-# vis.destroy_window()
+# win.AddLine([0,0,0],[10,0,0],[1,0,0])
+# win.AddLine([0,0,0],[0,10,0],[0,1,0])
+# win.AddLine([0,0,0],[0,0,10],[0,0,1])
+
+win.AddCircle([x,y,z],rvir)
 
 
-# open3d.visualization.gui.Application.instance.initialize()
-# window=open3d.visualization.gui.Application.instance.create_window("TEST",1200,800)
-
-# scene=open3d.visualization.gui.SceneWidget()
-# scene.scene = open3d.visualization.rendering.Open3DScene(window.renderer)
-# scene.set_view_controls(open3d.visualization.gui.SceneWidget.Controls.ROTATE_CAMERA)
-# scene.scene.set_background([0.5,0.5,0,1])
-
-
-# def AddPointCloud(ptype,pcolor):
-#     pcd = open3d.geometry.PointCloud()
-#     pcd.points = open3d.utility.Vector3dVector(GetPositionOf(ptype))
-#     # pcd.colors=o3d.utility.Vector3dVector(numpy.tile([1,1,1],(len(pos),1)))
-#     pcd.paint_uniform_color(pcolor)
-
-#     open3d.visualization.draw(pcd)
-#     # scene.scene.add_geometry("t"+str(ptype),pcd,open3d.visualization.rendering.MaterialRecord())
-
-# if SHOWTYPE[0]: AddPointCloud(0,DMCOLOR)
-# if SHOWTYPE[1]: AddPointCloud(1,GASCOLOR)
-# if SHOWTYPE[2]: AddPointCloud(2,STARCOLOR)
-# if SHOWTYPE[3]: AddPointCloud(3,BHCOLOR)
-
-# window.add_child(scene)
-# # open3d.visualization.gui.Application.instance.run()
-
-
-
-
-
-open3d.visualization.gui.Application.instance.initialize()
-vis = open3d.visualization.O3DVisualizer("TEST",1200,800)
-# vis.get_render_option().background_color = numpy.asarray(BGCOLOR)
-vis.show_settings = True
-
-def AddPointCloud(ptype,pcolor):
-    pcd = open3d.geometry.PointCloud()
-    pcd.points = open3d.utility.Vector3dVector(GetPositionOf(ptype))
-    # pcd.colors=o3d.utility.Vector3dVector(numpy.tile([1,1,1],(len(pos),1)))
-    pcd.paint_uniform_color(pcolor)
-    vis.add_geometry("p"+str(ptype),pcd)
-    
-if SHOWTYPE[0]: AddPointCloud(0,DMCOLOR)
-if SHOWTYPE[1]: AddPointCloud(1,GASCOLOR)
-if SHOWTYPE[2]: AddPointCloud(2,STARCOLOR)
-if SHOWTYPE[3]: AddPointCloud(3,BHCOLOR)
-
-
-# mp.DrawBox(vis,[0,0,0],[10,10,10],[1,1,1])
-
-# --- OPEN3D : CAMERA
-# if CAMMODE == "FLY" : sw.set_view_controls(open3d.visualization.gui.SceneWidget.FLY)
-
-
-open3d.visualization.gui.Application.instance.add_window(vis)
-open3d.visualization.gui.Application.instance.run()
+win.Show()
