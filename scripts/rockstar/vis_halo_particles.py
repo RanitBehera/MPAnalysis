@@ -7,10 +7,7 @@ import modules as mp
 OUTPUTDIR               = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2"  # Output directory of rockstar where ".ascii" and ".particles" files are present.
 HALO_FILENAME           = "halos_0.0.ascii"                                 # Name of ".ascii" files. Add ".ascii" extension.
 PARTICLES_FILENAME      = "halos_0.0.particles"                                 # Name of ".particles" files. Add ".particles" extension.
-EHID,TYPE   = 12,9                                                  # Column number (0-based) of "external_halo_id", "type".
-X,Y,Z       = 0,1,2                                                 # Column number (0-based) of "x", "y", "z".
 FOCUSTO     = 2088  # most massive : 3972,2088,7444,6143,1250       # The "external_halo_id" to focus for child particles.
-SHOWTYPE    = (0,1,1,1)                                             # Whether to render the particles types (dark-matter, gas, star, black-hole).
 BGCOLOR     = [0,0,0]                                               # Render window background color 
 DMCOLOR     = [1,0,1]                                               # Color of DM particle type
 GASCOLOR    = [0,1,1]                                               # Color of Gas particle type
@@ -24,10 +21,12 @@ PFILEPATH=OUTPUTDIR + os.sep + PARTICLES_FILENAME
 
 # --- DATA FILTER
 data=numpy.loadtxt(PFILEPATH)        
-f_ehid=numpy.where(data[:,EHID]==FOCUSTO)               
+f_ehid=numpy.where(data[:,mp.particles.external_haloid]==FOCUSTO)               
 def GetPositionOf(type):
-    f_type=numpy.where(data[:,TYPE][f_ehid]==type)              
-    x,y,z=data[:,X][f_ehid][f_type],data[:,Y][f_ehid][f_type],data[:,Z][f_ehid][f_type]
+    f_type=numpy.where(data[:,mp.particles.type][f_ehid]==type)              
+    x=data[:,mp.particles.x][f_ehid][f_type]
+    y=data[:,mp.particles.y][f_ehid][f_type]
+    z=data[:,mp.particles.z][f_ehid][f_type]
     return numpy.column_stack((x,y,z))
 
 datah=numpy.loadtxt(HFILEPATH)
@@ -38,22 +37,16 @@ x,y,z=halo_row[mp.ascii.x:mp.ascii.z+1]
 h=0.697000
 rvir/=1000*h
 
-print(x,y,z)
 
 # --- OPEN3D :
 win=mp.Open3DWindow()
 win.SetBackgroundColor(BGCOLOR)
 win.SetLookAt([x,y,z])
 
-if SHOWTYPE[0]: win.AddPointCloud(GetPositionOf(0),[DMCOLOR])
-if SHOWTYPE[1]: win.AddPointCloud(GetPositionOf(1),[GASCOLOR])
-if SHOWTYPE[2]: win.AddPointCloud(GetPositionOf(2),[STARCOLOR])
-if SHOWTYPE[3]: win.AddPointCloud(GetPositionOf(3),[BHCOLOR])
-
-
-# win.AddLine([0,0,0],[10,0,0],[1,0,0])
-# win.AddLine([0,0,0],[0,10,0],[0,1,0])
-# win.AddLine([0,0,0],[0,0,10],[0,0,1])
+win.DarkMatter(GetPositionOf(0),[DMCOLOR])
+win.Gas(GetPositionOf(1),[GASCOLOR])
+win.Star(GetPositionOf(2),[STARCOLOR])
+win.Blackhole(GetPositionOf(3),[BHCOLOR])
 
 win.AddCircle([x,y,z],rvir)
 
