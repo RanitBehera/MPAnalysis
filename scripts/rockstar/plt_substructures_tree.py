@@ -16,14 +16,20 @@ PFILEPATH=OUTPUTDIR + os.sep + PARTICLES_FILENAME
 # --- DATA FILTERS
 data=numpy.loadtxt(PFILEPATH)
 
-ehid=data[:,mp.particles.assigned_internal_haloid]
-ehid=data[:,mp.particles.internal_haloid]
-ehid=data[:,mp.particles.external_haloid]
+
+# def GetAllSubsOfEHID()
+
+ehid=numpy.int64(data[:,mp.particles.external_haloid])
+ihid=numpy.int64(data[:,mp.particles.internal_haloid])
+aihid=numpy.int64(data[:,mp.particles.assigned_internal_haloid])
+types=numpy.int64(data[:,mp.particles.type])
 
 # Filter by ehid
-# Filter by part type
-# find number of unique ihid with count and index and create numpy structures to fill
-# Filter by ihid==aihid for particles which are not in substructures
-# Filter by ihid!=aihid for particles which are in substructures
-# Get all substractures particles which have common aihid
-# Feed to open3d basic
+ids=numpy.arange(len(ehid))
+filter1=(ehid==FOCUS_EHID)&(types==0)
+
+f_aihid=aihid[filter1]
+u,c=numpy.unique(f_aihid,return_counts=True)
+
+print(u,c)
+

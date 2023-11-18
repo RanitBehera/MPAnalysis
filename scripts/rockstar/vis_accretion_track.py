@@ -27,7 +27,7 @@ def GetPositionOf(type):
     return numpy.column_stack((x,y,z))
 
 # --- GET TRACKS
-track_type=3
+track_type=2
 f_type=numpy.where(data[:,mp.particles.type][f_ehid]==track_type)
 f_ids=data[:,mp.particles.particle_id][f_ehid][f_type]
 
@@ -60,7 +60,7 @@ win=mp.Open3D.GADGET()
 win.Star(GetPositionOf(2))
 win.Blackhole(GetPositionOf(3))
 
-for i in range(5):
+for i in range(50):
     track_id=f_ids[i]
     track=GetTrack(track_id) 
     win.AddCurve(track,[1,0,0])

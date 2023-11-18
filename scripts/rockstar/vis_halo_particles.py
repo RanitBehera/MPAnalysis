@@ -50,8 +50,11 @@ win.Gas(GetPositionOf(1))
 win.Star(GetPositionOf(2))
 win.Blackhole(GetPositionOf(3))
 
-win.AddLine((x,y,z),(x+2*rvir*J[0],y+2*rvir*J[1],z+2*rvir*J[2]))
-win.AddLine((x,y,z),(x-rvir*J[0],y-rvir*J[1],z-rvir*J[2]))
+# win.AddLine((x,y,z),(x+2*rvir*J[0],y+2*rvir*J[1],z+2*rvir*J[2]))
+# win.AddLine((x,y,z),(x-rvir*J[0],y-rvir*J[1],z-rvir*J[2]))
 win.SurroundSpehere(rvir,normal=J,location=[x,y,z],resolution=10)
+win.AddWireframeBox((0,0,0),(10,10,10))
+
+
 win.Run()
 
