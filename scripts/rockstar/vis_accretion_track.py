@@ -35,32 +35,16 @@ def GetPositionOf(type):
 star_type=numpy.where(data[:,TYPE][f_ehid]==2)
 f_ids=data[:,PID][f_ehid][star_type]
 track_id=f_ids[0]
-track=[]
 
-
-
-track=[[1,2,3],[3,4,5],[5,6,7]]
+# for 
 
 
 
 
 
 # --- OPEN3D : POINT CLOUD
-vis = open3d.visualization.Visualizer()
-vis.create_window()
-vis.get_render_option().background_color = numpy.asarray(BGCOLOR)
 
-def AddPointCloud(ptype,pcolor):
-    pcd = open3d.geometry.PointCloud()
-    pcd.points = open3d.utility.Vector3dVector(GetPositionOf(ptype))
-    # pcd.colors=o3d.utility.Vector3dVector(numpy.tile([1,1,1],(len(pos),1)))
-    pcd.paint_uniform_color(pcolor)
-    vis.add_geometry(pcd)
-    
-if SHOWTYPE[0]: AddPointCloud(0,DMCOLOR)
-if SHOWTYPE[1]: AddPointCloud(1,GASCOLOR)
-if SHOWTYPE[2]: AddPointCloud(2,STARCOLOR)
-if SHOWTYPE[3]: AddPointCloud(3,BHCOLOR)
+
 
 
 # --- OPEN3d : TRACKS
