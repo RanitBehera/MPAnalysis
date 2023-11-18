@@ -7,7 +7,7 @@ import modules as mp
 OUTPUTDIR               = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2"
 HALO_FILENAME           = "halos_0.0.ascii"
 PARTICLES_FILENAME      = "halos_0.0.particles"
-FOCUS_EHID     = 2088  # most massive : 3972,2088,7444,6143,1250       # The "external_halo_id"
+FOCUS_EHID              = 2088  # most massive : 3972,2088,7444,6143,1250
 
 
 

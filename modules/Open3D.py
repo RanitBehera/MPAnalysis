@@ -126,6 +126,23 @@ class Basic:
         line_set.line_width=5
         self.vis.add_geometry(line_set)
 
+    def AddCurve(self,points,color=DEFAULT_LINE_COLOR,closed=False):
+        vertices=numpy.array(points)
+        edges=[]
+        for i in range(len(vertices)-2):edges.append([i,i+1])
+        if closed:edges.append([len(vertices)-1,0])
+        edges=numpy.array(edges)
+
+        edgecolor=numpy.outer(numpy.ones((len(edges),1)),color)
+        line_set=open3d.geometry.LineSet()
+        line_set.points=open3d.utility.Vector3dVector(vertices)
+        line_set.lines=open3d.utility.Vector2iVector(edges)
+        line_set.colors=open3d.utility.Vector3dVector(edgecolor)
+        self.vis.add_geometry(line_set)
+
+
+
+
     def AddCircle(self,radius=1,location=[0,0,0],color=DEFAULT_LINE_COLOR,normal=[0,0,1],segments=32,start_ang=0,stop_ang=2*numpy.pi):
         # First create and orient circle at orgin and then shift to location
         seg_angles=numpy.linspace(start_ang,stop_ang,segments)
@@ -148,6 +165,7 @@ class Basic:
         edges=[]
         for i in range(segments-1):edges.append([i,i+1])
         edges.append([segments-1,0])
+        edges=numpy.array(edges)
 
         # Add it to window
         edgecolor=numpy.outer(numpy.ones((len(edges),1)),color)
