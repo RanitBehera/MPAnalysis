@@ -9,7 +9,7 @@ HALO_FILENAME           = "halos_0.0.ascii"
 PARTICLES_FILENAME      = "halos_0.0.particles"
 WHICH_ID                = mp.particles.internal_haloid
 # SHOW_HIDs              = [3972,2088,7444,6143,1250]  # most massive : 3972,2088,7444,6143,1250
-SHOW_HIDs                = [8481]#,8577,7569,8504]
+SHOW_HIDs                = [7770,7569]#,7762,7755,7631,7605,7251,6798,7622,6908]
 TYPE                    = 0
 SHOW_BOX                = False
 

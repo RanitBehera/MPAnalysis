@@ -9,7 +9,7 @@ OUTPUTDIR               = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2"
 HALO_FILENAME           = "halos_0.0.ascii"
 PARTICLES_FILENAME      = "halos_0.0.particles"
 FOCUS_EHID              = 2088  # most massive : 3972,2088,7444,6143,1250
-SUBSTRUC_LIMIT          = 3
+SUBSTRUC_LIMIT          = 10
 
 # --- DERIVED PARAMETERS
 HFILEPATH=OUTPUTDIR + os.sep + HALO_FILENAME
@@ -17,6 +17,8 @@ PFILEPATH=OUTPUTDIR + os.sep + PARTICLES_FILENAME
 
 # --- DATA FILTERS
 data=numpy.loadtxt(PFILEPATH)
+type_mask=(data[:,mp.particles.type]==0)
+data=data[type_mask]
 
 def Get_intHID(extHID):
     ehid=numpy.int64(data[:,mp.particles.external_haloid])
@@ -31,12 +33,12 @@ def Get_AintHIDs(intHID):
     u=u[sort] # c=c[sort]
     return u
 
-def GetRow_Mask(AintHID,type):
-    aihid=numpy.int64(numpy.int64(data[:,mp.particles.assigned_internal_haloid]))
-    types=numpy.int64(numpy.int64(data[:,mp.particles.type]))
-    aihid_mask=(aihid==AintHID)
-    type_mask=(types==type)
-    return aihid_mask & type_mask
+# def GetRow_Mask(AintHID,type):
+#     aihid=numpy.int64(numpy.int64(data[:,mp.particles.assigned_internal_haloid]))
+#     types=numpy.int64(numpy.int64(data[:,mp.particles.type]))
+#     aihid_mask=(aihid==AintHID)
+#     type_mask=(types==type)
+#     return aihid_mask & type_mask
 
 
 
@@ -58,24 +60,16 @@ def NodeVis(t:Tree):
 
 def AddChild(node,intHID):
     node.add_face(TextFace(str(intHID),fsize=40),column=0,position="branch-right")
-    AintHIDs=Get_AintHIDs(intHID)[1:]   # esclude first for own particles
-    length=len(AintHIDs)
+    AintHIDs=Get_AintHIDs(intHID)
+    print(AintHIDs)
+    # length=len(AintHIDs)
     
-    for AintHID in AintHIDs:
-        cn=node.add_child(name="("+str(AintHID)+")")
-        NodeVis(cn)
-        # cn.add_face(TextFace(str(AintHID),fsize=40),column=0,position="branch-right")
-        AddChild(cn,AintHID)
+    # for AintHID in AintHIDs:
+    #     cn=node.add_child(name="("+str(AintHID)+")")
+    #     NodeVis(cn)
+    #     # cn.add_face(TextFace(str(AintHID),fsize=40),column=0,position="branch-right")
+    #     AddChild(cn,AintHID)
             
-
-    # for aIHID in aIHIDs:
-        # cn=node.add_child(name="("+str(aIHID)+")")
-        # NodeVis(cn)
-    
-    # if length>2:
-    #     aIHIDs=aIHIDs[1:]
-    #     for aIHID in aIHIDs:
-    #         AddChild(cn,aIHID)    
 
 
 
@@ -106,4 +100,4 @@ ts.title.add_face(TextFace("Substructure Tree\n(ext-HID)int-HID:("+str(FOCUS_EHI
 t.set_style(None)
 
 
-t.show(tree_style=ts)
+# t.show(tree_style=ts)
