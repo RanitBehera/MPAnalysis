@@ -4,49 +4,43 @@ sys.path.append(os.getcwd())
 import modules as mp
 
 # --- CONFIG PARAMETERS
-OUTPUTDIR   = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2"
+OUTPUTDIR           = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2/"
+# OUTPUTDIR           = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks_640/RKS_171/"
 HALO_FILENAME       = "halos_0.0.ascii"
 PARTICLE_FILENAME   = "halos_0.0.particles"
-
+LIST_LENGTH         = 10
 
 # --- DERIVED PARAMETRS
-HALO_FILEPATH       = OUTPUTDIR + os.sep + HALO_FILENAME
-PARTICLE_FILEPATH   = OUTPUTDIR + os.sep + PARTICLE_FILENAME
+HFILEPATH       = OUTPUTDIR + os.sep + HALO_FILENAME
+PFILEPATH       = OUTPUTDIR + os.sep + PARTICLE_FILENAME
 
 # --- DATA BANK
-halos               = numpy.loadtxt(HALO_FILEPATH)
-# particles   = numpy.loadtxt(PARTICLE_FILEPATH)
-
-# --- LINK
-mvir = halos[:,mp.ascii.mvir]
-num_p= halos[:,mp.ascii.num_p]
+halos               = numpy.loadtxt(HFILEPATH)
+particles         = numpy.loadtxt(PFILEPATH)
 
 # --- FILTERS
-def Filter(data,fieldname,n=10,desending=True):
-    id=halos[:,mp.ascii.id]
-    sorted=numpy.unique(numpy.sort(data))
-    if desending: sorted=sorted[::-1]
-    print("Sorted by : " + fieldname, end="")
-    if desending: print("(desending)")
-    else: print("(acsending)")
-
-    print("ID : ",end="")
-    for i in range(n):
-        print(int(id[numpy.where(data==sorted[i])][0]),end="")
-        if not i==n-1:print(" - ",end="")
-
-    print("")
-    print("")
+def Filter(field,n,descending=True):
+    fdata   = halos[:,field]
+    idsort  = numpy.argsort(fdata)
+    if descending: idsort=idsort[::-1]
+    id      = halos[:,mp.ascii.id][idsort]
+    print( list(numpy.int64(id[0:n])),end="\n\n")
 
 
-print("Most massive Halos")
-Filter(mvir,"mvir",10)
+print("Most massive Halos : ","mvir")
+Filter(mp.ascii.mvir,LIST_LENGTH)
 
-print("Least massive Halos")
-Filter(mvir,"mvir",10,False)
+print("Most populated Halos : ","num_p")
+Filter(mp.ascii.num_p,LIST_LENGTH)
 
-print("Most populated Halos")
-Filter(num_p,"num_p",10)
 
-print("Least populated Halos")
-Filter(num_p,"num_p",10,False)
+subhaloof=2088
+ehid=particles[:,mp.particles.external_haloid]
+ashid=particles[:,mp.particles.assigned_internal_haloid][ehid==subhaloof]
+u,c=numpy.unique(ashid,return_counts=True)
+sorted_id=numpy.argsort(c)[::-1]
+sorted_u=u[sorted_id]
+
+print(list(numpy.int64(sorted_u[:10])))
+
+

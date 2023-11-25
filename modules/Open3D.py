@@ -35,8 +35,9 @@ class Basic:
         self.vis.run()
         self.vis.destroy_window()
 
-    def SetBackgroundColor(self,bgcolor):
+    def SetBackgroundColor(self,bgcolor=[0,0,0]):
         self.vis.get_render_option().background_color = numpy.asarray(bgcolor) 
+        pass
 
     def RegisterExtraKeyBindings(self):
         tranlate_amount=0.1

@@ -1,78 +1,95 @@
 from hmf import MassFunction
 import matplotlib.pyplot as plt
-import numpy as np
+import numpy,sys,os
 from hmf import cosmology
 
-import sys
 sys.path.append("/home/ranitbehera/MyDrive/Repos/MPAnalysis/")
 import modules as mp
 
+# --- CONFIG PARAMETERS
+GADGET_PATH             = "/home/ranitbehera/MyDrive/Data/MP-Gadget/L50N640/"
+ROCKSTAR_PATH           = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks_640/RKS_036"
+# ROCKSTAR_PATH           = "/home/ranitbehera/MyDrive/Data/MP-Gadget/L50N640/RKS_036"
+ROCKSTAR_HALO_FILENAME  = "halos_0.0.ascii"
+SNAP_NUMBER             = 36
+INCLUDE_PIG             = True
+BINDEXSTEP              = 0.2
 
+# --- DERIVED PARAMETERS
+HFILEPATH               = ROCKSTAR_PATH + os.sep + ROCKSTAR_HALO_FILENAME
 
-# Plotting Axis
-f,(ac,ae)= plt.subplots(2,1,gridspec_kw={'height_ratios':[3,2]},figsize=(12,10))
-plt.subplots_adjust(hspace=0.0)
+cfg=mp.ConfigFile(ROCKSTAR_PATH)
+VOLUME          = cfg.BOX_SIZE**3
+REDSHIFT        = (1/cfg.SCALE_NOW)-1
+OMEGA_M         = cfg.Om
+HUBBLE_H        = cfg.h0
 
+# --- SIMULATION HALO MASS FUNCTION
+def SimHMF(Mass,LogBinStep):
+    log10_Mass=numpy.log10(Mass)
 
+    log10_bin_start=numpy.floor(min(log10_Mass))
+    log10_bin_end=numpy.ceil(max(log10_Mass))
 
-# - Halo Mass Function
-def SimHMF(Mass,LogBinStep,vol=50**3):
-    log10_Mass=np.log10(Mass)
-
-    log10_bin_start=np.floor(min(log10_Mass))
-    log10_bin_end=np.ceil(max(log10_Mass))
-
-    BinCount=np.zeros(int((log10_bin_end-log10_bin_start)/LogBinStep))
+    BinCount=numpy.zeros(int((log10_bin_end-log10_bin_start)/LogBinStep))
 
     for lm in log10_Mass:
         i=int((lm-log10_bin_start)/LogBinStep)
         BinCount[i]+=1
 
-    log10_M=np.arange(log10_bin_start,log10_bin_end,LogBinStep)+(LogBinStep/2)
-    dn_dlogM=BinCount/(vol*LogBinStep)
-    error=np.sqrt(BinCount)/(vol*LogBinStep)
+    log10_M=numpy.arange(log10_bin_start,log10_bin_end,LogBinStep)+(LogBinStep/2)
+    dn_dlogM=BinCount/(VOLUME*LogBinStep)
+    error=numpy.sqrt(BinCount)/(VOLUME*LogBinStep)
 
     return log10_M,dn_dlogM,error
 
-# MP-Gadget FoF
-op=mp.BaseDirectory("/home/ranitbehera/MyDrive/Data/MP-Gadget/L10N64/")
-FOFMass=op.PIG(17).FOFGroups.MassByType.ReadValues()*1e10
-cdm_mass=FOFMass[:,1]
-log10_M,dn_dlogM,error=SimHMF(cdm_mass,0.2,10**3)
-fi=4
-fe=-4
-error=error/2
-ac.errorbar(10**log10_M[fi:fe],dn_dlogM[fi:fe],error[fi:fe],fmt='.--',capsize=2,color='k',label="FoF (MP-Gadget)",lw=1)
 
-# Rockstar
-rs=np.loadtxt("halos_0.0.ascii")
-m_vir=rs[:,2]
-log10_M,dn_dlogM,error=SimHMF(m_vir,0.2,10**3)
-fi=9
-fe=-4
+# --- PLOTTING AXIS
+f,(ac,ae)= plt.subplots(2,1,gridspec_kw={'height_ratios':[3,2]},figsize=(12,10))
+plt.subplots_adjust(hspace=0.0)
+
+# --- PIG HMF
+if INCLUDE_PIG:
+    op=mp.BaseDirectory(GADGET_PATH)
+    FOFMass=op.PIG(SNAP_NUMBER).FOFGroups.MassByType.ReadValues()*1e10
+    cdm_mass=FOFMass[:,1]
+    log10_M,dn_dlogM,error=SimHMF(cdm_mass,BINDEXSTEP)
+    fi=0
+    fe=-1
+    error=error/2
+    ac.errorbar(10**log10_M[fi:fe],dn_dlogM[fi:fe],error[fi:fe],fmt='.--',capsize=2,color='k',label="FoF (MP-Gadget)",lw=1)
+
+# --- ROCKSTAR HMF
+data=numpy.loadtxt(HFILEPATH)
+m_vir=data[:,mp.ascii.mvir]
+mask=~(m_vir==0)
+m_vir=m_vir[mask]
+
+log10_M,dn_dlogM,error=SimHMF(m_vir,BINDEXSTEP)
+fi=0
+fe=-1
 error=error/2
 ac.errorbar(10**log10_M[fi:fe],dn_dlogM[fi:fe],error[fi:fe],fmt='.-',capsize=2,color='k',label="ROCKSTAR")
 
-# print(dn_dlogM)
-
-# Fitting Models
+# --- FITTING HMF
 def PlotMF(str1,**kwargs):
     # High Res
-    mf = MassFunction(z = 0.0,hmf_model=str1,cosmo_params={"Om0":0.2814,"H0":69.7,"Tcmb0":2.7255})
+    mf = MassFunction(z = REDSHIFT,hmf_model=str1,cosmo_params={"Om0":OMEGA_M,"H0":HUBBLE_H*100,"Tcmb0":2.7255})
     mf.Mmin=7
     mf.Mmax=12
-    h=0.697
+    h=HUBBLE_H
     ac.plot(mf.m,mf.dndlog10m*(h**3),**kwargs)
     
+    return
     # Low Res for Error
-    mf_l=MassFunction(z=0.0,hmf_model=str1,cosmo_params={"Om0":0.2814,"H0":69.7,"Tcmb0":2.7255},dlog10m=0.2)
+    mf_l=MassFunction(z=REDSHIFT,hmf_model=str1,cosmo_params={"Om0":OMEGA_M,"H0":HUBBLE_H*100,"Tcmb0":2.7255},dlog10m=BINDEXSTEP)
     mf_l.Mmin=7.1
     mf_l.Mmax=11.9
     
     # diff=mf_l.dndlog10m-dn_dlogM
     fact=mf_l.dndlog10m*(h**3)/dn_dlogM
-    fi=9
-    fe=-4
+    fi=0
+    fe=-1
     ae.plot(mf_l.m[fi:fe],fact[fi:fe],'.-',**kwargs)
 
     fact_p=mf_l.dndlog10m*(h**3)/(dn_dlogM-error)
@@ -132,9 +149,9 @@ ae.set_yticks([])
 ae.set_yticks(tick_ref)
 ae.set_yticklabels(tick_lable, minor=False)
 
-ac.set_title("Dark Matter Halo Mass Function Comparision (z=0)")
+ac.set_title("Dark Matter Halo Mass Function Comparision (z="+str(numpy.round(REDSHIFT,2))+")")
 # plt.tight_layout()
-# plt.show()
-plt.savefig("Halo_Mass_Function.png",dpi=200)
-plt.savefig("Halo_Mass_Function.svg")
+plt.show()
+# plt.savefig("Halo_Mass_Function.png",dpi=200)
+# plt.savefig("Halo_Mass_Function.svg")
 
