@@ -48,8 +48,12 @@ Do `git clone https://bitbucket.org/pbehroozi/rockstar-galaxies.git` in followin
 - RKSG_Orig
 - RKSG_Mod
 
-For the two "RKS_Orig" and "RKSG_Orig" build it. Please look for "rockstar_build.md" for details.
+For the two "RKS_Orig" and "RKSG_Orig" build it. Please look for "rockstar_build.md" for details. Make sure to build `with_hdf5`.
 
 For the two "RKS_Mod" and "RKSG_Mod" modify it to accept MP-GADGET directly and then build. Please look for "MPGADGET_input_support" for details.
 
 ## Step 4 : Modify the softwares.
+Look for "rockstar_io_mpgadget" for details.
+
+## Step 5: Run
+
