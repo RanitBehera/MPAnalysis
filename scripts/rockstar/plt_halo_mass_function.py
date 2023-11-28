@@ -7,11 +7,11 @@ sys.path.append("/home/ranitbehera/MyDrive/Repos/MPAnalysis/")
 import modules as mp
 
 # --- CONFIG PARAMETERS
-GADGET_PATH             = "/home/ranitbehera/MyDrive/Work/RKS_Benchmark/data/L10N64_PART_017/"
-ROCKSTAR_PATH           = "/home/ranitbehera/MyDrive/Work/RKS_Benchmark/data/RKS_Results/RKSG_Orig_HDF5/"
+GADGET_PATH             = "/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/"
+ROCKSTAR_PATH           = "/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKS_036/"
 ROCKSTAR_HALO_FILENAME  = "halos_0.0.ascii"
 INCLUDE_PIG             = True
-SNAP_NUMBER             = 17
+SNAP_NUMBER             = 36
 BINDEXSTEP              = 0.2
 SHOW_DEVIATION_PLOT     = False
 
@@ -104,16 +104,16 @@ else:
 
 # Possible model HMF
 # PS, ST, Behroozi, Angulo, Bhattacharya, Courtin, Crocce, Ishiyama, Jenkins, Manera, Peacock, Pillepich, Reed03, Reed07, Warren, Watson, Tinker08, Tinker10
-Plot_Model_HMF(ac,"PS",label="Press-Schechter",color='b')
+# Plot_Model_HMF(ac,"PS",label="Press-Schechter",color='b')
 Plot_Model_HMF(ac,"ST",label="Seith-Tormen",color='g')
-Plot_Model_HMF(ac,"Behroozi",label="Behroozi",color='m')
+# Plot_Model_HMF(ac,"Behroozi",label="Behroozi",color='m')
 
 if INCLUDE_PIG:
     Plot_PIG_HMF(ac,fmt='.--',capsize=2,color='k',label="FoF (MP-Gadget)",lw=1)
 
 # Plot_RKS_HMF(ac,fmt='.-',capsize=2,color='k',label="ROCKSTAR")
-Plot_RKS_HMF(ac,"/home/ranitbehera/MyDrive/Work/RKS_Benchmark/data/RKS_Results/RKS_Orig_HDF5/" + os.sep + "halos_0.0.ascii",fmt='.-',capsize=2,color='k',label="RKS (HDF5)")
-Plot_RKS_HMF(ac,"/home/ranitbehera/MyDrive/Work/RKS_Benchmark/data/RKS_Results/RKSG_Orig_HDF5/" + os.sep + "halos_0.0.ascii",fmt='.-',capsize=2,color='r',label="RKSG (HDF5)")
+Plot_RKS_HMF(ac,"/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKS_036" + os.sep + "halos_0.0.ascii",fmt='.-',capsize=2,color='k',label="RKS (HDF5)")
+Plot_RKS_HMF(ac,"/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKSG_036" + os.sep + "halos_0.0.ascii",fmt='.-',capsize=2,color='r',label="RKSG (HDF5)")
 
 
 
@@ -146,7 +146,10 @@ if SHOW_DEVIATION_PLOT:
     ae.set_yticks(tick_ref)
     ae.set_yticklabels(tick_lable, minor=False)
 
-ac.set_title("Dark Matter Halo Mass Function Comparision (z="+str(numpy.round(REDSHIFT,2))+")")
+if not SHOW_DEVIATION_PLOT:
+    ac.set_xlabel("Mass $log_{10}(M/M_\odot)$",fontsize=12)
+
+ac.set_title("Dark Matter Halo Mass Function Comparision (z="+str(numpy.round(REDSHIFT,2))+") : L = $50$ Mpc , N = $640^3$")
 # plt.tight_layout()
 plt.show()
 # plt.savefig("Halo_Mass_Function.png",dpi=200)

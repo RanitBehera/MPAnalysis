@@ -16,6 +16,22 @@ class particles:
     specific_energy,particle_id,type,\
     assigned_internal_haloid,internal_haloid,external_haloid=range(0,13)
 
+
+class ascii0:
+    id,num_p,mvir,mbound_vir,rvir,vmax,rvmax,vrms,\
+    x,y,z,vx,vy,vz,Jx,Jy,Jz,E,Spin,\
+    PosUncertainty,VelUncertainty,\
+    bulk_vx,bulk_vy,bulk_vz,BulkVelUnc,\
+    n_core,m200b,m200c,m500c,m2500c,Xoff,\
+    Voff,spin_bullock,\
+    b_to_a,c_to_a,Ax,Ay,Az,b_to_a_500c,c_to_a_500c,Ax_500c,Ay_500c,Az_500c,\
+    Rs,Rs_Klypin,T_U,M_pe_Behroozi,M_pe_Diemer,\
+    Halfmass_Radius,idx,i_so,i_ph,num_cp,mmetric=range(0,54)
+
+class particles0:
+    x,y,z,vx,vy,vz,particle_id,\
+    assigned_internal_haloid,internal_haloid,external_haloid=range(0,10)
+
 class ConfigFile:
     def __init__(self,filedir,filename="rockstar.cfg"):
         self.path       = filedir + os.sep + filename
@@ -217,6 +233,7 @@ def OutputRockstarHDF5(snap:_PART,filepath:str,include_gas:bool,include_dm:bool,
             bh.create_dataset("Coordinates",data=snap.BlackHole.Position.ReadValues());pb.Progress()
             bh.create_dataset("Velocities",data=snap.BlackHole.Velocity.ReadValues());pb.Progress()
             bh.create_dataset("Masses",data=snap.BlackHole.Mass.ReadValues());pb.Progress()
+
 
 
 

@@ -37,6 +37,36 @@ make install
 - Find libraries in  "`libtirpc-1.3.4/src/.libs`".
 
 ### 3. hdf5
+If avaiable in modolue load using 
+```
+module load cmake-3.27.4
+```
+First install `Cmake` which is neeeded to generate Makefile for hdf5 build.
+Download it from link https://github.com/Kitware/CMake/releases/download/v3.28.0-rc5/cmake-3.28.0-rc5.tar.gz using wget.
+
+```
+wget https://github.com/Kitware/CMake/releases/download/v3.28.0-rc5/cmake-3.28.0-rc5.tar.gz
+tar -xzvf cmake-3.28.0-rc5.tar.gz
+cd cmake-3.28.0-rc5/
+
+```
+
+Then
+
+Download it from link https://www.hdfgroup.org/downloads/hdf5/source-code/. It does not provide `wget` link. So you can download locally and upload using `scp`. So in hdf
+
+```
+module load cmake-3.27.4
+cd hdf5-1.14.3
+mkdir build
+cmake -S ./ -B ./build
+cd ./build
+make
+```
+- Find headers `hdf5.h` in `hdf5-1.14.3/src`
+- Find headers `H5pubconf.h` in `hdf5-1.14.3/build/src`
+- Find headers `H5FDsubfiling.h` in `hdf5-1.14.3/src/H5FDsubfiling`
+- Find lib `libhdf5.so` in `hdf5-1.14.3/build/bin`
 
 ## Download
 Repository address

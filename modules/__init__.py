@@ -1,5 +1,5 @@
 from .Navigate import *
-from .Read import *
+from .MPGADGETRead import *
 from .Cube import *
 from .Chain import *
 
