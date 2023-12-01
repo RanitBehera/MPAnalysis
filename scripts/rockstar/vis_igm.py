@@ -4,8 +4,8 @@ sys.path.append(os.getcwd())
 import modules as mp
 
 # --- CONFIG PARAMETERS
-OUTPUTDIR               = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2/"
-# OUTPUTDIR               = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks_640/RKS_036/"
+# OUTPUTDIR               = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2/"
+OUTPUTDIR               = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks_640/RKS_036/"
 HALO_FILENAME           = "halos_0.0.ascii"
 PARTICLES_FILENAME      = "halos_0.0.particles"
 SHOW_BOX                = True

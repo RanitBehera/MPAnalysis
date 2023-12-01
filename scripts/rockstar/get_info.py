@@ -4,7 +4,7 @@ sys.path.append(os.getcwd())
 import modules as mp
 
 # --- CONFIG PARAMETERS
-OUTPUTDIR           = "/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKSG_036/"
+OUTPUTDIR           = "/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKS_036/"
 HALO_FILENAME       = "halos_0.0.ascii"
 PARTICLE_FILENAME   = "halos_0.0.particles"
 LIST_LENGTH         = 10
@@ -24,7 +24,7 @@ def Filter(field,n,descending=True):
     fdata   = halos[:,field]
     idsort  = numpy.argsort(fdata)
     if descending: idsort=idsort[::-1]
-    id      = halos[:,mp.ascii.id][idsort]
+    id      = halos[:,mp.ascii0.id][idsort]
     print( list(numpy.int64(id[0:n])),end="\n\n")
 
 

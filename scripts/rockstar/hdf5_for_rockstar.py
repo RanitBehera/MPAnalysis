@@ -6,6 +6,6 @@ import modules as mp
 
 # bd=input("Base Directory : ")
 
-op=mp.BaseDirectory("/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/")
-saved_at=op.PART(36).OutputRockstarHDF5("/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/Dump",include_gas=True,include_star=True,include_bh=True)
+op=mp.BaseDirectory("/home/ranitbehera/MyDrive/Data/MP-Gadget/L10N64/")
+saved_at=op.PART(16).OutputRockstarHDF5("/home/ranitbehera/MyDrive/Data/RKS_NEW/rks",include_gas=True,include_star=True,include_bh=True)
 print("HDF5 Output Path :",saved_at)

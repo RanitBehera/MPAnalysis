@@ -8,8 +8,9 @@ import modules as mp
 
 # --- CONFIG PARAMETERS
 GADGET_PATH             = "/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/"
-ROCKSTAR_PATH           = "/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKS_036/"
+ROCKSTAR_PATH           = "/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKSG_036/"
 ROCKSTAR_HALO_FILENAME  = "halos_0.0.ascii"
+ROCKSTAR_PART_FILENAME  = "halos_0.0.particles"
 INCLUDE_PIG             = True
 SNAP_NUMBER             = 36
 BINDEXSTEP              = 0.2
@@ -18,6 +19,7 @@ SHOW_DEVIATION_PLOT     = False
 
 # --- DERIVED PARAMETERS
 HFILEPATH               = ROCKSTAR_PATH + os.sep + ROCKSTAR_HALO_FILENAME
+PFILEPATH               = ROCKSTAR_PATH + os.sep + ROCKSTAR_PART_FILENAME
 
 cfg=mp.ConfigFile(ROCKSTAR_PATH)
 VOLUME          = cfg.BOX_SIZE**3
@@ -91,38 +93,29 @@ def Plot_RKS_HMF(axis_handle,HALOFILE_PATH=HFILEPATH,BINDEXSTEP=BINDEXSTEP,**kwa
     error=error/2
     axis_handle.errorbar(10**log10_M[fi:fe],dn_dlogM[fi:fe],error[fi:fe],**kwargs)
 
-def Plot_RKSG_BGC2_HMF(axis_handle,BGC2FILE_PATH,BINDEXSTEP=BINDEXSTEP,exclude_subhalo=True,**kwargs):
-    data=numpy.loadtxt(BGC2FILE_PATH)
-    m_vir=data[:,2]
-    mask_roothalo=(data[:,14]==-1)
-
-    if exclude_subhalo:
-        m_vir=m_vir[mask_roothalo]
-
-    log10_M,dn_dlogM,error=SimHMF(m_vir,BINDEXSTEP)
-    fi,fe=0,-1
-    error=error/2
-    axis_handle.errorbar(10**log10_M[fi:fe],dn_dlogM[fi:fe],error[fi:fe],**kwargs)
-
-
-
-def Plot_filtered(axis_handle,filter_file_path,BINDEXSTEP=BINDEXSTEP,**kwargs):
-    data=numpy.loadtxt(filter_file_path)
-    N_dm=data
+def Plot_RKSG_HMF(axis_handle,HALOFILE_PATH=HFILEPATH,PARTFILE_PATH=PFILEPATH,BINDEXSTEP=BINDEXSTEP,**kwargs):
+    halos=numpy.loadtxt(HALOFILE_PATH)
+    particles=numpy.loadtxt(PARTFILE_PATH)
+    def Get_Number_of_Particles_in(EHID,type,exclude_sub=False):
+        ehid_mask   = particles[:,mp.particles.external_haloid]==EHID
+        type_mask   = particles[:,mp.particles.type]==type
+        mask        = ehid_mask & type_mask
+        if exclude_sub:
+            ihids       = particles[ehid_mask,mp.particles.internal_haloid]
+            ihid        = int(numpy.unique(ihids)[0])
+            ihid_mask   = particles[:,mp.particles.assigned_internal_haloid]==ihid
+            mask        = mask & ihid_mask
+        return sum(mask)
+    N_DM=[]
+    halo_len=len(halos)
+    for ehid in range(halo_len):
+        print(halos)
+        N_DM.append(Get_Number_of_Particles_in(ehid,0,True))
     
-    mf=0.00311013
-    mu=1e10
-    M_dm=N_dm*mf*mu
+    N_DM=numpy.array(N_DM)
+    M_DM=N_DM*0.00311013*1e10
 
-    log10_M,dn_dlogM,error=SimHMF(M_dm,BINDEXSTEP)
-    fi,fe=0,-1
-    error=error/2
-    axis_handle.errorbar(10**log10_M[fi:fe],dn_dlogM[fi:fe],error[fi:fe],**kwargs)
-    
-
-
-
-
+    print(M_DM)
 
 
 
@@ -142,24 +135,23 @@ Plot_Model_HMF(ac,"ST",label="Seith-Tormen",color='g')
 
 if INCLUDE_PIG:
     Plot_PIG_HMF(ac,fmt='.--',capsize=2,color='k',label="FoF (MP-Gadget)",lw=1)
-    
 
 # Plot_RKS_HMF(ac,fmt='.-',capsize=2,color='k',label="ROCKSTAR")
 # Plot_RKS_HMF(ac,"/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKS_036" + os.sep + "halos_0.0.ascii",fmt='.-',capsize=2,color='k',label="RKS (HDF5)")
-# Plot_RKS_HMF(ac,"/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKSG_036" + os.sep + "halos_0.0.ascii",fmt='.-',capsize=2,color='m',label="RKSG (HDF5)")
-# Plot_RKSG_BGC2_HMF(ac,"/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKSG_036_BGC2" + os.sep + "halos_PART_036.hdf5.0.bgc2.ascii",exclude_subhalo=True,fmt='.-',capsize=2,color='m',label="RKSG - BGC2 (HDF5) - without Sub")
-# Plot_RKSG_BGC2_HMF(ac,"/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKSG_036_BGC2" + os.sep + "halos_PART_036.hdf5.0.bgc2.ascii",exclude_subhalo=False,fmt='.-',capsize=2,color='b',label="RKSG - BGC2 (HDF5) - with Sub")
-Plot_RKS_HMF(ac,"/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/mkdir RKSG_036_JWISE/RKSG_036_JWISE" + os.sep + "halos_PART_036.hdf5.0.ascii",fmt='.-',capsize=2,color='b',label="RKSG (HDF5) JWISE")
+# Plot_RKS_HMF(ac,"/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKSG_036" + os.sep + "halos_0.0.ascii",fmt='.-',capsize=2,color='r',label="RKSG (HDF5)")
+# Plot_RKSG_HMF(ac,
+#              "/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKSG_036" + os.sep + "halos_0.0.ascii",
+#              "/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKSG_036" + os.sep + "halos_0.0.particles",
+#              fmt='.-',capsize=2,color='r',label="RKSG (HDF5)")
 
-# Plot_filtered(ac,"/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKSG_036" + os.sep + "ehid_num_part.txt", fmt='.-',capsize=2,color='b',label="RKSG (HDF5) - Manual")
 
 
 
 # Final Plot
 ac.set_xscale('log')
 ac.set_yscale('log')
-# ac.set_xlim([2e8,5e+11])
-# ac.set_ylim([1e-5,1e1])
+ac.set_xlim([2e8,5e+11])
+ac.set_ylim([1e-5,1e1])
 ac.grid(alpha=0.5)
 ac.legend()
 # ac.set_xticks([])

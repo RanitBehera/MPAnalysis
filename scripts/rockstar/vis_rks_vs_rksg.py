@@ -33,11 +33,14 @@ points_rksg=numpy.column_stack((x,y,z))
 
 
 
-win=mp.Open3D.Basic()
+win=mp.Open3D.GADGET()
 win.SetBackgroundColor([0,0,0])
 
-win.AddToPointCloudList("rks",points_rks,[0,1,0])
-win.AddToPointCloudList("rksg",points_rksg,[1,0,0])
+# win.AddToPointCloudList("rks",points_rks,[0,1,0])
+# win.AddToPointCloudList("rksg",points_rksg,[1,0,0])
+
+win.DarkMatter(points_rks)
+win.Gas(points_rksg)
 
 win.AddWireframeBox((0,0,0),(50,50,50))
 
