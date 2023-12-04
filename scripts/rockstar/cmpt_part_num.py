@@ -6,7 +6,7 @@ import modules as mp
 
 
 # --- CONFIG PARAMETERS
-ROCKSTAR_PATH           = "/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKSG_036/"
+ROCKSTAR_PATH           = "/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/RKSG_036_VAR"
 ROCKSTAR_HALO_FILENAME  = "halos_0.0.ascii"
 ROCKSTAR_PART_FILENAME  = "halos_0.0.particles"
 
@@ -68,7 +68,7 @@ particles=numpy.loadtxt(PFILEPATH)
 #     main()
 
 
-# --- Implementation 1
+# --- Implementation 2
 part_type=particles[:,mp.particles.type]
 int_HID=particles[:,mp.particles.internal_haloid]
 asn_int_HID=particles[:,mp.particles.assigned_internal_haloid]

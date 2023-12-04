@@ -1,8 +1,11 @@
-start=input("Starting Snap : ")
-end=input("Ending Snap : ")
+import os
 
-with open("snaplist.txt","w") as f:
+dir     = str(input("Directory : "))
+start   = int(input("Starting Snap : "))
+end     = int(input("Ending Snap : "))
+
+with open(dir + os.sep + "snaplist.txt","w") as f:
     for s in range(start,end+1):
-        f.write("PART_"+'{:03}'.format(s)+"\n")
+        f.write("PART_" + '{:03}'.format(s) + ".hdf5" + "\n")
 
-print("Output : snaplist.txt")
+print("Output : " + dir + os.sep + "snaplist.txt")

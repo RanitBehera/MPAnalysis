@@ -3,25 +3,27 @@ import matplotlib.pyplot as plt
 import numpy,sys,os
 from hmf import cosmology
 
-sys.path.append("/home/ranitbehera/MyDrive/Repos/MPAnalysis/")
+sys.path.append("/mnt/home/student/cranit/Repo/MPAnalysis")
 import modules as mp
 
 # --- CONFIG PARAMETERS
-GADGET_PATH             = "/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/"
-ROCKSTAR_PATH           = "/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKS_036/"
-ROCKSTAR_HALO_FILENAME  = "halos_0.0.ascii"
+GADGET_PATH             = "/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c"
+ROCKSTAR_PATH           = "/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/Z10_check/RKS"
+ROCKSTAR_GALAXIES_PATH  = "/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/Z10_check/RKSG"
+SNAP_NUMBER             = 24
+ROCKSTAR_HALO_FILENAME  = "halos_PART_"+'{:03}'.format(SNAP_NUMBER)+".hdf5.0.ascii"
 INCLUDE_PIG             = True
-SNAP_NUMBER             = 36
 BINDEXSTEP              = 0.2
 SHOW_DEVIATION_PLOT     = False
 
 
 # --- DERIVED PARAMETERS
 HFILEPATH               = ROCKSTAR_PATH + os.sep + ROCKSTAR_HALO_FILENAME
+HGFILEPATH              = ROCKSTAR_GALAXIES_PATH + os.sep + ROCKSTAR_HALO_FILENAME
 
 cfg=mp.ConfigFile(ROCKSTAR_PATH)
 VOLUME          = cfg.BOX_SIZE**3
-REDSHIFT        = (1/cfg.SCALE_NOW)-1
+REDSHIFT        = (1/cfg.SCALE_NOW)-1 
 OMEGA_M         = cfg.Om
 HUBBLE_H        = cfg.h0
 
@@ -53,22 +55,25 @@ def Plot_Model_HMF(axis_handle,model_name,**kwargs):
     h=HUBBLE_H
     axis_handle.plot(mf.m,mf.dndlog10m*(h**3),**kwargs)
     
-    return
+def Plot_Model_Deviation(axis_handle,model_name,dn_dlogM,error,**kwargs):
+    # ----------- Make model hmf automatic
     # Low Res for Error
-    mf_l=MassFunction(z=REDSHIFT,hmf_model=str1,cosmo_params={"Om0":OMEGA_M,"H0":HUBBLE_H*100,"Tcmb0":2.7255},dlog10m=BINDEXSTEP)
+    h=HUBBLE_H
+    mf_l=MassFunction(z=REDSHIFT,hmf_model=model_name,cosmo_params={"Om0":OMEGA_M,"H0":HUBBLE_H*100,"Tcmb0":2.7255},dlog10m=BINDEXSTEP)
     mf_l.Mmin=7.1
     mf_l.Mmax=11.9
     
-    # diff=mf_l.dndlog10m-dn_dlogM
+    diff=mf_l.dndlog10m-dn_dlogM
     fact=mf_l.dndlog10m*(h**3)/dn_dlogM
     fi=0
     fe=-1
-    ae.plot(mf_l.m[fi:fe],fact[fi:fe],'.-',**kwargs)
+    axis_handle.plot(mf_l.m[fi:fe],fact[fi:fe],'.-',**kwargs)
 
     fact_p=mf_l.dndlog10m*(h**3)/(dn_dlogM-error)
     fact_n=mf_l.dndlog10m*(h**3)/(dn_dlogM+error)
 
-    ae.fill_between(mf_l.m[fi:fe],fact_p[fi:fe],fact_n[fi:fe],alpha=0.2,edgecolor=(0,0,0,0),**kwargs)
+    axis_handle.fill_between(mf_l.m[fi:fe],fact_p[fi:fe],fact_n[fi:fe],**kwargs)
+
 
 def Plot_PIG_HMF(axis_handle,GADGET_PATH=GADGET_PATH,SNAP_NUMBER=SNAP_NUMBER,BINDEXSTEP=BINDEXSTEP,**kwargs):
     op=mp.BaseDirectory(GADGET_PATH)
@@ -78,6 +83,9 @@ def Plot_PIG_HMF(axis_handle,GADGET_PATH=GADGET_PATH,SNAP_NUMBER=SNAP_NUMBER,BIN
     fi,fe=0,-1
     error=error/2
     axis_handle.errorbar(10**log10_M[fi:fe],dn_dlogM[fi:fe],error[fi:fe],**kwargs)
+    
+    # ------ Get axis handle 2 and kwargs
+    # Plot_Model_Deviation(ac,"ST",dn_dlogM,error,alpha=0.2,edgecolor=(0,0,0,0),color="m")
 
 
 def Plot_RKS_HMF(axis_handle,HALOFILE_PATH=HFILEPATH,BINDEXSTEP=BINDEXSTEP,**kwargs):
@@ -90,6 +98,13 @@ def Plot_RKS_HMF(axis_handle,HALOFILE_PATH=HFILEPATH,BINDEXSTEP=BINDEXSTEP,**kwa
     fi,fe=0,-1
     error=error/2
     axis_handle.errorbar(10**log10_M[fi:fe],dn_dlogM[fi:fe],error[fi:fe],**kwargs)
+
+def Plot_RKS_ONLY_HMF(axis_handle,PATH=HFILEPATH,BINDEXSTEP=BINDEXSTEP,**kwargs):
+    Plot_RKS_HMF(axis_handle,HALOFILE_PATH=PATH,BINDEXSTEP=BINDEXSTEP,**kwargs)
+
+def Plot_RKS_GAL_HMF(axis_handle,PATH=HGFILEPATH,BINDEXSTEP=BINDEXSTEP,**kwargs):
+    Plot_RKS_HMF(axis_handle,HALOFILE_PATH=PATH,BINDEXSTEP=BINDEXSTEP,**kwargs)
+    
 
 def Plot_RKSG_BGC2_HMF(axis_handle,BGC2FILE_PATH,BINDEXSTEP=BINDEXSTEP,exclude_subhalo=True,**kwargs):
     data=numpy.loadtxt(BGC2FILE_PATH)
@@ -137,21 +152,33 @@ else:
 # Possible model HMF
 # PS, ST, Behroozi, Angulo, Bhattacharya, Courtin, Crocce, Ishiyama, Jenkins, Manera, Peacock, Pillepich, Reed03, Reed07, Warren, Watson, Tinker08, Tinker10
 # Plot_Model_HMF(ac,"PS",label="Press-Schechter",color='b')
-Plot_Model_HMF(ac,"ST",label="Seith-Tormen",color='g')
-# Plot_Model_HMF(ac,"Behroozi",label="Behroozi",color='m')
+Plot_Model_HMF(ac,"ST",label="Seith-Tormen",color='k')
+Plot_Model_HMF(ac,"Behroozi",label="Behroozi",color='m')
 
 if INCLUDE_PIG:
-    Plot_PIG_HMF(ac,fmt='.--',capsize=2,color='k',label="FoF (MP-Gadget)",lw=1)
+    Plot_PIG_HMF(ac,fmt='.--',capsize=2,color='r',label="FoF (MP-Gadget)",lw=1)
     
 
-# Plot_RKS_HMF(ac,fmt='.-',capsize=2,color='k',label="ROCKSTAR")
-# Plot_RKS_HMF(ac,"/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKS_036" + os.sep + "halos_0.0.ascii",fmt='.-',capsize=2,color='k',label="RKS (HDF5)")
-# Plot_RKS_HMF(ac,"/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKSG_036" + os.sep + "halos_0.0.ascii",fmt='.-',capsize=2,color='m',label="RKSG (HDF5)")
-# Plot_RKSG_BGC2_HMF(ac,"/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKSG_036_BGC2" + os.sep + "halos_PART_036.hdf5.0.bgc2.ascii",exclude_subhalo=True,fmt='.-',capsize=2,color='m',label="RKSG - BGC2 (HDF5) - without Sub")
-# Plot_RKSG_BGC2_HMF(ac,"/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKSG_036_BGC2" + os.sep + "halos_PART_036.hdf5.0.bgc2.ascii",exclude_subhalo=False,fmt='.-',capsize=2,color='b',label="RKSG - BGC2 (HDF5) - with Sub")
-Plot_RKS_HMF(ac,"/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/mkdir RKSG_036_JWISE/RKSG_036_JWISE" + os.sep + "halos_PART_036.hdf5.0.ascii",fmt='.-',capsize=2,color='b',label="RKSG (HDF5) JWISE")
+# Plot_RKS_ONLY_HMF(ac,"/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/LL_Prof/RKS/L18" +os.sep+"halos_PART_036.hdf5.0.ascii",fmt='.-',capsize=2,label="Rockstar (0.18)")
+# Plot_RKS_ONLY_HMF(ac,"/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/LL_Prof/RKS/L20" +os.sep+"halos_PART_036.hdf5.0.ascii",fmt='.-',capsize=2,label="Rockstar (0.20)")
+# Plot_RKS_ONLY_HMF(ac,"/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/LL_Prof/RKS/L22" +os.sep+"halos_PART_036.hdf5.0.ascii",fmt='.-',capsize=2,label="Rockstar (0.22)")
+# Plot_RKS_ONLY_HMF(ac,"/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/LL_Prof/RKS/L24" +os.sep+"halos_PART_036.hdf5.0.ascii",fmt='.-',capsize=2,label="Rockstar (0.24)")
+# Plot_RKS_ONLY_HMF(ac,"/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/LL_Prof/RKS/L26" +os.sep+"halos_PART_036.hdf5.0.ascii",fmt='.-',capsize=2,label="Rockstar (0.26)")
+# Plot_RKS_ONLY_HMF(ac,"/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/LL_Prof/RKS/L28" +os.sep+"halos_PART_036.hdf5.0.ascii",fmt='.-',capsize=2,label="Rockstar (0.28)")
+# Plot_RKS_ONLY_HMF(ac,"/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/LL_Prof/RKS/L30" +os.sep+"halos_PART_036.hdf5.0.ascii",fmt='.-',capsize=2,label="Rockstar (0.30)")
 
-# Plot_filtered(ac,"/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKSG_036" + os.sep + "ehid_num_part.txt", fmt='.-',capsize=2,color='b',label="RKSG (HDF5) - Manual")
+# Plot_RKS_ONLY_HMF(ac,"/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/LL_Prof/RKSG/L18" +os.sep+"halos_PART_036.hdf5.0.ascii",fmt='.-',capsize=2,label="Rockstar Galaxies (0.18)")
+# Plot_RKS_ONLY_HMF(ac,"/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/LL_Prof/RKSG/L20" +os.sep+"halos_PART_036.hdf5.0.ascii",fmt='.-',capsize=2,label="Rockstar Galaxies (0.20)")
+# Plot_RKS_ONLY_HMF(ac,"/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/LL_Prof/RKSG/L22" +os.sep+"halos_PART_036.hdf5.0.ascii",fmt='.-',capsize=2,label="Rockstar Galaxies (0.22)")
+# Plot_RKS_ONLY_HMF(ac,"/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/LL_Prof/RKSG/L24" +os.sep+"halos_PART_036.hdf5.0.ascii",fmt='.-',capsize=2,label="Rockstar Galaxies (0.24)")
+# Plot_RKS_ONLY_HMF(ac,"/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/LL_Prof/RKSG/L26" +os.sep+"halos_PART_036.hdf5.0.ascii",fmt='.-',capsize=2,label="Rockstar Galaxies (0.26)")
+# Plot_RKS_ONLY_HMF(ac,"/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/LL_Prof/RKSG/L28" +os.sep+"halos_PART_036.hdf5.0.ascii",fmt='.-',capsize=2,label="Rockstar Galaxies (0.28)")
+# Plot_RKS_ONLY_HMF(ac,"/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/LL_Prof/RKSG/L30" +os.sep+"halos_PART_036.hdf5.0.ascii",fmt='.-',capsize=2,label="Rockstar Galaxies (0.30)")
+
+
+Plot_RKS_ONLY_HMF(ac,fmt='.-',capsize=2,color='g',label="Rockstar")
+Plot_RKS_GAL_HMF(ac,fmt='.-',capsize=2,color='b',label="Rockstar Galaxies")
+
 
 
 
@@ -186,9 +213,9 @@ if SHOW_DEVIATION_PLOT:
 if not SHOW_DEVIATION_PLOT:
     ac.set_xlabel("Mass $log_{10}(M/M_\odot)$",fontsize=12)
 
-ac.set_title("Dark Matter Halo Mass Function Comparision (z="+str(numpy.round(REDSHIFT,2))+") : L = $50$ Mpc , N = $640^3$")
+ac.set_title("Dark Matter Halo Mass Function Comparision (z="+str(numpy.round(REDSHIFT,2))+") : L = $" + str(cfg.BOX_SIZE) + "$ Mpc , N = $640^3$")
 # plt.tight_layout()
-plt.show()
-# plt.savefig("Halo_Mass_Function.png",dpi=200)
-# plt.savefig("Halo_Mass_Function.svg")
+# plt.show()
+plt.savefig("/mnt/home/student/cranit/Work/RKSG_Benchmark/results/Z_10_check/snap.png",dpi=200)
+plt.savefig("/mnt/home/student/cranit/Work/RKSG_Benchmark/results/Z_10_check/snap.svg")
 
