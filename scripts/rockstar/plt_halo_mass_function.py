@@ -7,10 +7,11 @@ sys.path.append("/mnt/home/student/cranit/Repo/MPAnalysis")
 import modules as mp
 
 # --- CONFIG PARAMETERS
-GADGET_PATH             = "/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c"
-ROCKSTAR_PATH           = "/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/Z10_check/RKS"
-ROCKSTAR_GALAXIES_PATH  = "/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/Z10_check/RKSG"
-SNAP_NUMBER             = 24
+GADGET_PATH             = "/mnt/home/student/cranit/Data/MP_Gadget/Nishi/L50Mpc_N640"
+ROCKSTAR_PATH           = "/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/ZD_Prof/RKS"
+ROCKSTAR_GALAXIES_PATH  = "/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/ZD_Prof/RKSG"
+SNAP_NUMBER             = 16
+REDSHIFT                = 12
 ROCKSTAR_HALO_FILENAME  = "halos_PART_"+'{:03}'.format(SNAP_NUMBER)+".hdf5.0.ascii"
 INCLUDE_PIG             = True
 BINDEXSTEP              = 0.2
@@ -23,7 +24,7 @@ HGFILEPATH              = ROCKSTAR_GALAXIES_PATH + os.sep + ROCKSTAR_HALO_FILENA
 
 cfg=mp.ConfigFile(ROCKSTAR_PATH)
 VOLUME          = cfg.BOX_SIZE**3
-REDSHIFT        = (1/cfg.SCALE_NOW)-1 
+# REDSHIFT        = (1/cfg.SCALE_NOW)-1 
 OMEGA_M         = cfg.Om
 HUBBLE_H        = cfg.h0
 
@@ -151,7 +152,7 @@ else:
 
 # Possible model HMF
 # PS, ST, Behroozi, Angulo, Bhattacharya, Courtin, Crocce, Ishiyama, Jenkins, Manera, Peacock, Pillepich, Reed03, Reed07, Warren, Watson, Tinker08, Tinker10
-# Plot_Model_HMF(ac,"PS",label="Press-Schechter",color='b')
+Plot_Model_HMF(ac,"PS",label="Press-Schechter",color='b')
 Plot_Model_HMF(ac,"ST",label="Seith-Tormen",color='k')
 Plot_Model_HMF(ac,"Behroozi",label="Behroozi",color='m')
 
@@ -216,6 +217,6 @@ if not SHOW_DEVIATION_PLOT:
 ac.set_title("Dark Matter Halo Mass Function Comparision (z="+str(numpy.round(REDSHIFT,2))+") : L = $" + str(cfg.BOX_SIZE) + "$ Mpc , N = $640^3$")
 # plt.tight_layout()
 # plt.show()
-plt.savefig("/mnt/home/student/cranit/Work/RKSG_Benchmark/results/Z_10_check/snap.png",dpi=200)
-plt.savefig("/mnt/home/student/cranit/Work/RKSG_Benchmark/results/Z_10_check/snap.svg")
+plt.savefig("/mnt/home/student/cranit/Work/RKSG_Benchmark/results/ZD_Prof/snap" + '{:03}'.format(SNAP_NUMBER) + ".png",dpi=200)
+plt.savefig("/mnt/home/student/cranit/Work/RKSG_Benchmark/results/ZD_Prof/snap" + '{:03}'.format(SNAP_NUMBER) + ".svg")
 
