@@ -141,6 +141,56 @@ print(num*mt)
 
 
 
+# Try 
+h_cx=halos[EHID,mp.ascii.x]
+h_cy=halos[EHID,mp.ascii.y]
+h_cz=halos[EHID,mp.ascii.z]
+h_rv=halos[EHID,mp.ascii.rvir]
+
+# if EXCLUDE_SUBSTRUCTURES:print("(Excluding Substructures)")
+# else: print("(Including Substructures)")
+print("External Halo ID".ljust(20)," : ",str(EHID),"\n")
+print("Virial Mass".ljust(20)," : ",halos[EHID,mp.ascii.mvir]/1e10)
+print("Bound Mass".ljust(20)," : ",halos[EHID,mp.ascii.mbound_vir]/1e10)
+print("M200b Mass".ljust(20)," : ",halos[EHID,mp.ascii.m200b]/1e10)
+print("M200c Mass".ljust(20)," : ",halos[EHID,mp.ascii.m200c]/1e10,"\n")
+print("Virial Radius".ljust(20)," : ",numpy.round(halos[EHID,mp.ascii.rvir],2),"kpc\n")
+
+
+# Filter particles
+ehid_mask=(particles[:,mp.particles.external_haloid]==EHID)
+ehid_parts_id=particles[ehid_mask,mp.particles.particle_id]
+
+# These two lines make it unique
+uni,uindex=numpy.unique(ehid_parts_id,return_index=True)
+ids=ehid_parts_id[uindex]
+
+type0_mask=(particles[ehid_mask,mp.particles.type][uindex]==0)
+
+print(sum(type0_mask),"x",0.0248811,"=",sum(type0_mask)*0.0248811,"\n")
+
+x=(particles[ehid_mask,mp.particles.x][uindex][type0_mask])-h_cx
+y=(particles[ehid_mask,mp.particles.y][uindex][type0_mask])-h_cy
+z=(particles[ehid_mask,mp.particles.z][uindex][type0_mask])-h_cz
+
+points=numpy.column_stack((x,y,z))
+within=numpy.linalg.norm(points,axis=1)*1000
+within_mask=(within<=h_rv)
+
+print(within_mask)
+
+print(sum(within_mask),"x",0.0248811,"=",sum(within_mask)*0.0248811,"\n")
+
+# Check output of double unique fro single length of 1 to confirm
+# uid,ucounts=numpy.unique(ids,return_counts=True)
+# uucounts=numpy.unique(ucounts)
+# print(uucounts)
+
+
+
+
+
+
 
 
 
