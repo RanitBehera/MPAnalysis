@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import sys
 import os
 sys.path.append(os.getcwd())
-import galspec as mp
+import galspecold as mp
 
 # ----------------- INTERNAL -----------------
 

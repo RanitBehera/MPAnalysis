@@ -1,7 +1,7 @@
 import sys,os, numpy,colorsys
 
 sys.path.append(os.getcwd())
-import galspec as mp
+import galspecold as mp
 
 
 

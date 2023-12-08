@@ -1,0 +1,4 @@
+[project]
+name="galspec"
+version="0.0.1"
+dependencies=["numpy>=1.26.0","matplotlib>=3.7.0","h5py>=3.9.0","tqdm>=4.66.1"]

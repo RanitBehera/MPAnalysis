@@ -3,7 +3,7 @@ import os
 sys.path.append(os.getcwd())
 
 import numpy as np
-import galspec as mp
+import galspecold as mp
 import matplotlib.pyplot as plt
 op=mp.BaseDirectory("/home/ranitbehera/MyDrive/Data/MP-Gadget/Sim_L10N64/")
 # op=mp.BaseDirectory(r"D:\Ubuntu Back\Desktop\Sim_640")

@@ -2,7 +2,7 @@ import numpy,sys,os
 from multiprocessing import Pool
 
 sys.path.append("/home/ranitbehera/MyDrive/Repos/MPAnalysis/")
-import galspec as mp
+import galspecold as mp
 
 
 # --- CONFIG PARAMETERS

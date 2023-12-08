@@ -4,7 +4,7 @@ import numpy,sys,os
 from hmf import cosmology
 
 sys.path.append("/home/ranitbehera/MyDrive/Repos/MPAnalysis/")
-import galspec as mp
+import galspecold as mp
 
 # --- CONFIG PARAMETERS
 GADGET_PATH             = "/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/"

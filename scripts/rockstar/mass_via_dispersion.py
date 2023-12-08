@@ -2,7 +2,7 @@ import sys, os, numpy
 import matplotlib.pyplot as plt
 
 sys.path.append(os.getcwd())
-import galspec as mp
+import galspecold as mp
 
 # --- CONFIG PARAMETERS
 OUTPUTDIR               = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2/"
