@@ -5,7 +5,7 @@ sys.path.append(os.getcwd())
 import datetime
 
 import numpy as np
-import modules as mp
+import galspec as mp
 
 op=mp.BaseDirectory("/home/ranitbehera/MyDrive/Data/MP-Gadget/L50N640/")
 # print("start : "+str(datetime.datetime.now().time()))

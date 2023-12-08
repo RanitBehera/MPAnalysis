@@ -3,7 +3,7 @@ import os
 sys.path.append(os.getcwd())
 
 import numpy as np
-import modules as mp
+import galspec as mp
 
 op=mp.BaseDirectory(r"D:\Ubuntu Back\Desktop\Sim\hydro\std_hydro\seed_181170\fg11\output")
 # op=mp.BaseDirectory(r"D:\Ubuntu Back\Desktop\Sim_640")

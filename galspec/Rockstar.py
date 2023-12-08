@@ -162,8 +162,8 @@ from tqdm import tqdm
 
 
 sys.path.append(os.getcwd())
-import modules as mp
-from modules.Navigate import _PART
+import galspec as mp
+from galspec.Navigate import _PART
 
 
 class PBar:

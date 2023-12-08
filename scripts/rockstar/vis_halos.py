@@ -1,7 +1,7 @@
 import sys,os, numpy,colorsys
 
 sys.path.append(os.getcwd())
-import modules as mp
+import galspec as mp
 
 # --- CONFIG PARAMETERS
 OUTPUTDIR               = "/home/ranitbehera/MyDrive/Work/RKSG_Benchmark_2/L50N640c/RKS_036/"

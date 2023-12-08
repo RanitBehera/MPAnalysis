@@ -3,7 +3,7 @@ import numpy as np
 
 import sys
 sys.path.append("/home/ranitbehera/MyDrive/Repos/MPAnalysis/")
-import modules as mp
+import galspec as mp
 
 
 

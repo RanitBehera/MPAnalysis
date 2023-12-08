@@ -4,7 +4,7 @@ import numpy,sys,os
 from hmf import cosmology
 
 sys.path.append("/mnt/home/student/cranit/Repo/MPAnalysis")
-import modules as mp
+import galspec as mp
 
 # --- CONFIG PARAMETERS
 GADGET_PATH             = "/mnt/home/student/cranit/Data/MP_Gadget/Nishi/L50Mpc_N640"

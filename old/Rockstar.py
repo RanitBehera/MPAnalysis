@@ -6,8 +6,8 @@ from tqdm import tqdm
 import sys
 import os
 sys.path.append(os.getcwd())
-import modules as mp
-from modules.Navigate import _PART
+import galspec as mp
+from galspec.Navigate import _PART
 
 
 class PBar:

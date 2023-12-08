@@ -3,7 +3,7 @@ import os
 sys.path.append(os.getcwd())
 
 import numpy as np
-import modules as mp
+import galspec as mp
 
 
 def GetStarsInGroup(basedir:mp.BaseDirectory,sid,fgid):

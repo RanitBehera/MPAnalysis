@@ -1,7 +1,7 @@
 import sys, os, numpy
 
 sys.path.append(os.getcwd())
-import modules as mp
+import galspec as mp
 
 # --- CONFIG PARAMETERS
 OUTPUTDIR           = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2/"
@@ -47,13 +47,5 @@ if PRINT_NEXT:
     Filter(mp.ascii.num_p,LIST_LENGTH)
     PRINT_NEXT = DEFAULT_PRINT_NEXT
 
-# subhaloof=2088
-# ehid=particles[:,mp.particles.external_haloid]
-# ashid=particles[:,mp.particles.assigned_internal_haloid][ehid==subhaloof]
-# u,c=numpy.unique(ashid,return_counts=True)
-# sorted_id=numpy.argsort(c)[::-1]
-# sorted_u=u[sorted_id]
-
-# print(list(numpy.int64(sorted_u[:10])))
 
 
