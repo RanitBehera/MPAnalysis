@@ -8,7 +8,7 @@ import galspecold as mp
 OUTPUTDIR               = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2/"
 HALO_FILENAME           = "halos_0.0.ascii"
 PARTICLE_FILENAME       = "halos_0.0.particles"
-EHID                    = 3972
+EHID                    = 1250
 EXCLUDE_SUBSTRUCTURES   = True
 
 # --- DERIVED PARAMETRS
@@ -23,12 +23,17 @@ particles               = numpy.loadtxt(PFILEPATH)
 
 # if EXCLUDE_SUBSTRUCTURES:print("(Excluding Substructures)")
 # else: print("(Including Substructures)")
-print("External Halo ID".ljust(20)," : ",str(EHID),"\n")
+print("External Halo ID".ljust(20)," : ",str(EHID))
+print("Mass Unit".ljust(20)," : ","10^10 M_solar","\n")
+
+
+print("Number (num_p)".ljust(20)," : ",int(halos[EHID,mp.ascii.num_p]))
+print("Number (num_cp)".ljust(20)," : ",int(halos[EHID,mp.ascii.num_cp]),"\n")
 print("Virial Mass".ljust(20)," : ",halos[EHID,mp.ascii.mvir]/1e10)
 print("Bound Mass".ljust(20)," : ",halos[EHID,mp.ascii.mbound_vir]/1e10)
 print("M200b Mass".ljust(20)," : ",halos[EHID,mp.ascii.m200b]/1e10)
-print("M200c Mass".ljust(20)," : ",halos[EHID,mp.ascii.m200c]/1e10,"\n")
-print("Virial Radius".ljust(20)," : ",numpy.round(halos[EHID,mp.ascii.rvir],2),"kpc\n")
+print("M200c Mass".ljust(20)," : ",halos[EHID,mp.ascii.m200c]/1e10)
+print("Virial Radius".ljust(20)," : ",numpy.round(halos[EHID,mp.ascii.rvir],2),"Kpc\n")
 
 # print("-------------------------------------------------\n")
 
@@ -102,16 +107,21 @@ star_mass=(len(ids2_within)/len(filtered_mass2))*sum(filtered_mass2)
 bh_mass=(len(ids3_within)/len(filtered_mass3))*sum(filtered_mass3)
 total_mass=dm_mass+gas_mass+star_mass+bh_mass
 
+
+print("Filters".ljust(20)," : ","EHID + Unique + Type + In Rvir","\n\n")
+
+
 cell_width=12
+print(" MPGADGET EXTRACTED ".center(60,"="))
 print("Type".ljust(8),"RKSG-UIDS".center(cell_width),"GADGET-IDS".center(cell_width),"Matched-IDS".center(cell_width),"Mass".rjust(cell_width))
 print("".ljust(60,"-"))
 print(str("DM").ljust(8),str(len(ids0_within)).center(cell_width),str(len(present0)).center(cell_width),str(len(filtered_mass0)).center(cell_width),str(round(dm_mass,3)).rjust(cell_width))
 print(str("Gas").ljust(8),str(len(ids1_within)).center(cell_width),str(len(present1)).center(cell_width),str(len(filtered_mass1)).center(cell_width),str(round(gas_mass,3)).rjust(cell_width))
 print(str("Star").ljust(8),str(len(ids2_within)).center(cell_width),str(len(present2)).center(cell_width),str(len(filtered_mass2)).center(cell_width),str(round(star_mass,3)).rjust(cell_width))
 print(str("BH").ljust(8),str(len(ids3_within)).center(cell_width),str(len(present3)).center(cell_width),str(len(filtered_mass3)).center(cell_width),str(round(bh_mass,3)).rjust(cell_width))
-print("".ljust(60,"-"))
+print("".ljust(60,"_"))
 
-print("Total Mass".ljust(20),":",round(total_mass,3))
+print("Total Mass".ljust(20),":",str(round(total_mass,3)).rjust(37))
 
 
 #-----------------------------------------------------------------------
@@ -130,16 +140,17 @@ M_BH    = N_BH * MASSTABLE[5]
 
 M_TOTAL = M_DM + M_GAS + M_STAR + M_BH
 
-print("\n\n\n")
+print("\n")
 
-print("Type".ljust(8)   ,":","Number".ljust(12)     ,"x","Mass Fraction".ljust(16)  ,"=","Type Mass")
+print(" MASSTABLE MULTIPLIED ".center(60,"="))
+print("Type".ljust(8)   ,":","Number".ljust(12)     ,"x","Mass Fraction".ljust(16)  ,"=","Type Mass".rjust(15))
 print("".ljust(60,"-"))
-print("DM".ljust(8)     ,":",str(N_DM).ljust(12)    ,"x",str(MASSTABLE[1]).ljust(16),"=",numpy.round(M_DM,3))
-print("GAS".ljust(8)    ,":",str(N_GAS).ljust(12)   ,"x",str(MASSTABLE[0]).ljust(16),"=",numpy.round(M_GAS,3))
-print("STAR".ljust(8)   ,":",str(N_STAR).ljust(12)  ,"x",str(MASSTABLE[4]).ljust(16),"=",numpy.round(M_STAR,3))
-print("BH".ljust(8)     ,":",str(N_BH).ljust(12)    ,"x",str(MASSTABLE[5]).ljust(16),"=",numpy.round(M_BH,3))
-print("".ljust(60,"-"))
-print("Total".ljust(8)  ,":",str(N_TOTAL).ljust(12)," ","".ljust(16) ,"=",numpy.round(M_TOTAL,3),end="\n\n")
+print("DM".ljust(8)     ,":",str(N_DM).ljust(12)    ,"x",str(MASSTABLE[1]).ljust(16),"=",str(numpy.round(M_DM,3)).rjust(15))
+print("GAS".ljust(8)    ,":",str(N_GAS).ljust(12)   ,"x",str(MASSTABLE[0]).ljust(16),"=",str(numpy.round(M_GAS,3)).rjust(15))
+print("STAR".ljust(8)   ,":",str(N_STAR).ljust(12)  ,"x",str(MASSTABLE[4]).ljust(16),"=",str(numpy.round(M_STAR,3)).rjust(15))
+print("BH".ljust(8)     ,":",str(N_BH).ljust(12)    ,"x",str(MASSTABLE[5]).ljust(16),"=",str(numpy.round(M_BH,3)).rjust(15))
+print("".ljust(60,"_"))
+print(("Total Mass (" + str(N_TOTAL) + ")").ljust(20)  ,":",str(numpy.round(M_TOTAL,3)).rjust(37),end="\n\n")
 
 
 
