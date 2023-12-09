@@ -102,14 +102,14 @@ star_mass=(len(ids2_within)/len(filtered_mass2))*sum(filtered_mass2)
 bh_mass=(len(ids3_within)/len(filtered_mass3))*sum(filtered_mass3)
 total_mass=dm_mass+gas_mass+star_mass+bh_mass
 
-cell_width=16
-print("Type".ljust(8),"Rockstar-UIDS".rjust(cell_width),"GADGET-IDS".rjust(cell_width),"Matched-IDS".rjust(cell_width),"Mass".rjust(cell_width))
-print("----------------------------------------------------------------------------------------------")
-print(str("DM").ljust(8),str(len(ids0_within)).rjust(cell_width),str(len(present0)).rjust(cell_width),str(len(filtered_mass0)).rjust(cell_width),str(round(dm_mass,3)).rjust(cell_width))
-print(str("Gas").ljust(8),str(len(ids1_within)).rjust(cell_width),str(len(present1)).rjust(cell_width),str(len(filtered_mass1)).rjust(cell_width),str(round(gas_mass,3)).rjust(cell_width))
-print(str("Star").ljust(8),str(len(ids2_within)).rjust(cell_width),str(len(present2)).rjust(cell_width),str(len(filtered_mass2)).rjust(cell_width),str(round(star_mass,3)).rjust(cell_width))
-print(str("BH").ljust(8),str(len(ids3_within)).rjust(cell_width),str(len(present3)).rjust(cell_width),str(len(filtered_mass3)).rjust(cell_width),str(round(bh_mass,3)).rjust(cell_width))
-print("---------------------------------------------------------------------------------------------")
+cell_width=12
+print("Type".ljust(8),"RKSG-UIDS".center(cell_width),"GADGET-IDS".center(cell_width),"Matched-IDS".center(cell_width),"Mass".rjust(cell_width))
+print("".ljust(60,"-"))
+print(str("DM").ljust(8),str(len(ids0_within)).center(cell_width),str(len(present0)).center(cell_width),str(len(filtered_mass0)).center(cell_width),str(round(dm_mass,3)).rjust(cell_width))
+print(str("Gas").ljust(8),str(len(ids1_within)).center(cell_width),str(len(present1)).center(cell_width),str(len(filtered_mass1)).center(cell_width),str(round(gas_mass,3)).rjust(cell_width))
+print(str("Star").ljust(8),str(len(ids2_within)).center(cell_width),str(len(present2)).center(cell_width),str(len(filtered_mass2)).center(cell_width),str(round(star_mass,3)).rjust(cell_width))
+print(str("BH").ljust(8),str(len(ids3_within)).center(cell_width),str(len(present3)).center(cell_width),str(len(filtered_mass3)).center(cell_width),str(round(bh_mass,3)).rjust(cell_width))
+print("".ljust(60,"-"))
 
 print("Total Mass".ljust(20),":",round(total_mass,3))
 
@@ -130,14 +130,15 @@ M_BH    = N_BH * MASSTABLE[5]
 
 M_TOTAL = M_DM + M_GAS + M_STAR + M_BH
 
-print("-------------------------------------------------------")
+print("\n\n\n")
+
 print("Type".ljust(8)   ,":","Number".ljust(12)     ,"x","Mass Fraction".ljust(16)  ,"=","Type Mass")
-print("-------------------------------------------------------")
+print("".ljust(60,"-"))
 print("DM".ljust(8)     ,":",str(N_DM).ljust(12)    ,"x",str(MASSTABLE[1]).ljust(16),"=",numpy.round(M_DM,3))
 print("GAS".ljust(8)    ,":",str(N_GAS).ljust(12)   ,"x",str(MASSTABLE[0]).ljust(16),"=",numpy.round(M_GAS,3))
 print("STAR".ljust(8)   ,":",str(N_STAR).ljust(12)  ,"x",str(MASSTABLE[4]).ljust(16),"=",numpy.round(M_STAR,3))
 print("BH".ljust(8)     ,":",str(N_BH).ljust(12)    ,"x",str(MASSTABLE[5]).ljust(16),"=",numpy.round(M_BH,3))
-print("-------------------------------------------------------")
+print("".ljust(60,"-"))
 print("Total".ljust(8)  ,":",str(N_TOTAL).ljust(12)," ","".ljust(16) ,"=",numpy.round(M_TOTAL,3),end="\n\n")
 
 

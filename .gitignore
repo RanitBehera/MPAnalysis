@@ -2,3 +2,6 @@ modules/__pycache__/
 examples/__pycache__/
 gsvenv
 src/galspec.egg-info
+galspecold/__pycache__
+src/galspec/mpgadget/__pycache__
+.vscode
