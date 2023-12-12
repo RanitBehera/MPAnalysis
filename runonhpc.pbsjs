@@ -1,0 +1,18 @@
+#!/bin/bash
+
+#PBS -P "ROCKSTAR"
+#PBS -N "LenByType10b16"
+#PBS -l walltime=10:00:00
+#PBS -l select=10:ncpus=16:mem=10gb
+#PBS -o "/mnt/home/student/cranit/PBS/PBS_Log"
+#PBS -e "/mnt/home/student/cranit/PBS/PBS_Log"
+#PBS -j oe
+#PBS -M "ranit.behera@iucaa.in"
+#PBS -m abe
+
+
+echo -n "JOB STARTED : " && date
+cd $PBS_O_WORKDIR
+python310 /mnt/home/student/cranit/Repo/MPAnalysis/scripts/rockstar/cmpt_part_num.py
+echo -n "JOB ENDED : " && date
+

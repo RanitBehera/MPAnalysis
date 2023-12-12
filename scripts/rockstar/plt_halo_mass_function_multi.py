@@ -3,17 +3,17 @@ import matplotlib.pyplot as plt
 import numpy,sys,os
 from hmf import cosmology
 
-sys.path.append("/home/ranitbehera/MyDrive/Repos/MPAnalysis")
+sys.path.append("/mnt/home/student/cranit/Repo/MPAnalysis")
 import galspecold as mp
 
 # --- CONFIG PARAMETERS
-GADGET_PATH             = "/home/ranitbehera/MyDrive/Data/MP-Gadget/L10N64/"
+GADGET_PATH             = "/mnt/home/student/cranit/Data/MP_Gadget/Nishi/L50Mpc_N640"
 ROCKSTAR_PATH           = "/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/ZD_Prof/RKS"
-ROCKSTAR_GALAXIES_PATH  = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2/"
-SNAP_NUMBER             = 17
-REDSHIFT                = 0
+ROCKSTAR_GALAXIES_PATH  = "/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/RKSG_S36LL20_WP"
+SNAP_NUMBER             = 36
+REDSHIFT                = 8
 # ROCKSTAR_HALO_FILENAME  = "halos_PART_"+'{:03}'.format(SNAP_NUMBER)+".hdf5.0.ascii"
-ROCKSTAR_HALO_FILENAME  = "halos_0.0.ascii"
+ROCKSTAR_HALO_FILENAME  = "halos_PART_036.hdf5.0.ascii"
 INCLUDE_PIG             = True
 BINDEXSTEP              = 0.5
 SHOW_DEVIATION_PLOT     = False
@@ -150,10 +150,10 @@ def Plot_filtered(axis_handle,filter_file_path,BINDEXSTEP=BINDEXSTEP,**kwargs):
     N_bh=data[:,3]
     
     mu=1e10
-    mt_dm=0.0248811
-    mt_gas=0.00491269
-    mt_star=0.00122817
-    mt_bh=0.00122817
+    mt_dm=0.00311013
+    mt_gas=0.000614086
+    mt_star= 0.000153522
+    mt_bh= 0.000153522
 
     M_dm=N_dm*mt_dm*mu
     M_gas=N_gas*mt_gas*mu
@@ -170,7 +170,7 @@ def Plot_filtered(axis_handle,filter_file_path,BINDEXSTEP=BINDEXSTEP,**kwargs):
     DoForMass(M_dm[M_dm!=0],"RKSG (PFILE ,DM)",color="m")
     DoForMass(M_star[M_star!=0],"PFILE (PFILE, Star)",color="r")
     DoForMass(M_gas[M_gas!=0],"RKSG (PFILE, Gas)",color="y")
-    DoForMass(M_bh[M_bh!=0],"RKSG (PFILE, BH)",color="c")
+    # DoForMass(M_bh[M_bh!=0],"RKSG (PFILE, BH)",color="c")
     DoForMass(M_tot[M_tot!=0],"RKSG (PFILE, Total)",color="g",lw=2)
 
 
@@ -202,7 +202,7 @@ if INCLUDE_PIG:
 # Plot_RKS_ONLY_HMF(ac,fmt='-',capsize=1,color='g',label="Rockstar",lw=1)
 Plot_RKS_GAL_HMF(ac,fmt='-',capsize=1,color='k',label="RKSG (HFILE, mvir)",lw=1)
 
-Plot_filtered(ac,"/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2/ehid_num_part.txt")
+Plot_filtered(ac,"/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/RKSG_S36LL20_WP/LengthByType2.txt")
 
 
 
@@ -231,8 +231,8 @@ Plot_filtered(ac,"/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2/ehid_num_pa
 # Final Plot
 ac.set_xscale('log')
 ac.set_yscale('log')
-# ac.set_xlim([2e8,5e+11])
-# ac.set_ylim([1e-5,1e1])
+ac.set_xlim([2e5,5e+12])
+ac.set_ylim([1e-5,1e1])
 ac.grid(alpha=0.5)
 ac.legend()
 # ac.set_xticks([])
@@ -263,6 +263,6 @@ if not SHOW_DEVIATION_PLOT:
 ac.set_title("Dark Matter Halo Mass Function Comparision (z="+str(numpy.round(REDSHIFT,2))+") : L = $" + str(cfg.BOX_SIZE) + "$ Mpc , N = $64^3$")
 # plt.tight_layout()
 # plt.show()
-# plt.savefig("/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2/Results/snap" + '{:03}'.format(SNAP_NUMBER) + ".png",dpi=200)
-plt.savefig("/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2/Results/snap" + '{:03}'.format(SNAP_NUMBER) + ".svg")
+plt.savefig("/mnt/home/student/cranit/Work/RKSG_Benchmark/results/MF_All_Part_640/ObO/snap" + '{:03}'.format(SNAP_NUMBER) + ".png",dpi=200)
+plt.savefig("/mnt/home/student/cranit/Work/RKSG_Benchmark/results/MF_All_Part_640/ObO/snap" + '{:03}'.format(SNAP_NUMBER) + ".svg")
 

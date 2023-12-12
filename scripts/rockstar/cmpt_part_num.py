@@ -1,21 +1,21 @@
 import numpy,sys,os
 from multiprocessing import Pool
 
-sys.path.append("/home/ranitbehera/MyDrive/Repos/MPAnalysis/")
+sys.path.append("/mnt/home/student/cranit/Repo/MPAnalysis")
 import galspecold as mp
 
 
 # --- CONFIG PARAMETERS
-ROCKSTAR_PATH           = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2/"
-ROCKSTAR_HALO_FILENAME  = "halos_0.0.ascii"
-ROCKSTAR_PART_FILENAME  = "halos_0.0.particles"
+ROCKSTAR_PATH           = "/mnt/home/student/cranit/Work/RKSG_Benchmark/L50N640c/RKSG_S36LL20_WP"
+ROCKSTAR_HALO_FILENAME  = "halos_PART_036.hdf5.0.ascii"
+ROCKSTAR_PART_FILENAME  = "halos_PART_036.hdf5.0.particles"
 
 
 
 # --- DERIVED PARAMETERS
 HFILEPATH               = ROCKSTAR_PATH + os.sep + ROCKSTAR_HALO_FILENAME
 PFILEPATH               = ROCKSTAR_PATH + os.sep + ROCKSTAR_PART_FILENAME
-SAVE_PATH               = ROCKSTAR_PATH + os.sep + "ehid_num_part.txt" 
+SAVE_PATH               = ROCKSTAR_PATH + os.sep + "LengthByTypeSpdChk.txt" 
 
 # --- DATA BANK
 print("Loading halos data ... ",end="")
@@ -75,8 +75,8 @@ def GetParticlesIN(EHID):
 from multiprocessing import Pool
 def main():
     inputs=numpy.int64(halos[:,mp.ascii.id])
-    print("Computing parallelly ... ",len(inputs),end="")
-    p=Pool(16)
+    print("Computing parallelly ... ",len(inputs))
+    p=Pool(32)
     outputs=p.map(GetParticlesIN,inputs)
     # print("Done")
 
