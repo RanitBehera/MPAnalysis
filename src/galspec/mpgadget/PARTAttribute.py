@@ -17,10 +17,9 @@ class _Attr:
 
     def __repr__(self) -> str:
         return str(self.value)
-
-    # @property
+    
     def __call__(self, *args: Any, **kwds: Any) -> Any:
-        return self.value
+        return int(self.value)
 
 
 class PARTAttribute:

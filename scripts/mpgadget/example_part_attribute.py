@@ -26,7 +26,6 @@ if PRINT_PARSED_CONTENET:
           f"{th[2]:<{int(TCW/2)}}"
           f"{th[3]:<{TCW}}")
 
-
     print("".ljust(RULE_WIDTH,"-"))
 
     def PrintRow(field: _Attr):
@@ -35,28 +34,21 @@ if PRINT_PARSED_CONTENET:
             f"{field.nmemb:<{int(TCW/2)}}"
             f"{str(field.value):<{TCW}}")
 
-    
+    rows = (    attr.BoxSize,attr.CMBTemperatures,
+                attr.HubbleParam,attr.Omega0,attr.OmegaBaryon,attr.OmegaLambda,
+                attr.DensityKernel,attr.MassTable,
+                attr.RSDFactor,
+                attr.Time,attr.TimeIC,
+                attr.TotNumPart,attr.TotNumPartInit,
+                attr.UnitLength_in_cm,attr.UnitMass_in_g,attr.UnitVelocity_in_cm_per_s,
+                attr.UsePeculiarVelocity
+            )
 
-    PrintRow(attr.BoxSize)
-    PrintRow(attr.CMBTemperatures)
-    PrintRow(attr.HubbleParam)
-    PrintRow(attr.Omega0)
-    PrintRow(attr.OmegaBaryon)
-    PrintRow(attr.OmegaLambda)
-    PrintRow(attr.DensityKernel)
-    PrintRow(attr.MassTable)
-    PrintRow(attr.RSDFactor)
-    PrintRow(attr.Time)
-    PrintRow(attr.TimeIC)
-    PrintRow(attr.TotNumPart)
-    PrintRow(attr.TotNumPartInit)
-    PrintRow(attr.UnitLength_in_cm)
-    PrintRow(attr.UnitMass_in_g)
-    PrintRow(attr.UnitVelocity_in_cm_per_s)
-    PrintRow(attr.UsePeculiarVelocity)
-    
-    a=attr.BoxSize
-    print(a) 
+    for row in rows:
+        PrintRow(row)
+
+    a=attr.BoxSize()
+    print(a+1) 
     # Not working due to python OOP.
     # Add __add__ magic methods to support maths 
     # Or return integer using __new__ to boxsize etc
