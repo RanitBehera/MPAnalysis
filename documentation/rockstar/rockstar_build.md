@@ -37,7 +37,7 @@ make install
 - Find libraries in  "`libtirpc-1.3.4/src/.libs`".
 
 ### 3. hdf5
-If avaiable in modolue load using 
+If avaiable in module, load using 
 ```
 module load cmake-3.27.4
 ```
