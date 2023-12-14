@@ -46,9 +46,3 @@ if PRINT_PARSED_CONTENET:
 
     for row in rows:
         PrintRow(row)
-
-    a=attr.BoxSize()
-    print(a+1) 
-    # Not working due to python OOP.
-    # Add __add__ magic methods to support maths 
-    # Or return integer using __new__ to boxsize etc
