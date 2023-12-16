@@ -2,7 +2,7 @@ import numpy
 from galspec.mpgadget.DType import _DTYPE
 
 
-class FieldHeader:
+class _FieldHeader:
     def __init__(self, path: str) -> None:
         self.path   = path
 
@@ -12,10 +12,10 @@ class FieldHeader:
         lines = self.contents.split("\n")[:-1]
         
         self.DType              = _DTYPE(lines[0].split(" ")[1])
-        self.dtype              = self.DType()
+        self.DTYPE              = self.DType()
 
-        self.nmemb              = int(lines[1].split(":")[1])
-        self.nfile              = int(lines[2].split(":")[1])
+        self.NMEMB              = int(lines[1].split(":")[1])
+        self.NFILE              = int(lines[2].split(":")[1])
 
         self.filenames              = ()
         self.datalength_per_file    = numpy.zeros(len(lines)-3,dtype=int)

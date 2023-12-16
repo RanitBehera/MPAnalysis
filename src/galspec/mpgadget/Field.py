@@ -1,13 +1,22 @@
+import os, galspec
+from typing import Any
+
 class _Field:
     def __init__(self,parent_dir):
         # Knowling field name is required to take different actions based on field under same name
-        self.fieldName  =   self.__class__.__name__.split("_")[-1]     # str
-        self.path       = parent_dir + os.sep + self.fieldName
-        self.parentpath = parent_dir
-        # self.value  = None
+        self.field_name     = self.__class__.__name__.split("_")[-1]     # str
+        self.path           = parent_dir + os.sep + self.field_name
+        self.parent_path    = parent_dir
 
-    # def ReadValues(self):
-        # return mp.ReadField(self)
+    def NValue(self):
+        return galspec._ReadFieldWithNumpy(self)
+
+    def BValue(self):
+        return galspec._ReadFieldWithBigFile(self)
+
+    # def __call__(self, *args: Any, **kwds: Any) -> Any:
+        # return galspec._ReadFieldWithNumpy(self)
+        # return galspec._ReadFieldWithBigFile(self)
 
 
 
@@ -24,7 +33,6 @@ class _Mass(_Field):                        pass
 # Common - Gas + Star + Blaclhole
 class _Generation(_Field):                  pass
 class _SmoothingLength(_Field):             pass
-
 
 # Common - Gas + Star
 class _Metallicity(_Field):                 pass
@@ -62,27 +70,17 @@ class _BlackholeSwallowID(_Field):          pass
 class _BlackholeSwallowTime(_Field):        pass
 class _Swallowed(_Field):                   pass
 
-
-
-# FOF
+# --- PIG Field
 class _FirstPos(_Field):                    pass
-
 class _GasMetalElemMass(_Field):            pass
 class _GasMetalMass(_Field):                pass
-
-
 class _Imom(_Field):                        pass
 class _Jmom(_Field):                        pass
 class _LengthByType(_Field):                pass
-
-
 class _MassByType(_Field):                  pass
 class _MassCenterPosition(_Field):          pass
 class _MassCenterVelocity(_Field):          pass
 class _MassHeIonized(_Field):               pass
 class _MinID(_Field):                       pass
-
-
-
 class _StellarMetalElemMass(_Field):        pass
 class _StellarMetalMass(_Field):            pass
