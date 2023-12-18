@@ -1,6 +1,7 @@
 import os, galspec
 from typing import Any
 
+# --- Base Field Class
 class _Field:
     def __init__(self,parent_dir):
         # Knowling field name is required to take different actions based on field under same name
@@ -8,14 +9,8 @@ class _Field:
         self.path           = parent_dir + os.sep + self.field_name
         self.parent_path    = parent_dir
 
-    def NValue(self):
+    def __call__(self, *args: Any, **kwds: Any) -> Any:
         return galspec._ReadFieldWithNumpy(self)
-
-    def BValue(self):
-        return galspec._ReadFieldWithBigFile(self)
-
-    # def __call__(self, *args: Any, **kwds: Any) -> Any:
-        # return galspec._ReadFieldWithNumpy(self)
         # return galspec._ReadFieldWithBigFile(self)
 
 
@@ -24,7 +19,10 @@ class _Field:
 
 # Common - All
 class _GroupID(_Field):                     pass
-class _ID(_Field):                          pass
+class _ID(_Field):
+    def GetIndexOfIDs(ids_list):
+        
+
 class _Position(_Field):                    pass
 class _Potential(_Field):                   pass
 class _Velocity(_Field):                    pass
