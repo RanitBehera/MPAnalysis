@@ -4,9 +4,9 @@ sys.path.append(os.getcwd())
 import galspecold as mp
 
 # --- CONFIG PARAMETERS
-OUTPUTDIR           = "/home/ranitbehera/MyDrive/Data/RKS_NEW/rks/output2/"
-HALO_FILENAME       = "halos_0.0.ascii"
-PARTICLE_FILENAME   = "halos_0.0.particles"
+OUTPUTDIR           = "/mnt/home/student/cranit/Work/Merger_Tree_WNum/RKSG_L10N64c"
+HALO_FILENAME       = "halos_PART_017.0.ascii"
+PARTICLE_FILENAME   = "halos_PART_017.0.particles"
 LIST_LENGTH         = 10
 
 # --- DERIVED PARAMETRS

@@ -1,8 +1,10 @@
-from ete3 import Tree,TreeStyle, TextFace, NodeStyle
+# from ete3 import Tree,TreeStyle, TextFace, NodeStyle
+from ete3 import Tree, TreeStyle, TextFace, NodeStyle
 import numpy as np
 
 
-file=open("tree_0_0_0.dat")
+# file=open("tree_0_0_0.dat")
+file=open("/mnt/home/student/cranit/Work/Merger_Tree_WNum/RKSG_L10N64c/trees/tree_0_0_0.dat")
 lines=file.readlines()
 file.close()
 
@@ -90,7 +92,8 @@ for n in t.traverse():
 t.set_style(None)
 
 
-t.show(tree_style=ts)
+# t.show(tree_style=ts)
+t.render("/mnt/home/student/cranit/Work/Merger_Tree_WSFR_Mod/Results/my_tree.png", w=183, h=183, units="mm")
 
 
 

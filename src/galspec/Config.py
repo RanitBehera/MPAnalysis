@@ -4,8 +4,11 @@ class _Config:
             self.SetUserConfig()
 
     def SetUserConfig(self):
-        self.MPGADGET_OUTPUT_DIR    = "/home/ranitbehera/MyDrive/Data/MP-Gadget/L10N64" # Remove last '/' if input by validation
-        # self.MPGADGET_OUTPUT_DIR    = "/home/ranitbehera/MyDrive/Data/MP-Gadget/L50N640" # Remove last '/' if input by validation
+        self.MPGADGET_OUTPUT_DIR        = "/home/ranitbehera/MyDrive/Data/MP-Gadget/L10N64" # Remove last '/' if input by validation
+        # self.MPGADGET_OUTPUT_DIR      = "/home/ranitbehera/MyDrive/Data/MP-Gadget/L50N640" # Remove last '/' if input by validation
+        self.CONSISTENT_TREE_OUTPUT_DIR =  "/mnt/home/student/cranit/Work/Merger_Tree_WNum/RKSG_L10N64c/trees"
+        
+        
         self.READ_FIELD_WITH        = "numpy"   # numpy, bigfile
     
     def SetConfigFromFile(self,filename:str):

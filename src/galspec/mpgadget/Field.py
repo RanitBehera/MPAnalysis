@@ -19,10 +19,7 @@ class _Field:
 
 # Common - All
 class _GroupID(_Field):                     pass
-class _ID(_Field):
-    def GetIndexOfIDs(ids_list):
-        pass
-
+class _ID(_Field):                          pass
 class _Position(_Field):                    pass
 class _Potential(_Field):                   pass
 class _Velocity(_Field):                    pass
