@@ -54,3 +54,24 @@ install `PyQt5` as
 ```
 pip install PyQt5
 ```
+
+
+
+
+
+
+### Treelib Error
+if `tree.show()` prints strings instead of tree like render,
+right click on `tree.show()` and click on `Go To Definition` which will open
+
+`gsvenv > lib > Python3.10 > site-packages > treelib > tree.py` file with function `def show()`.
+
+Navigate to bottom of the fuction and you will find following section.
+```python
+if stdout:
+    # print(self._reader.encode("utf-8"))   # Commented by Ranit
+    print(self._reader)                     # By Ranit
+else:
+    return self._reader
+```
+Comment the original line and `print()` instead the `self._reader`. That should fix the bug.

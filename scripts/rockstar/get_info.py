@@ -4,7 +4,7 @@ sys.path.append(os.getcwd())
 import galspecold as mp
 
 # --- CONFIG PARAMETERS
-OUTPUTDIR           = "/mnt/home/student/cranit/Work/Merger_Tree_WNum/RKSG_L10N64c"
+OUTPUTDIR           = "/mnt/home/student/cranit/Work/Merger_Tree_WSFR_Mod/RKSG_L10N64c"
 HALO_FILENAME       = "halos_PART_017.0.ascii"
 PARTICLE_FILENAME   = "halos_PART_017.0.particles"
 LIST_LENGTH         = 10
