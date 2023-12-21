@@ -4,6 +4,7 @@ from galspec.mpgadget.DarkMatter import _DarkMatter
 from galspec.mpgadget.Neutrino import _Neutrino
 from galspec.mpgadget.Star import _Star
 from galspec.mpgadget.Blackhole import _BlackHole
+from galspec.mpgadget.PARTAttribute import _PARTAttribute
 
 class _PART:
     def __init__(self,snap_num,base_dir):
@@ -17,6 +18,8 @@ class _PART:
         self.Neutrino   = _Neutrino(self.path)
         self.Star       = _Star(self.path)
         self.BlackHole  = _BlackHole(self.path)
+
+        self.Header     = _PARTAttribute(self.path + os.sep + "Header" + os.sep + "attr-v2")
 
     # def ReadAttribute(self):
     #     return mp.ReadAttribute(self)

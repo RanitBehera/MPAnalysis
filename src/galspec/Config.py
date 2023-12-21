@@ -4,8 +4,9 @@ class _Config:
             self.SetUserConfig()
 
     def SetUserConfig(self):
-        self.MPGADGET_OUTPUT_DIR        = "/home/ranitbehera/MyDrive/Data/MP-Gadget/L10N64" # Remove last '/' if input by validation
+        self.MPGADGET_OUTPUT_DIR        = "/mnt/home/student/cranit/Data/MP_Gadget/Nishi/L10Mpc_N64c/output" # Remove last '/' if input by validation
         # self.MPGADGET_OUTPUT_DIR      = "/home/ranitbehera/MyDrive/Data/MP-Gadget/L50N640" # Remove last '/' if input by validation
+        self.MPGADGET_SNAPSHOT_TXT_DIR  = "/mnt/home/student/cranit/Data/MP_Gadget/Nishi/L10Mpc_N64c/txtfiles/Snapshots.txt" # Remove last '/' if input by validation
         self.CONSISTENT_TREE_OUTPUT_DIR =  "/mnt/home/student/cranit/Work/Merger_Tree_WNum/RKSG_L10N64c/trees"
         
         
@@ -29,3 +30,4 @@ def InitConfig():
     # or default
     sim = _Sim(galspec.CONFIG.MPGADGET_OUTPUT_DIR)
     return sim
+

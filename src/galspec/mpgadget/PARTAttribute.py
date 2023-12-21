@@ -27,7 +27,7 @@ class _Attr:
         return self.value
 
 
-class PARTAttribute:
+class _PARTAttribute:
     def __init__(self, path: str) -> None:
         self.path = path
 
