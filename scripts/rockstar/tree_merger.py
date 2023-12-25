@@ -48,10 +48,10 @@ def GetTag(i):
     # Snap Num (Redshift) + Snap HID + SFR
     sn=mpg.get_snapshot_number_from_time(scale[i])
     tag = ""
-    # # tag += "S" + str(mpg.get_snapshot_number_from_time(scale[i]))
-    # # tag += "(z=" + str(round((1/scale[i]-1),2)) + ")"
-    # # tag += ":"
-    # # tag += "HID-" + str(orig_halo_id[i])
+    # tag += "S" + str(mpg.get_snapshot_number_from_time(scale[i]))
+    # tag += "(z=" + str(round((1/scale[i]-1),2)) + ")"
+    # tag += ":"
+    # tag += "HID-" + str(orig_halo_id[i])
     # # tag += " -----> "
 
     part_fixed=mpg.get_fixed_format_snapshot_number(sn)

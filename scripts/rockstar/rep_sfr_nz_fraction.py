@@ -36,7 +36,7 @@ def Print_For_Mass_Range(start,end):
     mask_mass = ((log10_mh>=start) & (log10_mh<end))    
     # selected_halo_mass = halo_mass[mask_mass]
     # print(list(numpy.round(numpy.log10(selected_halo_mass),1)))
-    selected_sfr    = sfr[mask_mass]
+    selected_sfr    = sfr[mask_mass]        # length same as selected halos within mass range
     halo_fraction   = len(selected_sfr)/len(sfr)
     if not len(selected_sfr)==0:
         selected_nz_sfr = selected_sfr[selected_sfr!=0]
@@ -45,13 +45,13 @@ def Print_For_Mass_Range(start,end):
     print(str(start).rjust(int(CELL_WIDTH/2)-1),"-",str(end).ljust(int(CELL_WIDTH/2)-2),
           "|",
           str(len(selected_sfr)).rjust(int(CELL_WIDTH/2)),
-          ("( " + str(round((halo_fraction)*100,2)) + "% )").ljust(int(CELL_WIDTH/2)-1),
+          (": " + str(round((halo_fraction)*100,2)) + "%").ljust(int(CELL_WIDTH/2)-1),
           "|",
           end="")
     
     if len(selected_sfr)==0 : print("-".center(CELL_WIDTH))
     else: print(str(len(selected_nz_sfr)).rjust(int(CELL_WIDTH/2)),
-          ("( " + str(round((nz_sfr_fraction)*100,2)) + "% )").ljust(int(CELL_WIDTH/2)-1),)
+          (": " + str(round((nz_sfr_fraction)*100,2)) + "%").ljust(int(CELL_WIDTH/2)-1),)
 
 
 for i in range(5,14):
