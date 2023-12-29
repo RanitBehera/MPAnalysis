@@ -1,5 +1,9 @@
 import bagpipes as pipes
 import numpy as np
+import matplotlib.pyplot as plt
+
+# import matplotlib
+# matplotlib.use('Agg')
 
 exp = {}                          # Tau model star formation history component
 exp["age"] = 3.                   # Gyr
@@ -18,9 +22,12 @@ model_components["dust"] = dust
 
 
 
-goodss_filt_list = np.loadtxt("filters/goodss_filt_list.txt", dtype="str")
+goodss_filt_list = np.loadtxt("/mnt/home/student/cranit/Repo/MPAnalysis/scripts/bagpipes/filters/myfilters.txt", dtype="str")
 model = pipes.model_galaxy(model_components, filt_list=goodss_filt_list)
 
 
-# model.plot()
-model.sfh.plot()
+model.plot(False)
+# model.sfh.plot()
+
+
+plt.savefig("/mnt/home/student/cranit/Work/Spectra/test.png", dpi=200)

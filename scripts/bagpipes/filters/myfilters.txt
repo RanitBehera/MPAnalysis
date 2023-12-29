@@ -1,0 +1,15 @@
+/mnt/home/student/cranit/Repo/MPAnalysis/scripts/bagpipes/filters/VIMOS_U
+/mnt/home/student/cranit/Repo/MPAnalysis/scripts/bagpipes/filters/f435w
+/mnt/home/student/cranit/Repo/MPAnalysis/scripts/bagpipes/filters/f606w
+/mnt/home/student/cranit/Repo/MPAnalysis/scripts/bagpipes/filters/f775w
+/mnt/home/student/cranit/Repo/MPAnalysis/scripts/bagpipes/filters/f850lp
+/mnt/home/student/cranit/Repo/MPAnalysis/scripts/bagpipes/filters/f098m
+/mnt/home/student/cranit/Repo/MPAnalysis/scripts/bagpipes/filters/f105w
+/mnt/home/student/cranit/Repo/MPAnalysis/scripts/bagpipes/filters/f125w
+/mnt/home/student/cranit/Repo/MPAnalysis/scripts/bagpipes/filters/f160w
+/mnt/home/student/cranit/Repo/MPAnalysis/scripts/bagpipes/filters/ISAAC_Ks
+/mnt/home/student/cranit/Repo/MPAnalysis/scripts/bagpipes/filters/HAWKI_K
+/mnt/home/student/cranit/Repo/MPAnalysis/scripts/bagpipes/filters/IRAC1
+/mnt/home/student/cranit/Repo/MPAnalysis/scripts/bagpipes/filters/IRAC2
+/mnt/home/student/cranit/Repo/MPAnalysis/scripts/bagpipes/filters/IRAC3
+/mnt/home/student/cranit/Repo/MPAnalysis/scripts/bagpipes/filters/IRAC4
