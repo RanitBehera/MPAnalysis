@@ -45,7 +45,7 @@ def GetZSFR(sidx):
             # filter for '#' as frist charcter
             # skip first two rows for meta data
             lines=[l for l in lines if l[0]=="#"][2:]
-            # split and ectract the ehid
+            # split and extract the ehid
             lines_ehid = [int(l.split(":")[0][1:]) for l in lines]
             # get index of selected ehid
             # can skip if output file is structured so that line N has EHID N info

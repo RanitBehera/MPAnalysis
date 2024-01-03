@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 # --- Config
 DIR = "/mnt/home/student/cranit/Work/Merger_Tree_WSFR_Mod/RKSG_L50N640c"
-SNAP_NUM = 36
+SNAP_NUM = 16
 CELL_WIDTH=24
 
 

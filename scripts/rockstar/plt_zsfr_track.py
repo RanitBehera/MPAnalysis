@@ -57,4 +57,4 @@ txt=plt.gcf().text(0.5,0.16,text,fontsize=8,wrap=True,ma="left",ha="center",va="
 txt._get_wrap_line_width = lambda : 1100
 
 plt.savefig("/mnt/home/student/cranit/Work/PID_SFR_Track/Result/zsfr_test.png",dpi=200)
-# plt.savefig("/mnt/home/student/cranit/Work/PID_SFR_Track/Result/zsfr_test.svg")
+plt.savefig("/mnt/home/student/cranit/Work/PID_SFR_Track/Result/zsfr_test.svg")

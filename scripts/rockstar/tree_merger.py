@@ -49,10 +49,10 @@ def GetTag(i):
     sn=mpg.get_snapshot_number_from_time(scale[i])
     tag = ""
     # tag += "S" + str(mpg.get_snapshot_number_from_time(scale[i]))
-    # tag += "(z=" + str(round((1/scale[i]-1),2)) + ")"
+    # tag += "z=" + str(round((1/scale[i]-1),2)) + ""
     # tag += ":"
     # tag += "HID-" + str(orig_halo_id[i])
-    # # tag += " -----> "
+    # tag += " " + chr(9472)*5 + chr(9675) +" "
 
     part_fixed=mpg.get_fixed_format_snapshot_number(sn)
     part_file_name = "halos_PART_" + part_fixed + ".0.particles"
