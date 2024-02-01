@@ -136,6 +136,7 @@ class Basic:
 
         edgecolor=numpy.outer(numpy.ones((len(edges),1)),color)
         line_set=open3d.geometry.LineSet()
+        
         line_set.points=open3d.utility.Vector3dVector(vertices)
         line_set.lines=open3d.utility.Vector2iVector(edges)
         line_set.colors=open3d.utility.Vector3dVector(edgecolor)

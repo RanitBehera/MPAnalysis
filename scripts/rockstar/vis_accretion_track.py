@@ -58,9 +58,9 @@ def GetTrack(track_id):
 # --- OPEN3d 
 win=mp.Open3D.GADGET()
 win.Star(GetPositionOf(2))
-win.Blackhole(GetPositionOf(3))
+# win.Blackhole(GetPositionOf(3))
 
-for i in range(50):
+for i in range(5):
     track_id=f_ids[i]
     track=GetTrack(track_id) 
     win.AddCurve(track,[1,0,0])
