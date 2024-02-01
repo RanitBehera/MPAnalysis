@@ -13,9 +13,9 @@ class _TempRSGPartDump:
         self.path = parent_dir + os.sep + str(part_type_int)
         self.parentpath = parent_dir
 
-        self.GroupID                     = fld._GroupID(self.path)
-        self.InternalGroupID             = fld._InternalGroupID(self.path)
-        self.AssignedInternalGroupID     = fld._AssignedInternalGroupID(self.path)
+        self.HaloID                     = fld._HaloID(self.path)
+        self.InternalHaloID             = fld._InternalHaloID(self.path)
+        self.AssignedInternalHaloID     = fld._AssignedInternalHaloID(self.path)
         self.ID                          = fld._ID(self.path)
         self.Mass                        = fld._Mass(self.path)
         # self.Position                    = fld._Position(self.path)

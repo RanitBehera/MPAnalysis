@@ -6,8 +6,8 @@ class _RKSGroups:
         self.path = parent_dir + os.sep + "RKSGroups"
         self.parentpath = parent_dir
 
-        self.GroupID                    = fld._GroupID(self.path)
-        self.InternalGroupID            = fld._InternalGroupID(self.path)
+        self.HaloID                    = fld._HaloID(self.path)
+        self.InternalHaloID            = fld._InternalHaloID(self.path)
         self.Length                     = fld._Length(self.path)
         self.VirialMass                 = fld._VirialMass(self.path)
         self.VirialRadius               = fld._VirialRadius(self.path)
