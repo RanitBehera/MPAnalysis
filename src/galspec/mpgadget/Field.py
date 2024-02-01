@@ -79,3 +79,10 @@ class _MassHeIonized(_Field):               pass
 class _MinID(_Field):                       pass
 class _StellarMetalElemMass(_Field):        pass
 class _StellarMetalMass(_Field):            pass
+
+# --- RSG Fields
+class _InternalGroupID(_Field):             pass
+class _AssignedInternalGroupID(_Field):     pass
+class _Length(_Field):                      pass
+class _VirialMass(_Field):                  pass
+class _VirialRadius(_Field):                pass

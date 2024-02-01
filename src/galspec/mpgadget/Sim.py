@@ -1,5 +1,6 @@
 from galspec.mpgadget.PART import _PART
 from galspec.mpgadget.PIG import _PIG
+from galspec.mpgadget.RSG import _RSG
 
 class _Sim:
     def __init__(self,output_dir:str):
@@ -13,3 +14,7 @@ class _Sim:
     def PIG(self,snap_num:int):
         if not isinstance(snap_num,int):raise TypeError
         return _PIG(snap_num,self.path)
+    
+    def RSG(self,snap_num:int):
+        if not isinstance(snap_num,int):raise TypeError
+        return _RSG(snap_num,self.path)
