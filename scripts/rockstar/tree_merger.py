@@ -1,5 +1,5 @@
 import numpy,os
-import galspec.mpgadget as mpg
+import galspec.snapshot as mpg
 from treelib import Tree, Node
 
 TREE_PATH="/mnt/home/student/cranit/Work/Merger_Tree_WSFR_Mod/RKSG_L10N64c/trees/tree_0_0_0.dat"

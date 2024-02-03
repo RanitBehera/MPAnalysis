@@ -1,4 +1,4 @@
-import galspec.mpgadget as mpg
+import galspec.snapshot as mpg
 
 # --- Config Variables
 HEDAER_PATH = "/home/ranitbehera/MyDrive/Data/MP-Gadget/L10N64/PART_017/1/Position/header"

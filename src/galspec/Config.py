@@ -22,7 +22,7 @@ class _Config:
 
 
 
-from galspec.mpgadget.Sim import _Sim
+from galspec.snapshot.Sim import _Sim
 import galspec
 def InitConfig():
     # Make it to work from a file,
