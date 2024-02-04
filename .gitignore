@@ -2,3 +2,4 @@
 gsvenv
 src/galspec.egg-info
 .vscode
+env.cfg

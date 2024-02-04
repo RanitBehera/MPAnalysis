@@ -1,31 +1,4 @@
-from typing import Any
-import numpy
-from galspec.snapshot.DType import _DTYPE
-
-class _Attr:
-    def __init__(self, attrline: str) -> None:
-        chunks      = attrline.split(" ")
-        self.name   = chunks[0]
-        self.DType  = _DTYPE(chunks[1])
-        self.dtype  = self.DType()
-        self.nmemb  = chunks[2]
-
-        np_chunks   = numpy.array(chunks)
-        sqbr_start  = int(numpy.where(np_chunks=='[')[0])
-        sqbr_end    = int(numpy.where(np_chunks=="]")[0])
-        self.value  = np_chunks[sqbr_start+1:sqbr_end].astype(self.dtype)
-        
-        if (self.value.size==1): self.value=self.value[0]
-
-    def __str__(self) -> str:
-        return str(self.value)
-        
-    def __repr__(self) -> str:
-        return repr(self.value)
-    
-    def __call__(self, *args: Any, **kwds: Any) -> Any:
-        return self.value
-
+from galspec.snapshot.Attribute import _Attr
 
 class _PARTAttribute:
     def __init__(self, path: str) -> None:
@@ -39,8 +12,8 @@ class _PARTAttribute:
         self.BoxSize                    = _Attr(lines[0])
         self.box_size                   = self.BoxSize()
 
-        self.CMBTemperatures            = _Attr(lines[1])
-        self.cmb_temperatures           = self.CMBTemperatures()
+        self.CMBTemperature             = _Attr(lines[1])
+        self.cmb_temperature            = self.CMBTemperature()
 
         self.DensityKernel              = _Attr(lines[4])
         self.density_kernel             = self.DensityKernel()

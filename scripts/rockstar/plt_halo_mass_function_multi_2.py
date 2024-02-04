@@ -71,6 +71,7 @@ def Plot_Colo_HMF(axis_handle,model_name,mdef="fof",**kwargs):
     z = REDSHIFT
     M = 10**numpy.arange(7.0, 14, 0.1)
     mfunc = mass_function.massFunction(M, z, mdef = mdef, model = model_name, q_out = 'dndlnM')
+    mass_function.massFunction()
     axis_handle.plot(M,mfunc,**kwargs)
     
     
