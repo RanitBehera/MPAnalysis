@@ -5,6 +5,7 @@ from galspec.snapshot.Header import _FieldHeader
 # decide if bigfile to be used depending on config and
 # abstract one read function here instead of Field read function.
 
+
 def _ReadFieldWithNumpy(field:_Field):
     if not isinstance(field,_Field):raise TypeError
     header = _FieldHeader(field.path + os.sep + "header")

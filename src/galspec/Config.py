@@ -41,5 +41,8 @@ class _Config:
             if key in class_members:setattr(self,key,value)
 
             
-def NavigationRoot():
-    return _Sim(galspec.CONFIG.SNAPSORT_DIRECTORY)
+def NavigationRoot(path:str):
+    if path=="":
+        return _Sim(galspec.CONFIG.SNAPSORT_DIRECTORY)
+    else:
+        return _Sim(path)

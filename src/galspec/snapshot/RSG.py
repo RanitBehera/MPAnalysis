@@ -24,8 +24,8 @@ class _TempRSGPartDump:
         self.AssignedInternalHaloID     = fld._AssignedInternalHaloID(self.path)
         self.ID                         = fld._ID(self.path)
         self.Mass                       = fld._Mass(self.path)
-        # self.Position                    = fld._Position(self.path)
-        # self.Velocity                    = fld._Velocity(self.path)
+        self.Position                    = fld._Position(self.path)
+        self.Velocity                    = fld._Velocity(self.path)
 # --- Temporary solution 
 
 
@@ -55,23 +55,9 @@ class _RSG:
 # RGS needs RSGUtility for Utility meber and
 # RSGUtility needs RSG for type hinting and intellisense
 # If intellisense not needed we can transfer it to its own file
+# if file make it in Utility folder
 
-
-from galspec.utility.MassFunction import mass_function_from_mass_list, mass_function_litreture
-from typing import Literal
-
-
-
-user_to_colossus_model_name_map =  { 
-                "Press-Schechter" : "press74",
-                "Seith-Tormen"    : "sheth99",
-            }
-
-user_to_colossus_qout_map =  { 
-                "dn/dlnM" : "dndlnM",
-                "(M2/rho0)*(dn/dm)"    : "M2dndM",
-            }
-
+from galspec.utility.MassFunction import _mass_function_from_mass_list
 
 
 class _RGSUtility:
@@ -80,31 +66,12 @@ class _RGSUtility:
 
     def MassFunction(self,LogBinStep=0.5):
         mass_list = self.RSG.RKSGroups.VirialMass()
-        volume = self.RSG.Attribute.BoxSize()
-        log_M, dn_dlogM,error = mass_function_from_mass_list(mass_list,volume,LogBinStep)
+        volume = (self.RSG.Attribute.BoxSize()/1000)**3
+        log_M, dn_dlogM,error = _mass_function_from_mass_list(mass_list,volume,LogBinStep)
 
         M = numpy.exp(log_M)
         return M,dn_dlogM
-    
-    def MassFunctionLitreture(self,
-                              model_name : Literal["Press-Schechter","Seith-Tormen"],
-                              mass_range,
-                              output : Literal["dn/dlnM","(M2/rho0)*(dn/dm)"]
-                              ):
-        sim_cosmo = {
-            'flat': True,   # Link this too
-            'H0': self.RSG.Attribute.HubbleParam() * 100,
-            'Om0': self.RSG.Attribute.Omega0(),
-            'Ob0': self.RSG.Attribute.OmegaBaryon(),
-            'sigma8': 0.81, # Link this too
-            'ns': 0.971     # Link this too
-            }
 
-        model = user_to_colossus_model_name_map[model_name]
-        q_out = user_to_colossus_qout_map[output]
-        redshift = (1/self.RSG.Attribute.Time())-1
-
-        return mass_function_litreture(sim_cosmo, model,redshift,mass_range,q_out)
 
 
 
