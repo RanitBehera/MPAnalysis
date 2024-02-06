@@ -1,5 +1,5 @@
 import numpy
-from galspec.snapshot.DType import _DTYPE
+from galspec.IO.DType import _DTYPE
 
 
 class _FieldHeader:

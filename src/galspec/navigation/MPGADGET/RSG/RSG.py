@@ -13,7 +13,7 @@ from galspec.snapshot.RSGAttribute import _RSGAttribute
 # RSG particle fields are different from GADGET particle fields
 # Proper is to make RSGGas and RSGDarkMatter class and its file
 # Also have to modify original Gas to PARTGas then
-import galspec.snapshot.Field as fld
+import galspec.IO.Field as fld
 class _TempRSGPartDump:
     def __init__(self,parent_dir,part_type_int):
         self.path = parent_dir + os.sep + str(part_type_int)
@@ -35,19 +35,36 @@ class _TempRSGPartDump:
 class _RSG:
     def __init__(self,snap_num,base_dir):
         snap_num_fix='{:03}'.format(snap_num)
-        self.path       = base_dir + os.sep + "RSG_" + snap_num_fix
-        self.parentpath = base_dir
-        self.snap_num   = snap_num
+        self.path        = base_dir + os.sep + "RSG_" + snap_num_fix
+        self.parentpath  = base_dir
+        self.snap_num    = snap_num
 
-        self.Gas        = _TempRSGPartDump(self.path,0)
-        self.DarkMatter = _TempRSGPartDump(self.path,1)
+        self.Gas         = _TempRSGPartDump(self.path,0)
+        self.DarkMatter  = _TempRSGPartDump(self.path,1)
         # self.Neutrino   = _TempRSGPartDump(self.path,2)
-        self.Star       = _TempRSGPartDump(self.path,4)
-        self.BlackHole  = _TempRSGPartDump(self.path,5)
-        self.RKSGroups  = _RKSGroups(self.path)
+        self.Star        = _TempRSGPartDump(self.path,4)
+        self.BlackHole   = _TempRSGPartDump(self.path,5)
+        self.RKSGroups   = _RKSGroups(self.path)
 
-        self.Attribute  = _RSGAttribute(self.path + "/Header/attr-v2")
-        self.Utility    = _RGSUtility(self)
+        self.Attribute   = _RSGAttribute(self.path + "/Header/attr-v2")
+        self.Utility     = _RSGUtility(self)
+        # self.PostProcess =plt.plot(log_M,dn_dlogM)
+
+# mass_hr = numpy.logspace(7,12,100)
+
+# log_M, dn_dlogM = sim.RSG(36).Utility.MassFunctionLitreture('Press-Schechter',mass_hr,'dn/dlnM')
+# plt.plot(log_M,dn_dlogM)
+
+# log_M, dn_dlogM = sim.RSG(36).Utility.MassFunctionLitreture('Seith-Tormen',mass_hr,'dn/dlnM')
+# plt.plot(log_M,dn_dlogM)
+
+
+
+
+# plt.xscale('log')
+# plt.yscale('log')
+
+# plt.savefig("/mnt/home/student/cranit/Work/ResetRKSG/Result/check_mass_function.png",dpi=200)
 
 
 
@@ -59,8 +76,7 @@ class _RSG:
 
 from galspec.utility.MassFunction import _mass_function_from_mass_list
 
-
-class _RGSUtility:
+class _RSGUtility:
     def __init__(self,RSG:_RSG) -> None:
         self.RSG = RSG
 

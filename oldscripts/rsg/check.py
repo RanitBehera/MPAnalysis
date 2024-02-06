@@ -12,3 +12,5 @@ sim = galspec.InitConfig()
 stars = sim.RSG(36).Star.ID()
 
 print(len(stars))
+
+

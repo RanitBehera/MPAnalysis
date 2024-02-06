@@ -38,7 +38,7 @@ RVIR = SNAP.RKSGroups.VirialRadius()[vm_sort][select_offset] / 1000 # Kpc to Mpc
 
 # --- COUNT PARTICLES
 # Returns number of occurance of "ihid" in list of particle ihid
-from galspec.snapshot.RSG import _TempRSGPartDump as pt
+from galspec.navigation.MPGADGET.RSG.RSG import _TempRSGPartDump as pt
 def ReturnCount(ptype:pt,ihid):
     ihid_mask = (ptype.InternalHaloID()==ihid)
     pos = ptype.Position()[ihid_mask]

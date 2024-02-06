@@ -1,6 +1,6 @@
 from typing import Any
 import numpy
-from galspec.snapshot.DType import _DTYPE
+from galspec.IO.DType import _DTYPE
 
 class _Attr:
     def __init__(self, attrline: str) -> None:

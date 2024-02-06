@@ -1,6 +1,6 @@
-from galspec.snapshot.PART import _PART
-from galspec.snapshot.PIG import _PIG
-from galspec.snapshot.RSG import _RSG
+from galspec.navigation.MPGADGET.PART.PART import _PART
+from galspec.navigation.MPGADGET.PIG.PIG import _PIG
+from galspec.navigation.MPGADGET.RSG.RSG import _RSG
 
 from typing import Literal
 

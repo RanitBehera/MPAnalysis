@@ -15,8 +15,10 @@ user_to_colossus_qout_map =  {
 
 # Separate Utility for RSG. etc rewire accordingly.
 class _Utility:
-    def __init__(self) -> None:
+    def __init__(self) :
         pass
+        
+        
 
     def MassFunctionLitreture(self,
                               model_name : Literal["Press-Schechter","Seith-Tormen"],
@@ -29,4 +31,7 @@ class _Utility:
         model = user_to_colossus_model_name_map[model_name]
         q_out = user_to_colossus_qout_map[output]
 
-        return _mass_function_litreture(cosmology, model,redshift,mass_range,q_out)
+        # return _mass_function_litreture(cosmology, model,redshift,mass_range,q_out)
+    
+
+    

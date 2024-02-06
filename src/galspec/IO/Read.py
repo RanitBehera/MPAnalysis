@@ -1,6 +1,6 @@
 import numpy, os,galspec,bigfile
-from galspec.snapshot.Field import _Field
-from galspec.snapshot.Header import _FieldHeader
+from galspec.IO.Field import _Field
+from galspec.IO.Header import _FieldHeader
 
 # decide if bigfile to be used depending on config and
 # abstract one read function here instead of Field read function.

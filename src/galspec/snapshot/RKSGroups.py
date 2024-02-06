@@ -1,5 +1,5 @@
 import os
-import galspec.snapshot.Field as fld
+import galspec.IO.Field as fld
 
 class _RKSGroups:
     def __init__(self,parent_dir):

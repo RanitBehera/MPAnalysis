@@ -1,4 +1,4 @@
 from .PARTAttribute import *
-from .Header import *
+from galspec.IO.Header import *
 
 # from .Utility_hold import *
