@@ -36,6 +36,8 @@ class _Field(_Folder):
         raise NotImplementedError
 
     def Read(self):
-        
         return self._ReadWithNumpy()
+    
+    def __call__(self, *args: Any, **kwds: Any) -> Any:
+        return self.Read()
 

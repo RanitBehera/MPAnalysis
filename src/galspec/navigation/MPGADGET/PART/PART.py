@@ -5,13 +5,10 @@ from galspec.navigation.MPGADGET.PART.DarkMatter import _DarkMatter
 from galspec.navigation.MPGADGET.PART.Neutrino import _Neutrino
 from galspec.navigation.MPGADGET.PART.Star import _Star
 from galspec.navigation.MPGADGET.PART.Blackhole import _BlackHole
-from galspec.snapshot.PARTAttribute import _PARTAttribute
+from galspec.navigation.MPGADGET.PART.PARTAttribute import _PARTAttribute
 
 class _PART(_Folder):
     def __init__(self,path):
-        # self.snap_num   = snap_num
-        # snap_num_fix='{:03}'.format(self.snap_num)
-        # super().__init__(os.path.join(base_dir, "PART_" + snap_num_fix))
         super().__init__(path)
 
 

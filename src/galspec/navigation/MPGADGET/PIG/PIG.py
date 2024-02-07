@@ -9,11 +9,6 @@ from galspec.navigation.MPGADGET.PIG.FOFGroups import _FOFGroups
 
 class _PIG(_Folder):
     def __init__(self,path):
-        # snap_num_fix='{:03}'.format(snap_num)
-        # self.path       = base_dir + os.sep + "PIG_" + snap_num_fix
-        # self.parentpath = base_dir
-        # self.snap_num   = snap_num
-
         super().__init__(path)
 
 

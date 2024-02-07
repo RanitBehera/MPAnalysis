@@ -1,5 +1,5 @@
 import os,sys,numpy
-
+from typing import Literal
 
 class _BinaryFile:
     def __init__(self,path:str,dtype:numpy.dtype) -> None:
@@ -37,7 +37,7 @@ def _WriteHeader(path,variable:numpy.ndarray,nfile=1):
     with open(path,"w") as f:f.write(header)
 
 
-def Write(path:str,fieldname:str,variable):
+def WriteField(path:str,fieldname:str,variable,mode:Literal["Overwrite","Skip"]="Skip"):
     # Validation
     path = path.strip()
     fieldname = fieldname.strip()
@@ -45,10 +45,16 @@ def Write(path:str,fieldname:str,variable):
     if (len(variable.shape)==1):variable=variable.reshape(len(variable),1)
     elif (len(variable.shape)==0):variable=variable.reshape(1,1)
 
-    field_path = path + os.sep + fieldname
-    os.makedirs(field_path,exist_ok=True)
-    # os.makedirs()
+    file_dir = os.path.join(path, fieldname)
+    os.makedirs(file_dir,exist_ok=True)
+    try:
+        if mode=="Skip":
+            with open(file_dir + os.sep + "000000",'xb') as f: variable.tofile(f)
+        if mode=="Overwrite":
+            with open(file_dir + os.sep + "000000",'wb') as f: variable.tofile(f)
+    except FileExistsError:
+        print("Following file already exist. Skipping writing data.")
+        print(file_dir + os.sep + "000000")
 
-    with open(field_path + os.sep + "000000",'xb') as f: variable.tofile(f)
-    _WriteHeader(field_path + os.sep + "header",variable)
+    _WriteHeader(file_dir + os.sep + "header",variable)
 

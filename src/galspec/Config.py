@@ -1,5 +1,5 @@
 import galspec
-from galspec.snapshot.Sim import _Sim
+from galspec.navigation.MPGADGET.Sim import _Sim
 
 class _Config:
     def __init__(self) -> None:

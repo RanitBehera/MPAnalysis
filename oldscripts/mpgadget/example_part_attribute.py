@@ -1,5 +1,5 @@
 import galspec.snapshot as mpg
-from galspec.snapshot.PARTAttribute import _Attr
+from galspec.navigation.MPGADGET.PART.PARTAttribute import _Attr
 
 # --- Config Variables
 ATTR_PATH = "/home/ranitbehera/MyDrive/Data/MP-Gadget/L10N64/PART_017/Header/attr-v2"

@@ -1,4 +1,4 @@
-from galspec.snapshot.Attribute import _Attr
+from galspec.IO.Attribute import _Attr
 
 class _RSGAttribute:
     def __init__(self, path: str) -> None:
