@@ -31,7 +31,10 @@ print(len(SNAP.RKSGroups.HaloID()))
 
 
 # --- FOCOUSED HALO PROPERTIES
-IHID = SNAP.RKSGroups.InternalHaloID()[vm_sort][select_offset]
+# --- SORT AS DECREASING MASS
+VirialMass = SNAP.RKSGroups.VirialMass()
+vm_sort = numpy.argsort(VirialMass)[::-1]
+VirialMass = VirialMass[vm_sort]
 HPOS = SNAP.RKSGroups.Position()[vm_sort][select_offset]
 RVIR = SNAP.RKSGroups.VirialRadius()[vm_sort][select_offset] / 1000 # Kpc to Mpc
 

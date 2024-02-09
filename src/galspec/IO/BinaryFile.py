@@ -50,11 +50,10 @@ def WriteField(path:str,fieldname:str,variable,mode:Literal["Overwrite","Skip"]=
     try:
         if mode=="Skip":
             with open(file_dir + os.sep + "000000",'xb') as f: variable.tofile(f)
-        if mode=="Overwrite":
+        elif mode=="Overwrite":
             with open(file_dir + os.sep + "000000",'wb') as f: variable.tofile(f)
     except FileExistsError:
         print("Following file already exist. Skipping writing data.")
         print(file_dir + os.sep + "000000")
-
     _WriteHeader(file_dir + os.sep + "header",variable)
 

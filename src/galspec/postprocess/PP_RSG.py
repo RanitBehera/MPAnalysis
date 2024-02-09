@@ -1,6 +1,5 @@
 import os,numpy
 from galspec.navigation.MPGADGET.RSG.RSG import _RSG
-from galspec.navigation.base.Folder import _Folder
 from galspec.IO.BinaryFile import WriteField
 
 
@@ -63,6 +62,7 @@ class PP_RSG:
             gmask = numpy.isin(pihids,gihids)
             pihids,ppos=pihids[gmask],ppos[gmask]
 
+
             rvir_mask = numpy.zeros((len(pihids)))
             # Algorithm-1 : Works but slow.
             # for i,ihid in enumerate(pihids):
@@ -70,13 +70,11 @@ class PP_RSG:
             #     rvir_mask[i] = ( numpy.linalg.norm(ppos[i]-ihid_pos_map[ihid])<ihid_rvir_map[ihid] )
 
             # Algorithm-2 : Works and fast.
-            linked_halo_center = numpy.empty(len(pihids))
-            linked_halo_radius = numpy.empty(len(pihids))
-            for i,ihid in enumerate(pihids):
-                linked_halo_center = ihid_pos_map.get(ihid)
-                linked_halo_radius = ihid_rvir_map.get(ihid)
-            rvir_mask = numpy.linalg.norm(ppos-linked_halo_center)<linked_halo_radius
-
+            linked_halo_center = [ihid_pos_map.get(ihid) for ihid in pihids]
+            linked_halo_radius = [ihid_rvir_map.get(ihid) for ihid in pihids]
+            rvir_mask = numpy.linalg.norm(ppos-linked_halo_center,axis=1)<linked_halo_radius
+            
+            # print(rvir_mask)
             
             pihids = pihids[rvir_mask]
             # --- Same as without Rvir

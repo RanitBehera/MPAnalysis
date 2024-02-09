@@ -13,3 +13,7 @@ class _RKSGroups(_Folder):
         self.VirialRadius       = _Field(os.path.join(self.path,"VirialRadius"))
         self.Position           = _Field(os.path.join(self.path,"Position"))
         self.Velocity           = _Field(os.path.join(self.path,"Velocity"))
+
+        # Post Processed
+        self.LengthByTypeWC         = _Field(os.path.join(self.path,"LengthByTypeWC"))
+        self.LengthByTypeInRvirWC   = _Field(os.path.join(self.path,"LengthByTypeInRvirWC"))
