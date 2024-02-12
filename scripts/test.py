@@ -7,36 +7,32 @@ matplotlib.use('Agg')
 
 
 # --- SIMULATIONS
-L10N64     = galspec.NavigationRoot("/mnt/home/student/cranit/Work/ResetRKSG/RSG_L10N64")
+BOX     = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L50N640")
 
-mass = L10N64.RSG(17).RKSGroups.VirialMass()
+count = BOX.RSG(36).RKSGroups.LengthByTypeInRvirWC()
 
-from galspec.IO.Field import _Field
-lbt = _Field("/mnt/home/student/cranit/Work/ResetRKSG/RSG_L10N64/RSG_017/RKSGroups/LengthByTypeInRvirWC")()
+gas = count[:,0]
+dm = count[:,1]
+st = count[:,4]
 
-gas,dm,u1,u2,star,bh = numpy.transpose(lbt)
+gas *= BOX.RSG(36).Attribute.MassTable()[0]
+dm *= BOX.RSG(36).Attribute.MassTable()[1]
+st *= BOX.RSG(36).Attribute.MassTable()[4]
 
-gas  = gas * L10N64.RSG(17).Attribute.MassTable()[0]
-dm   = dm * L10N64.RSG(17).Attribute.MassTable()[1]
-star = star * L10N64.RSG(17).Attribute.MassTable()[4]
-bh   = bh * L10N64.RSG(17).Attribute.MassTable()[5]
+ratio = (gas+st)/dm
+# ratio = (gas)/(gas+st+0.0001)
 
-total = gas + dm + star + bh
-total *= 10**10
-
-
-ratio = total/mass
-
-asort = numpy.argsort(mass)
-mass  = mass[asort]
-ratio = ratio[asort]
-
-import matplotlib.pyplot as plt
+ex_ratio = BOX.RSG(36).Attribute.OmegaBaryon()/BOX.RSG(36).Attribute.Omega0()
 
 plt.hist(ratio,bins=100)
+plt.axvline(ex_ratio,color="k")
 plt.yscale('log')
+# plt.xscale('log')
 
-plt.savefig("/mnt/home/student/cranit/Work/ResetRKSG/Result/check_mvir_calc_hist.png",dpi=200)
+plt.savefig("/mnt/home/student/cranit/Work/RSGBank/Results/test.png")
+
+
+
 
 
 

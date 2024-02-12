@@ -6,6 +6,8 @@ from galspec.utility.MassFunction import MassFunction, MassFunctionLitreture
 import matplotlib
 matplotlib.use('Agg')
 
+# --- SIMULATIONS
+BOX         = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L50N640")
 
 # --- FLAGS
 SNAP_NUM    = 36
@@ -13,8 +15,6 @@ BIN_SIZE    = 0.5
 MASS_HR     = numpy.logspace(6,12,100) # High resolution mass for litrature mass function plot
 SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results/mass_function_contribution.png" 
 
-# --- SIMULATIONS
-BOX         = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L50N640")
 
 # --- AUTO-FLAGS
 # Make sure cosmology in all simulations are same
@@ -66,7 +66,7 @@ m = numpy.power(10,x)
 dn = numpy.power(10,y)
 sa = numpy.argsort(m)
 m,dn=m[sa],dn[sa]
-plt.plot(m,dn,':g',lw=1,label="Star (Astrid) **")
+plt.plot(m,dn,'g',lw=1,label="Star (Astrid) **")
 
 # LBT         = BOX.RSG(SNAP_NUM).RKSGroups.LengthByTypeWC()
 
@@ -76,7 +76,7 @@ GAS,DM,U1,U2,STAR,BH = numpy.transpose(LBT)
 STAR    = numpy.int64(STAR)
 MASS_TABLE = numpy.int64(MASS_TABLE)
 STAR    *=  MASS_TABLE[4]
-PlotMF(STAR,color="y",label="Star FOF **",ls=':',lw=1)
+PlotMF(STAR,color="y",label="Star FOF **",ls='-',lw=1)
 
 
 

@@ -8,24 +8,27 @@ from galspec.navigation.MPGADGET.Sim import _Sim
 import matplotlib
 matplotlib.use('Agg')
 
+
+# --- SIMULATIONS
+L50N640     = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L50N640")
+L140N700    = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L140N700")
+L140N896    = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L140N896")
+L140N1008   = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L140N1008")
+
+
 # --- FLAGS
 SNAP_NUM    = 36
 BIN_SIZE    = 0.5
 MASS_HR     = numpy.logspace(7,12,100) # High resolution mass for litrature mass function plot
 SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results/mass_function_convergence.png"
 
-INCLUDE_CONTRIBUTIONS = [True,True,True,False]   # [ DM, STAR, GAS, BH ]
+INCLUDE_CONTRIBUTIONS = [0,0,0,0]   # [ DM, STAR, GAS, BH ]
 
 
-# --- SIMULATIONS
-L50N640     = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L50N640")
-L140N896    = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L140N896")
-L140N1008   = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L140N1008")
-
-# --- LINKING BOX
-#               
+# --- LINKING BOX           
 BOX_LIST    = [ [L50N640    ,"L50N640"   ,"r"],
-                [L140N896   ,"L140N896"  ,"g"],
+                [L140N700   ,"L140N700"  ,"y"],
+                [L140N896   ,"L140N896"  ,"c"],
                 [L140N1008  ,"L140N1008" ,"b"] ]
 
 # --- AUTO-FLAGS
@@ -33,7 +36,6 @@ BOX_LIST    = [ [L50N640    ,"L50N640"   ,"r"],
 COSMOLOGY   = L50N640.GetCosmology("MassFunctionLitrature")
 SNAP        = L50N640.RSG(SNAP_NUM)
 REDSHIFT    = (1/SNAP.Attribute.Time())-1 
-BOX_TEXT    = L50N640.path.split("_")[-1]       # Special Case Work Only
 HUBBLE      = SNAP.Attribute.HubbleParam()
 
 
@@ -44,14 +46,18 @@ def PlotSMF(SIM:_Sim,**kwargs):
     MASS_UNIT = 10**10                          # <--- HARD CODE
     MASS_TABLE = SNAP.Attribute.MassTable() * MASS_UNIT
 
+    conv_lim = 32 * MASS_TABLE[1]
+
     def PlotMF(mass,**kwargs):
         log_M, dn_dlogM = MassFunction(mass,BOX_SIZE,BIN_SIZE)
-        mask        = (dn_dlogM>1e-20)
+        mask1        = (dn_dlogM>1e-20)
+        mask2        = (log_M>conv_lim)
+        mask=mask1 & mask2
+        plt.plot(log_M[mask1],dn_dlogM[mask1],alpha=0.1)
         plt.plot(log_M[mask],dn_dlogM[mask],**kwargs)
     
-
-
     PlotMF(SNAP.RKSGroups.VirialMass(),**kwargs)
+    plt.axvline(conv_lim,color=kwargs['color'],lw=0.5,ls='--',alpha=0.5)
 
 
     if True in INCLUDE_CONTRIBUTIONS:
@@ -64,7 +70,7 @@ def PlotSMF(SIM:_Sim,**kwargs):
 
         if INCLUDE_CONTRIBUTIONS[0]:PlotMF(DM,      color=kwargs['color'],lw=1,ls='--')
         if INCLUDE_CONTRIBUTIONS[1]:PlotMF(GAS,     color=kwargs['color'],lw=1,ls=':')
-        if INCLUDE_CONTRIBUTIONS[2]:PlotMF(STAR,    color=kwargs['color'],lw=1,ls='-.')
+        if INCLUDE_CONTRIBUTIONS[2]:PlotMF(STAR,    color=kwargs['color'],lw=0.5,ls='-.')
         if INCLUDE_CONTRIBUTIONS[3]:PlotMF(BH,      color=kwargs['color'],lw=1,ls='-.')
 
         
@@ -76,7 +82,10 @@ for BOX in BOX_LIST:
 # --- LITRARTURE MASS FUNCTIONS
 if True:
     log_M, dn_dlogM = MassFunctionLitreture("Seith-Tormen",COSMOLOGY,REDSHIFT,MASS_HR,"dn/dlnM")
-    plt.plot(log_M,dn_dlogM*HUBBLE,'k',label="Seith-Tormen",lw=1,zorder=-1,alpha=0.1)
+    plt.plot(log_M,dn_dlogM*HUBBLE,'k',lw=1,zorder=-1,alpha=0.1)
+
+    log_M, dn_dlogM = MassFunctionLitreture("Press-Schechter",COSMOLOGY,REDSHIFT,MASS_HR,"dn/dlnM")
+    plt.plot(log_M,dn_dlogM*HUBBLE,'k',lw=1,zorder=-1,alpha=0.1)
 
 
 # --- BEUTIFY

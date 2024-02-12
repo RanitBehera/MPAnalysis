@@ -7,14 +7,15 @@ import matplotlib
 matplotlib.use('Agg')
 
 
+# --- SIMULATIONS
+BOX         = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L50N640")
+
 # --- FLAGS
 SNAP_NUM    = 36
 BIN_SIZE    = 0.5
 MASS_HR     = numpy.logspace(7,12,100) # High resolution mass for litrature mass function plot
 SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results/mass_function_comparision.png" 
 
-# --- SIMULATIONS
-BOX         = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L50N640")
 
 # --- AUTO-FLAGS
 # Make sure cosmology in all simulations are same
