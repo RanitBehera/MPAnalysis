@@ -3,8 +3,8 @@ import numpy
 import matplotlib.pyplot as plt
 from galspec.visualization.Matcube import PlotCube
 
-import matplotlib
-matplotlib.use('Agg')
+# import matplotlib
+# matplotlib.use('Agg')
 
 
 # --- SIMS
@@ -68,6 +68,6 @@ PlotCube(ax,TBH_POS,5*TRVIR/1000,2,'k')
 # print(TDM_POS)
 
 # --- SAVE
-# plt.show()
+plt.show()
 
-plt.savefig(SAVE_PATH,dpi=200)
+# plt.savefig(SAVE_PATH,dpi=200)

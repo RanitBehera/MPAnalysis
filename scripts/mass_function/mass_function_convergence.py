@@ -20,9 +20,9 @@ L140N1008   = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_
 SNAP_NUM    = 36
 BIN_SIZE    = 0.5
 MASS_HR     = numpy.logspace(7,12,100) # High resolution mass for litrature mass function plot
-SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results/mass_function_convergence.png"
+SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results_PMCAM/p2_mf_conv.png"
 
-INCLUDE_CONTRIBUTIONS = [0,0,0,0]   # [ DM, STAR, GAS, BH ]
+INCLUDE_CONTRIBUTIONS = [1,1,1,0]   # [ DM, GAS, STAR, BH ]
 
 
 # --- LINKING BOX           
@@ -49,10 +49,10 @@ def PlotSMF(SIM:_Sim,**kwargs):
     conv_lim = 32 * MASS_TABLE[1]
 
     def PlotMF(mass,**kwargs):
-        log_M, dn_dlogM = MassFunction(mass,BOX_SIZE,BIN_SIZE)
+        M, dn_dlogM = MassFunction(mass,BOX_SIZE,BIN_SIZE)
         mask1        = (dn_dlogM>1e-20)
         mask2        = (log_M>conv_lim)
-        mask=mask1 & mask2
+        mask=mask1 #& mask2
         plt.plot(log_M[mask1],dn_dlogM[mask1],alpha=0.1)
         plt.plot(log_M[mask],dn_dlogM[mask],**kwargs)
     

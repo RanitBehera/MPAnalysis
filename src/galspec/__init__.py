@@ -1,5 +1,5 @@
 from .Config import _Config
-from .Config import NavigationRoot
+from .Config import NavigationRoot,RockstarCFG
 
 
 CONFIG = _Config()

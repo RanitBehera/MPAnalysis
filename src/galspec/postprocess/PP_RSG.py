@@ -16,7 +16,7 @@ class PP_RSG:
 
     def StartAll(self):
         if(self.show_progress):print(" GENERATING FIELDS ".center(30,'='))
-        # self.LengthByTypeWC()
+        self.LengthByTypeWC()
         self.LengthByTypeInRvirWC()
         # self.StarFormationRate()
 

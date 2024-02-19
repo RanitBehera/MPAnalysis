@@ -1,4 +1,4 @@
-import numpy, galspec
+import numpy, galspec,os
 import matplotlib.pyplot as plt
 
 from galspec.utility.MassFunction import MassFunction, MassFunctionLitreture,MASS_OPTIONS
@@ -7,10 +7,15 @@ from galspec.utility.MassFunction import MassFunction, MassFunctionLitreture,MAS
 # matplotlib.use('Agg')
 
 # --- SIMULATIONS
-BOX         = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L50N640")
-LINKED_BOX  = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/L50N640")
+# Make sure cosmology in all simulations are same
+L50N640     = "/mnt/home/student/cranit/Work/RSGBank/OUT_L50N640"
+L140N700    = "/mnt/home/student/cranit/Work/RSGBank/OUT_L140N700"
+L140N896    = "/mnt/home/student/cranit/Work/RSGBank/OUT_L140N896"
+L140N1008   = "/mnt/home/student/cranit/Work/RSGBank/OUT_L140N1008"
+
 
 # --- FLAGS
+CFG         = galspec.RockstarCFG(L50N640)
 SNAP_NUM    = 36
 BIN_SIZE    = 0.5
 MASS_HR     = numpy.logspace(7,12,100) # High resolution mass for litrature mass function plot
@@ -18,12 +23,15 @@ SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results_PMCAM/p1_mf_comp1.p
 HALO_DEF    = 50    # Can be auto detected from rockstar.cfg
 
 # --- AUTO-FLAGS
-# Make sure cosmology in all simulations are same
+BOX_TEXT    = os.path.basename(CFG.INBASE)
+BOX         = galspec.NavigationRoot(CFG.OUTBASE)
+LINKED_BOX  = galspec.NavigationRoot(CFG.INBASE)
 COSMOLOGY   = BOX.GetCosmology("MassFunctionLitrature")
 SNAP        = BOX.RSG(SNAP_NUM)
+print(SNAP.path)
+exit()
 REDSHIFT    = (1/SNAP.Attribute.Time())-1
 BOX_SIZE    = SNAP.Attribute.BoxSize()/1000
-BOX_TEXT    = BOX.path.split("_")[-1]       # Special Case Work Only
 HUBBLE      = SNAP.Attribute.HubbleParam()
 MASS_UNIT   = 10**10
 MASS_TABLE  = SNAP.Attribute.MassTable() * MASS_UNIT

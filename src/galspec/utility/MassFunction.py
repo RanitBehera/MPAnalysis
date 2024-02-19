@@ -52,7 +52,7 @@ def MassFunction(mass_list,
     volume = (box_size)**3
     log_M, dn_dlogM,error = _mass_function_from_mass_list(mass_list,volume,LogBinStep)
     M = numpy.exp(log_M)
-    return M,dn_dlogM
+    return M,dn_dlogM,error
 
 
 # -----------------------------------------------

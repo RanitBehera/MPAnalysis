@@ -13,7 +13,7 @@ BOX         = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_
 SNAP_NUM    = 36
 BIN_SIZE    = 0.5
 MASS_HR     = numpy.logspace(6,12,100) # High resolution mass for litrature mass function plot
-SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results/mass_function_contribution.png" 
+SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results/mass_function_contribution_ast.png" 
 
 
 # --- AUTO-FLAGS
@@ -43,7 +43,7 @@ RATIO = MTOTAL/MVIR
 
 # --- MASS FUNCTION PLOTS
 def PlotMF(mass,**kwargs):
-    log_M, dn_dlogM = MassFunction(mass,BOX_SIZE,BIN_SIZE)
+    M, dn_dlogM = MassFunction(mass,BOX_SIZE,BIN_SIZE)
     mask        = (dn_dlogM>1e-20)
     plt.plot(log_M[mask],dn_dlogM[mask],**kwargs)
 
@@ -61,6 +61,19 @@ plt.plot(log_M,dn_dlogM*HUBBLE,label="Seith-Tormen",ls='-',color='k',lw=1)
 # --- TEMP CHECK ASTRID
 x = [7.015723270440252, 10.066037735849056, 10.41194968553459, 9.374213836477988, 7.361635220125786, 7.723270440251572, 8.084905660377359, 8.430817610062894, 8.69811320754717, 8.949685534591195, 9.185534591194969, 9.531446540880504, 9.79874213836478]
 y = [-1.948717948717949, -6.794871794871795, -7.282051282051282, -5, -2.282051282051282, -2.6923076923076925, -3.1282051282051286, -3.5897435897435903, -4, -4.384615384615385, -4.717948717948718, -5.461538461538462, -6.128205128205128]
+
+ASTRID_COSMOLOGY = {
+                # Get these from simulation run files
+                'flat': True,
+                'H0': 67.74,
+                'Om0': 0.3089,
+                'Ob0': 0.0486,
+                'sigma8': 0.816,
+                'ns': 0.9667
+                }
+log_M, dn_dlogM = MassFunctionLitreture("Seith-Tormen",ASTRID_COSMOLOGY,REDSHIFT,MASS_HR,"dn/dlnM")
+plt.plot(log_M,dn_dlogM*HUBBLE,'k--',lw=1,zorder=-1)
+
 
 m = numpy.power(10,x)
 dn = numpy.power(10,y)

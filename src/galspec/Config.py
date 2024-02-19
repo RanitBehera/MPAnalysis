@@ -1,5 +1,6 @@
-import galspec
+import galspec,os
 from galspec.navigation.MPGADGET.Sim import _Sim
+from galspec.IO.RockstarCFG import _RockstarCFG
 
 class _Config:
     def __init__(self) -> None:
@@ -46,3 +47,7 @@ def NavigationRoot(path:str):
         return _Sim(galspec.CONFIG.SNAPSORT_DIRECTORY)
     else:
         return _Sim(path)
+
+
+def RockstarCFG(path:str):
+    return _RockstarCFG(os.path.join(path,"rockstar.cfg"))
