@@ -17,4 +17,5 @@ class _RKSGroups(_Folder):
         # Post Processed
         self.LengthByTypeWC         = _Field(os.path.join(self.path,"LengthByTypeWC"))
         self.LengthByTypeInRvirWC   = _Field(os.path.join(self.path,"LengthByTypeInRvirWC"))
+        self.MassByTypeInRvirWC     = _Field(os.path.join(self.path,"MassByTypeInRvirWC"))
         self.StarFormationRate      = _Field(os.path.join(self.path,"StarFormationRate"))

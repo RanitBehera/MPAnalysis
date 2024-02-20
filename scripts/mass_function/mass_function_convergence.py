@@ -22,13 +22,13 @@ BIN_SIZE    = 0.5
 MASS_HR     = numpy.logspace(7,12,100) # High resolution mass for litrature mass function plot
 SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results_PMCAM/p2_mf_conv.png"
 
-INCLUDE_CONTRIBUTIONS = [1,1,1,0]   # [ DM, GAS, STAR, BH ]
+INCLUDE_CONTRIBUTIONS = [0,0,0,0]   # [ DM, GAS, STAR, BH ]
 
 
 # --- LINKING BOX           
-BOX_LIST    = [ [L50N640    ,"L50N640"   ,"r"],
-                [L140N700   ,"L140N700"  ,"y"],
-                [L140N896   ,"L140N896"  ,"c"],
+BOX_LIST    = [ #[L50N640    ,"L50N640"   ,"r"],
+                # [L140N700   ,"L140N700"  ,"y"],
+                # [L140N896   ,"L140N896"  ,"c"],
                 [L140N1008  ,"L140N1008" ,"b"] ]
 
 # --- AUTO-FLAGS
@@ -49,12 +49,16 @@ def PlotSMF(SIM:_Sim,**kwargs):
     conv_lim = 32 * MASS_TABLE[1]
 
     def PlotMF(mass,**kwargs):
-        M, dn_dlogM = MassFunction(mass,BOX_SIZE,BIN_SIZE)
+        M, dn_dlogM,error = MassFunction(mass,BOX_SIZE,BIN_SIZE)
+        print(M)
+        print(len(M))
+        print("conv : ",conv_lim)
         mask1        = (dn_dlogM>1e-20)
-        mask2        = (log_M>conv_lim)
-        mask=mask1 #& mask2
-        plt.plot(log_M[mask1],dn_dlogM[mask1],alpha=0.1)
-        plt.plot(log_M[mask],dn_dlogM[mask],**kwargs)
+        mask2        = (M>conv_lim)
+        mask=mask1 & mask2
+        plt.plot(M[mask1],dn_dlogM[mask1],alpha=0.1)
+        plt.plot(M[mask],dn_dlogM[mask],'.-',**kwargs)
+        print(len(M[mask]))
     
     PlotMF(SNAP.RKSGroups.VirialMass(),**kwargs)
     plt.axvline(conv_lim,color=kwargs['color'],lw=0.5,ls='--',alpha=0.5)

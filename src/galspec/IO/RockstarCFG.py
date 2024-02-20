@@ -14,9 +14,10 @@ class _RockstarCFG:
             key,value = key.strip(),value.strip()
             temp_dict[key]=value
 
-        self.MIN_HALO_OUTPUT_SIZE = temp_dict["MIN_HALO_OUTPUT_SIZE"]
-        self.INBASE = temp_dict["INBASE"][1:-1]
-        self.OUTBASE = temp_dict["OUTBASE"][1:-1]
+        self.MIN_HALO_PARTICLES     = numpy.int64(temp_dict["MIN_HALO_PARTICLES"])
+        self.MIN_HALO_OUTPUT_SIZE   = numpy.int64(temp_dict["MIN_HALO_OUTPUT_SIZE"])
+        self.INBASE                 = temp_dict["INBASE"][1:-1]
+        self.OUTBASE                = temp_dict["OUTBASE"][1:-1]
 
 
     def __str__(self) -> str:

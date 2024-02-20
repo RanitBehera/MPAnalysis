@@ -17,8 +17,8 @@ class PP_RSG:
     def StartAll(self):
         if(self.show_progress):print(" GENERATING FIELDS ".center(30,'='))
         self.LengthByTypeWC()
-        self.LengthByTypeInRvirWC()
-        # self.StarFormationRate()
+        self.LengthByTypeInRvirWC()     # Also adds MassByTypeInRvirWC()
+        self.StarFormationRate()
 
 
     def LengthByTypeWC(self):
@@ -91,7 +91,18 @@ class PP_RSG:
         WriteField(os.path.join(self.RSG.path,"RKSGroups"),"LengthByTypeInRvirWC",LengthBTInRvirWC,"Overwrite")
         if(self.show_progress):print("Done")
 
-
+        # MassByTypeInRvirWC
+        if(self.show_progress):print("/RKSGroups/MassByTypeInRvirWC : ",end="",flush=True)
+        mass_table = self.RSG.Attribute.MassTable()
+        M_gas   = LengthBTInRvirWC[:,0] * mass_table[0]
+        M_dm    = LengthBTInRvirWC[:,1] * mass_table[1]
+        M_u1    = LengthBTInRvirWC[:,2] * mass_table[2]
+        M_u2    = LengthBTInRvirWC[:,3] * mass_table[3]
+        M_star  = LengthBTInRvirWC[:,4] * mass_table[4]
+        M_bh    = LengthBTInRvirWC[:,5] * mass_table[5]
+        MassBTInRvirWC = numpy.column_stack([M_gas,M_dm,M_u1,M_u2,M_star,M_bh])
+        WriteField(os.path.join(self.RSG.path,"RKSGroups"),"MassByTypeInRvirWC",MassBTInRvirWC,"Overwrite")
+        if(self.show_progress):print("Done")
 
 
     def StarFormationRate(self):

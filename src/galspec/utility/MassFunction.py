@@ -32,7 +32,7 @@ def _mass_function_from_mass_list(Mass,VOLUME,LogBinStep):
 
 
 #https://bdiemer.bitbucket.io/colossus/lss_mass_function.html
-def _mass_function_litreture(sim_cosmology, model_name, redshift,mass_range,q_out):
+def _mass_function_literature(sim_cosmology, model_name, redshift,mass_range,q_out):
     cosmology.setCosmology("my_cosmo",sim_cosmology)
     mass_func = mass_function.massFunction(mass_range, redshift, mdef = "fof", model = model_name, q_out = 'dndlnM')
     return mass_range,mass_func
@@ -64,10 +64,10 @@ user_to_colossus_qout_map =  {
                 "dn/dlnM" : "dndlnM",
                 "(M2/rho0)*(dn/dm)"    : "M2dndM",
             }
-MASS_OPTIONS = Literal["Press-Schechter","Seith-Tormen"]
+LMF_OPTIONS = Literal["Press-Schechter","Seith-Tormen"]
 
-def MassFunctionLitreture(
-        model_name : MASS_OPTIONS,
+def MassFunctionLiterature(
+        model_name : LMF_OPTIONS,
         cosmology,
         redshift,
         mass_range,
@@ -75,4 +75,4 @@ def MassFunctionLitreture(
         ):
     model = user_to_colossus_model_name_map[model_name]
     q_out = user_to_colossus_qout_map[output]
-    return _mass_function_litreture(cosmology, model,redshift,mass_range,q_out)
+    return _mass_function_literature(cosmology, model,redshift,mass_range,q_out)
