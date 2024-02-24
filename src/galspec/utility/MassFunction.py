@@ -32,9 +32,9 @@ def _mass_function_from_mass_list(Mass,VOLUME,LogBinStep):
 
 
 #https://bdiemer.bitbucket.io/colossus/lss_mass_function.html
-def _mass_function_literature(sim_cosmology, model_name, redshift,mass_range,q_out):
+def _mass_function_literature(sim_cosmology, model_name, redshift,mass_range,q_out,mdef="fof"):
     cosmology.setCosmology("my_cosmo",sim_cosmology)
-    mass_func = mass_function.massFunction(mass_range, redshift, mdef = "fof", model = model_name, q_out = 'dndlnM')
+    mass_func = mass_function.massFunction(mass_range, redshift, mdef = mdef, model = model_name, q_out = 'dndlnM')
     return mass_range,mass_func
 
 
@@ -59,12 +59,13 @@ def MassFunction(mass_list,
 user_to_colossus_model_name_map =  { 
                 "Press-Schechter" : "press74",
                 "Seith-Tormen"    : "sheth99",
+                "Comparat(z=0)"   : "comparat17"
             }
 user_to_colossus_qout_map =  { 
                 "dn/dlnM" : "dndlnM",
                 "(M2/rho0)*(dn/dm)"    : "M2dndM",
             }
-LMF_OPTIONS = Literal["Press-Schechter","Seith-Tormen"]
+LMF_OPTIONS = Literal["Press-Schechter","Seith-Tormen","Comparat(z=0)"]
 
 def MassFunctionLiterature(
         model_name : LMF_OPTIONS,
@@ -75,4 +76,9 @@ def MassFunctionLiterature(
         ):
     model = user_to_colossus_model_name_map[model_name]
     q_out = user_to_colossus_qout_map[output]
-    return _mass_function_literature(cosmology, model,redshift,mass_range,q_out)
+
+    if model_name=="Comparat(z=0)":mdef = "vir"
+    else:mdef="fof"
+
+
+    return _mass_function_literature(cosmology, model,redshift,mass_range,q_out,mdef)

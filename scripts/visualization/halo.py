@@ -12,8 +12,8 @@ BOX         = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_
 PARTBOX     = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/L50N640/")
 
 # --- FLAGS : Set flags
+SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results_PMCAM/halo_bh.png" 
 SNAP_NUM    = 36
-SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results/spatial_distribution.png" 
 HALO_OFFSET = 0
 
 
@@ -35,6 +35,7 @@ TRVIR       = SNAP.RKSGroups.VirialRadius()[ORDER][HALO_OFFSET]
 TPOS        = SNAP.RKSGroups.Position()[ORDER][HALO_OFFSET]
 
 
+
 # FILTER PARTICLE ROWS
 GAS_IHIDS   = SNAP.Gas.InternalHaloID()
 DM_IHIDS    = SNAP.DarkMatter.InternalHaloID()
@@ -53,21 +54,58 @@ TDM_POS     -= TPOS
 TSTAR_POS   -= TPOS
 TBH_POS     -= TPOS
 
+# --- GET RELATIVE DISTANCE
+R_TGAS      = numpy.linalg.norm(TGAS_POS,axis=1)
+R_TDM       = numpy.linalg.norm(TDM_POS,axis=1)
+R_TSTAR     = numpy.linalg.norm(TSTAR_POS,axis=1)
+R_TBH       = numpy.linalg.norm(TBH_POS,axis=1)
+
+# --- GET RELATIVE POSITION BOUNDS
+BOUND          = 2 * max(max(R_TGAS),max(R_TDM),max(R_TSTAR),max(R_TBH))
 
 # PLOT
 fig = plt.figure()
-ax = plt.axes(projection='3d')
 
-PlotCube(ax,TDM_POS,5*TRVIR/1000,2,'m')
-PlotCube(ax,TGAS_POS,5*TRVIR/1000,2,'y')
-PlotCube(ax,TSTAR_POS,5*TRVIR/1000,2,'b')
-PlotCube(ax,TBH_POS,5*TRVIR/1000,2,'k')
+ax1 = fig.add_subplot(111,projection='3d')
+
+# ax1 = fig.add_subplot(141,projection='3d')
+# ax2 = fig.add_subplot(142,projection='3d')
+# ax3 = fig.add_subplot(143,projection='3d')
+# ax4 = fig.add_subplot(144,projection='3d')
+
+# OFFSET
+TRANSLATE    = numpy.ones(3)*(BOUND/2)
+ZOOM_SCALE          = 1
+
+# PlotCube(ax1,(TGAS_POS*ZOOM_SCALE) +TRANSLATE,BOUND,1,'m')
+# PlotCube(ax1,(TGAS_POS*ZOOM_SCALE) +TRANSLATE,BOUND,1,'c')
+# PlotCube(ax1,(TSTAR_POS*ZOOM_SCALE)+TRANSLATE,BOUND,5,'y')
+PlotCube(ax1,(TBH_POS*ZOOM_SCALE)  +TRANSLATE,BOUND,[100,80],'k')
+
+#  For blackhole size scaling
+# bh_mask = (BH_IHIDS==TIHID)
+# bh_mass = SNAP.BlackHole.Mass()[bh_mask]
+# print(numpy.log10(bh_mass))
+# For offset_id=1 blackhole mass almost macth
+
+
 # --- BEAUTIFY
+# ax1.set_title("Dark Matter")
+# ax1.set_title("Gas")
+# ax1.set_title("Star")
+# ax1.set_title("Blackhole")
 
 # print(TRVIR)
 # print(TDM_POS)
 
 # --- SAVE
-plt.show()
+for ax in [ax1]:
+    ax.set_xlim(0,BOUND)
+    ax.set_ylim(0,BOUND)
+    ax.set_zlim(0,BOUND)
+    ax.set_box_aspect([1.0, 1.0, 1.0])
 
-# plt.savefig(SAVE_PATH,dpi=200)
+plt.tight_layout()
+# plt.show()
+
+plt.savefig(SAVE_PATH,dpi=300)

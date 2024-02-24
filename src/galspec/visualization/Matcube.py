@@ -1,14 +1,15 @@
 import numpy
 import matplotlib.pyplot as plt
+from typing import Literal
 
-def PlotCube(ax:plt.Axes,pos,box_size,point_size,point_color):
+def PlotCube(ax:plt.Axes,pos,box_size,point_size,point_color,alpha=1):
     # Validation
     if box_size==0:raise Exception("ERROR : Box Size=0.")
     L=box_size
 
     #------------------------------------------------------------
     x,y,z=numpy.transpose(pos)
-    ax.scatter(x,y,z,s=point_size,color=point_color,ec='none')
+    ax.scatter(x,y,z,s=point_size,color=point_color,ec='none',alpha=alpha)
     #------------------------------------------------------------
 
     # --- BEAUTIFY
@@ -32,6 +33,7 @@ def PlotCube(ax:plt.Axes,pos,box_size,point_size,point_color):
     ax.plot([L,L],[0,0],[0,L],'k-',alpha=alp,lw=1)
     ax.plot([L,L],[L,L],[0,L],'k-',alpha=alp,lw=1)
     ax.plot([0,0],[L,L],[0,L],'k-',alpha=alp,lw=1)
+
     # plt.tight_layout()
     #Rotate view(elev,azim)
     ax.view_init(20,40)

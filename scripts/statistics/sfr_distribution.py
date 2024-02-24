@@ -12,7 +12,7 @@ BOX         = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_
 
 # --- FLAGS
 SNAP_NUM    = 36
-SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results/sfr_distribution.png" 
+SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results_PMCAM/sfr_distribution.png" 
 MASS_BINS = numpy.arange(7,13,1)
 SFR_BIN_START = -10
 SFR_BIN_END = 10
@@ -169,7 +169,7 @@ for i in range(len(MASS_BINS)-1):
 
 # --- BEAUTIFY
 ax_list[0].set_title("SFR Distribution \n( L="+ str(BOX_SIZE) +"Mpc, N=$" + str(PART_NUM) + "^3, $ z="+str(numpy.round(REDSHIFT,2))+" )",pad=10)
-ax_list[-1].set_xlabel("$log_{10}\left(\\frac{SFR}{\\text{??  }M_{\odot} yr^{-1} \\text{  ??}}\\right)$")
+ax_list[-1].set_xlabel("$log_{10}\left(\\frac{SFR}{M_{\odot} yr^{-1}}\\right)$")
 fig.text(0.05, 0.5, 'Relative Density', va='center', rotation='vertical',fontsize=12)
 fig.text(0.14, 0.9, '$N^{\\text{Box}}_{\\text{halo}}$='+str(len(SFR)), va='center',fontsize=8,alpha=0.3)
 

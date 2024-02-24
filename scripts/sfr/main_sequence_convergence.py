@@ -9,7 +9,7 @@ matplotlib.use('Agg')
 
 # --- FLAGS
 SNAP_NUM    = 36
-SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results/main_sequence_convergence.png" 
+SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results_PMCAM/main_sequence_convergence.png" 
 REDSHIFT    = 8
 
 
@@ -79,7 +79,7 @@ iax.yaxis.set_label_position("right")
 iax.yaxis.tick_right()
 
 plt.legend()
-plt.title(f"MAIN SEQUENCE CONVERGENCE\nz={numpy.round(REDSHIFT,2)}")
+plt.title(f"MAIN SEQUENCE (z={numpy.round(REDSHIFT,2)})")
 
 # --- SAVE
-plt.savefig(SAVE_PATH,dpi=200)
+plt.savefig(SAVE_PATH,dpi=300)

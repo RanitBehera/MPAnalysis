@@ -11,4 +11,5 @@ dependencies=[
     "Cython>=3.0.6",
     "colossus>=1.3.3",
     "bagpipes>=1.0.4",
+    "treelib>=1.7.0",
     ]
