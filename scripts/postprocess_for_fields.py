@@ -10,7 +10,7 @@ L140N1008   = "/mnt/home/student/cranit/Work/RSGBank/OUT_L140N1008"
 
 CFG         = galspec.RockstarCFG(L50N640)   # <---
 
-SNAP_NUM    = 171
+SNAP_NUM    = 36
 BOX         = galspec.NavigationRoot(CFG.OUTBASE)
 LINKED_BOX  = galspec.NavigationRoot(CFG.INBASE)
 

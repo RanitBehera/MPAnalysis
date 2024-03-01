@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 
 goodss_filt_list = np.loadtxt("/mnt/home/student/cranit/Repo/MPAnalysis/oldscripts/bagpipes/filters/myfilters.txt", dtype="str")
 
-
-
 dust = {}                         
 dust["type"] = "Calzetti"         
 dust["Av"] = 0.2                  
@@ -26,7 +24,7 @@ ex_data = np.loadtxt("/mnt/home/student/cranit/Repo/MPAnalysis/sfh.txt")
 
 sfh[:,0] = ex_data[:,0]
 sfh[:,1] = ex_data[:,1]
-print(sfh)
+# print(sfh)
 
 
 
@@ -34,6 +32,7 @@ custom = {}
 custom["history"] = sfh
 # custom["massformed"] =  9.224393257882129  # Log_10 total stellar mass formed: M_Solar.
 # custom["massformed"] =  9.26087315  # Log_10 total stellar mass formed: M_Solar.
+# custom["massformed"] =  9  # Log_10 total stellar mass formed: M_Solar.
 custom["metallicity"] = 1.
 
 model_components = {}                   
@@ -49,11 +48,15 @@ model = pipes.model_galaxy(model_components, filt_list=goodss_filt_list,spec_wav
 # SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results/bg_sfh.png" 
 sfh_fig,sfh_ax = model.sfh.plot()
 
-# print(sfh_ax.lines[0].get_xdata())
-# print(sfh_ax.lines[0].get_ydata())
+xdata=sfh_ax.lines[0].get_xdata()
+ydata=sfh_ax.lines[0].get_ydata()
+
+print("Max Input :",np.max(sfh[:,1]))
+print("Max (Bagpipes) :",np.max(ydata))
+
 
 # plt.savefig(SAVE_PATH,dpi=200)
 
 # SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results/bg_spec.png" 
-# fig = model.plot()
+fig = model.plot()
 # plt.savefig(SAVE_PATH,dpi=200)

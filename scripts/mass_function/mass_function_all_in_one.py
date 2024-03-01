@@ -19,17 +19,17 @@ DM,GAS,STAR,BH  = 1,2,4,8   # Don't change this
 
 # Skip points structure [[fof-dm,fof-gas,fof-star],[vir-dm,vir-gas,vir-star]]
 CURVE_LIST       = [ 
-        [L50N640, FOF, DM,[[1,2,4],[1,1,2]]],
+        [L50N640, ROCKSTAR, DM,[[1,2,4],[1,1,2]]],
         # [L140N1008, FOF, DM,[[0,0,3],[1,0,0]]]
     ]
 
 COLORS_FOF  = ['cyan','blue']
 COLORS_RKS  = ['lime','green']
 
-SNAP_NUM    = 171
+SNAP_NUM    = 36
 BIN_SIZE    = 0.5
 MASS_HR     = numpy.logspace(7,12,100) # High resolution mass for literature mass function plot
-SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results_PMCAM/mf_rks_z0.png" 
+SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Result_comp/dmmf_res002.png" 
 INCLUDE_DEVIATION = False
 # INCLUDE_LMF = True          # Deviation axis and its plot also needs to be adapted. Not implemeted for now.
 
@@ -134,8 +134,8 @@ for i,PLOT in enumerate(CURVE_LIST):
     COSMOLOGY   = BOX.GetCosmology("MassFunctionLitrature")
     SNAP        = BOX.RSG(SNAP_NUM)
     REDSHIFT    = (1/SNAP.Attribute.Time())-1
-    BOX_SIZE    = SNAP.Attribute.BoxSize()/1000
     HUBBLE      = SNAP.Attribute.HubbleParam()
+    BOX_SIZE    = (SNAP.Attribute.BoxSize()/1000)
     MASS_UNIT   = 10**10
     MASS_TABLE  = SNAP.Attribute.MassTable()
     HALO_DEF    = CFG.MIN_HALO_PARTICLES
@@ -199,7 +199,7 @@ ax[0].legend(oh, ol,loc="upper right",ncol=2,title=LEGEND_TITLE,fontsize=10,titl
 ax[0].set_ylabel("$dn/d\log(M/M_{\odot})$",fontsize=16)
 ax[0].grid(alpha=0.3)
 # ax[0].set_xlim(left=5*10**5,right=5*10**12)
-ax[0].set_xlim(left=5*10**8,right=5*10**15)
+# ax[0].set_xlim(left=5*10**8,right=5*10**12)
 
 # ax[-1] = ax[0] when deviation not included else ax[1]
 ax[-1].set_xlabel("$M/M_{\odot}$",fontsize=16)
