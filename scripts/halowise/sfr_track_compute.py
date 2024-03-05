@@ -12,7 +12,6 @@ LBOX    = galspec.NavigationRoot(CFG.INBASE)
 # --- FLAGS : Set flags
 TSNAP_NUM   = 36    # Target snap num from which we will back track
 SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/TBSFR_Bank" 
-NUM_HALO    = 100   # Number of halos to track
 
 # Must be in desending order, like [25,20,15]
 TRACK_BACK_SNAP_NUMS = numpy.arange(36,15,-1).tolist()
@@ -26,7 +25,7 @@ CMBT        = TSNAP.Attribute.CMBTemperature()
 MUNIT       = 1e10
 MASSTABLE   = TSNAP.Attribute.MassTable()
 COSMOLOGY   = FlatLambdaCDM(H0=HUBBLE, Om0=OMEGA_M, Tcmb0=CMBT)
-
+NUM_HALO    = len(TSNAP.RKSGroups.InternalHaloID())   # Number of halos to track
 
 # Find redshifts and age only once
 tracked_redshift   = numpy.empty(len(TRACK_BACK_SNAP_NUMS))
@@ -74,7 +73,8 @@ def TrackBack_TargetHaloSFR_OffsetBy(offset):
 
 
 # COMPUTE and DUMP
-if False:
+NUM_HALO = 1000
+if True:
     for offset in range(NUM_HALO):
         print(offset+1,"/",NUM_HALO,end='',flush=True)
         TrackBack_TargetHaloSFR_OffsetBy(offset)
