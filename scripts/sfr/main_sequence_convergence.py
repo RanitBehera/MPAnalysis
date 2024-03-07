@@ -140,5 +140,6 @@ plt.legend(loc="upper left")
 plt.title(f"MAIN SEQUENCE (z={numpy.round(REDSHIFT,2)})")
 
 # --- SAVE
-plt.show()
+# plt.show()
 # plt.savefig(SAVE_PATH,dpi=300)
+plt.savefig("temp/plots/main_seq.png",dpi=300)

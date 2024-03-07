@@ -1,40 +1,37 @@
 import numpy
 import matplotlib.pyplot as plt
+from astropy.cosmology import FlatLambdaCDM
+
 
 LUM_PATH = "/mnt/home/student/cranit/Work/RSGBank/TBSFR_Bank/luminosities.txt"
-lum_flam = numpy.loadtxt(LUM_PATH) # erg s-1 cm-2 A-1
+off,ed,sfr = numpy.loadtxt(LUM_PATH).T # erg s-1 cm-2 A-1
+
+
+
+
+# # Ed to lum by multipkying luminosisty disnatce
+HUBBLE = 69.7
+OMEGA_M = 0.2814
+CMBT = 2.7255
+REDSHIFT = 8
+cosmo = FlatLambdaCDM(H0=HUBBLE, Om0=OMEGA_M, Tcmb0=CMBT)
+
+DL=cosmo.luminosity_distance(REDSHIFT).value #In Mpc
+cm_per_Mpc = 3.086e24
+DL *= cm_per_Mpc
+Area = 4*numpy.pi*(DL**2)
+
+lum_flam = ed * Area*(1+REDSHIFT)/(4*numpy.pi*((3.086e+19)**2))
+
 
 # === conversion
 if True:
-    c = 3e8 * 1e10 # A/s
-    # print(c)
-    # exit()
-    lam = 1450 *(1+8) # A
-    cf = (lam**2)/c
+    lam = 1450
+    f_lam = lum_flam
+    f_nu_b_jy = (3.34e4)*(lam**2)*f_lam
 
-    lum_fnu = lum_flam/cf # per angstorm to per Hz conversion as Jy unit
-
-    Jy = 1e-23 # erg s-1 cm-2 Hz-1
-    ref = 3631*Jy
-
-    # m_AB = -2.5*numpy.log10(lum_fnu/ref)
-    m_AB = -2.5*numpy.log10(lum_fnu)-48.60+2
-    
-
-if False:
-    # convert to si
-    lum_flam_si = lum_flam * (1e-7) / (((1e-2)**2) * (1e-10)) # J s-1 m-2 m-1
-    lam = 1450 *(1+8)* (1e-10)
-    c=3e8
-    lum_nu_si = lum_flam_si * (lam**2)/c  # J s-1 m-2 Hz-1
-    lum_nu = lum_nu_si * (1e7) / (((1e2)**2))
-    Jy = 1e-23 # erg s-1 cm-2 Hz-1
-    ref = 3631*Jy
-    m_AB = -2.5*numpy.log10(lum_nu)-48.60
-
-
-
-
+    m_AB = -2.5*numpy.log10(f_nu_b_jy/3631)
+    # m_AB to M_AB done while scaling flux
 
 
 
@@ -108,4 +105,5 @@ plt.ylabel("$Number/Mpc^{-3}/Mag$")
 plt.title("Redshift z~"+str(8))
 plt.grid(alpha=0.2)
 plt.yscale('log')
-plt.show()
+# plt.show()
+plt.savefig("temp/plots/lum_fun.png",dpi=300)

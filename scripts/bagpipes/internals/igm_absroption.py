@@ -40,7 +40,7 @@ l1inf=AnnotateLine(1,1000,"Ly - Limit")
 # Supressed Area
 plt.fill_between(wv,1,fact,color='r',alpha=0.05)
 
-
+plt.title("IGM attenuation model - Inoue et al. (2014)",fontsize=20)
 plt.yscale('log')
 plt.xlabel("$\\mathrm{Rest\\ Frame\\ Wavelength\\ (\\AA)}$",fontsize=12)
 plt.ylabel("Transmission",fontsize=12)
@@ -48,4 +48,5 @@ plt.xlim(min(wv),max(wv))
 plt.ylim(top=1.5)
 
 
-plt.show()
+# plt.show()
+plt.savefig("temp/plots/igm_trans.png",dpi=300)
