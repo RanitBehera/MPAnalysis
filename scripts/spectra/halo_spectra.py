@@ -26,7 +26,7 @@ def PlotSpectra_and_GetLuminosity(offset):
     goodss_filt_list = numpy.loadtxt("/mnt/home/student/cranit/Repo/MPAnalysis/oldscripts/bagpipes/filters/myfilters.txt", dtype="str")
 
     dust = {"type":"Calzetti","Av":0.2,"eta":3.}                         
-    nebular = {"logU":-10}                             
+    nebular = {"logU":-3}                             
 
     custom = {}
     custom["history"] = numpy.column_stack((lbage,sfh))
@@ -73,12 +73,22 @@ def PlotSpectra_and_GetLuminosity(offset):
     waves = axes[0].lines[0].get_xdata()
     lums  = axes[0].lines[0].get_ydata()
 
+    print(waves/(1+8))
+
+    # axes[0].plot(waves/(1+8),lums)
+    axes[0].plot([1,2,3])
+    plt.savefig("temp/plots/test_rest.png",dpi=200)
+
+
+    exit()
+    # plt.plot(waves/(1+8),lums)
+
     lum   = lums[numpy.argmin(numpy.abs(waves-wv))]
-    axes[0].axhline(lum,color='k',ls='--',lw=1)
-    axes[0].annotate(str(numpy.round(lum,2)),xy=(axes[0].get_xlim()[0],lum),xycoords='data',xytext=(5,5),textcoords='offset points',fontsize=10,c='k')
+    # axes[0].axhline(lum,color='k',ls='--',lw=1)
+    # axes[0].annotate(str(numpy.round(lum,2)),xy=(axes[0].get_xlim()[0],lum),xycoords='data',xytext=(5,5),textcoords='offset points',fontsize=10,c='k')
 
     # plt.show()
-    plt.savefig("temp/plots/ion_par_LU_neg10.png",dpi=200)
+    # plt.savefig("temp/plots/test.png",dpi=200)
     # plt.close()
     return offset, lum * 10**yscale,sfh[0]  #erg s-1 cm-2 A-1,M0 yr-1
 
