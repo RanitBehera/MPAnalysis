@@ -48,7 +48,7 @@ def PlotSpectra_and_GetLuminosity(offset):
     # model = pipes.model_galaxy(model_components,spec_wavs=numpy.logspace(4,4.2,10000))
 
     # --- SFH
-    # sfh_fig,sfh_ax = model.sfh.plot()
+    sfh_fig,sfh_ax = model.sfh.plot()
     # xdata=sfh_ax.lines[0].get_xdata()
     # ydata=sfh_ax.lines[0].get_ydata()
     # print("Max Input :",numpy.max(sfh))

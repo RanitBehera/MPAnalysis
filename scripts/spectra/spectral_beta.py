@@ -2,6 +2,7 @@ import numpy,os
 import matplotlib.pyplot as plt
 import bagpipes as pipes
 import galspec
+from scipy.optimize import curve_fit
 
 SAVED_PATH = "/mnt/home/student/cranit/Work/RSGBank/TBSFR_Bank"
 
@@ -33,12 +34,12 @@ def PlotSpectra_and_GetSpectralBeta(offset):
     # model_components["t_bc"] = 0.01         
     # model_components["veldisp"] = 200. 
     model_components["custom"] = custom
-    model_components["dust"] = dust
-    model_components["nebular"] = nebular
+    # model_components["dust"] = dust
+    # model_components["nebular"] = nebular
 
     # spectral index
-    ref_start = 1300*(1+8)
-    ref_end = 2000*(1+8)
+    ref_start = 1350*(1+8)
+    ref_end = 2800*(1+8)
     log_ref_start = numpy.log10(ref_start)
     log_ref_end = numpy.log10(ref_end)
     # model = pipes.model_galaxy(model_components, filt_list=goodss_filt_list,spec_wavs=numpy.logspace(4,4.2,10000))
@@ -64,33 +65,42 @@ def PlotSpectra_and_GetSpectralBeta(offset):
     waves = axes[0].lines[0].get_xdata()
     f_lam  = axes[0].lines[0].get_ydata()
 
+    print(waves)
+    print(f_lam)
+
     axes[0].set_xscale('log')
 
-    Y= numpy.log10(f_lam*(10**yscale))
-    X= numpy.log10(waves*1e-10)
-    slope=(Y[-1]-Y[0])/(X[-1]-X[0])
-    # print(slope)
 
-    axes[0].plot([waves[0],waves[-1]],[f_lam[0],f_lam[-1]],'k--',zorder = 10,lw=1,label = "UV slope $\\beta=$"+str(round(slope,2)))
+    # Fit for slope
+    def FitFun(lam,beta,f0):
+        return beta*lam + f0
+
+    pvar,pcov = curve_fit(FitFun,X,Y,[-1,Y[0]])
+    Y_fit = FitFun(X,pvar[0],pvar[1])
+    slope=pvar[0]
+
+    fit_waves = 10**(X)/1e-10
+    fit_f_lam = 10**(Y_fit)/(10**yscale)
+    print(fit_f_lam)
+
+    axes[0].plot(fit_waves,fit_f_lam,'k--',zorder = 10,lw=1,label = "UV slope $\\beta=$"+str(round(pvar[0],2)))
     axes[0].legend(loc='lower center',fontsize=12)
-
 
     plt.suptitle("UV slope using rest-frame wavelength [1300,2000] redshifted by 8")
 
-
-    # plt.show()
+    plt.show()
     # plt.savefig(SAVE_PATH,dpi=200)
     # plt.savefig("/mnt/home/student/cranit/Repo/MPAnalysis/temp/plots_mar9/UV_slope_Av_01.png",dpi=300)
-    plt.close()
+    # plt.close()
     return offset, slope
 
 # --- Single Halo
-# a,b=PlotSpectra_and_GetSpectralBeta(68)
+a,b=PlotSpectra_and_GetSpectralBeta(0)
 
 # plt.savefig(SAVED_PATH + "/test5.png",dpi=300)
 
 # --- Multiple Halo Single Core
-if True:
+if False:
     N=1000
     table=numpy.zeros((N,3))
     for offset in range(N):
