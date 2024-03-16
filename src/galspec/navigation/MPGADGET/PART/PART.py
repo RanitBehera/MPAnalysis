@@ -18,7 +18,7 @@ class _PART(_Folder):
         self.Star       = _Star(os.path.join(self.path,"4"))
         self.BlackHole  = _BlackHole(os.path.join(self.path,"5"))
 
-        self.Header     = _PARTAttribute(self.path + os.sep + "Header" + os.sep + "attr-v2")
+        self.Attribute     = _PARTAttribute(self.path + os.sep + "Header" + os.sep + "attr-v2")
 
     # def ReadAttribute(self):
     #     return mp.ReadAttribute(self)

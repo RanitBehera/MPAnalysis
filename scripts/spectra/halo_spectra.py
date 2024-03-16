@@ -73,27 +73,21 @@ def PlotSpectra_and_GetLuminosity(offset):
     waves = axes[0].lines[0].get_xdata()
     lums  = axes[0].lines[0].get_ydata()
 
-    print(waves/(1+8))
-
-    # axes[0].plot(waves/(1+8),lums)
-    axes[0].plot([1,2,3])
-    plt.savefig("temp/plots/test_rest.png",dpi=200)
-
-
-    exit()
-    # plt.plot(waves/(1+8),lums)
+    
+    plt.plot(waves,lums)
 
     lum   = lums[numpy.argmin(numpy.abs(waves-wv))]
-    # axes[0].axhline(lum,color='k',ls='--',lw=1)
-    # axes[0].annotate(str(numpy.round(lum,2)),xy=(axes[0].get_xlim()[0],lum),xycoords='data',xytext=(5,5),textcoords='offset points',fontsize=10,c='k')
+    axes[0].axhline(lum,color='k',ls='--',lw=1)
+    axes[0].annotate(str(numpy.round(lum,2)),xy=(axes[0].get_xlim()[0],lum),xycoords='data',xytext=(5,5),textcoords='offset points',fontsize=10,c='k')
 
-    # plt.show()
+    plt.show()
     # plt.savefig("temp/plots/test.png",dpi=200)
     # plt.close()
     return offset, lum * 10**yscale,sfh[0]  #erg s-1 cm-2 A-1,M0 yr-1
 
 # --- Single Halo
-PlotSpectra_and_GetLuminosity(0)
+vals=PlotSpectra_and_GetLuminosity(0)
+# print(vals)
 # plt.savefig(SAVED_PATH + "/test5.png",dpi=300)
 
 # --- Multiple Halo Single Core
@@ -110,8 +104,9 @@ if False:
     mask = (table[:,1]==0)
     out_list = table[~mask]
 
-    OUT_DIR = os.path.join(SAVED_PATH,"luminosities.txt")
-    numpy.savetxt(OUT_DIR,out_list,header="Luminosity(erg s-1 cm-2 ang-1) SFR(M0 yr-1)")
+    # OUT_DIR = os.path.join(SAVED_PATH,"luminosities.txt")
+    OUT_DIR = os.path.join("temp/UV_LUM/Av","lum_Av_02.txt")
+    numpy.savetxt(OUT_DIR,out_list,fmt="%d %e %e",header="Luminosity(erg s-1 cm-2 ang-1) SFR(M0 yr-1)")
     print("Saved :",OUT_DIR,flush=True)
 
 
@@ -129,10 +124,5 @@ if False:
 #         OUT_DIR = os.path.join(SAVED_PATH,"luminosities.txt")
 #         numpy.savetxt(OUT_DIR,numpy.row_stack((lum_list)),header="Unit : erg s-1 cm-2 ng-1")
 #         print("Saved :",OUT_DIR,flush=True)
-
-
-
-
-
 
 

@@ -33,10 +33,12 @@ class _Field(_Folder):
         return data
 
     def _ReadWithBigFile(self):
+        print(self.path,flush=True)
         raise NotImplementedError
 
     def Read(self):
         return self._ReadWithNumpy()
+        # self._ReadWithBigFile()
     
     def __call__(self, *args: Any, **kwds: Any) -> Any:
         return self.Read()

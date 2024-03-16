@@ -8,8 +8,8 @@ from galspec.visualization.Matcube import PlotCube
 
 
 # --- SIMS
-BOX         = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L50N640/")
-PARTBOX     = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/L50N640/")
+BOX         = galspec.NavigationRoot("/scratch/cranit/RSGBank/OUT_L50N640")
+PARTBOX     = galspec.NavigationRoot("/scratch/cranit/RSGBank/L50N640")
 
 # --- FLAGS : Set flags
 SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results_PMCAM/halo_bh.png" 
@@ -31,7 +31,7 @@ ORDER       = numpy.argsort(SNAP.RKSGroups.VirialMass())[::-1]    # Reorders as 
 # TARGET HALO FEILDS
 TIHID       = SNAP.RKSGroups.InternalHaloID()[ORDER][HALO_OFFSET]
 TMVIR       = SNAP.RKSGroups.VirialMass()[ORDER][HALO_OFFSET]
-TRVIR       = SNAP.RKSGroups.VirialRadius()[ORDER][HALO_OFFSET]
+TRVIR       = SNAP.RKSGroups.VirialRadius()[ORDER][HALO_OFFSET]*0.001
 TPOS        = SNAP.RKSGroups.Position()[ORDER][HALO_OFFSET]
 
 
@@ -60,33 +60,53 @@ R_TDM       = numpy.linalg.norm(TDM_POS,axis=1)
 R_TSTAR     = numpy.linalg.norm(TSTAR_POS,axis=1)
 R_TBH       = numpy.linalg.norm(TBH_POS,axis=1)
 
+
+# --- VIRIAL RADIUS FILTER
+MASK_RVIR_GAS   = R_TGAS<TRVIR
+MASK_RVIR_DM    = R_TDM<TRVIR
+MASK_RVIR_STAR  = R_TSTAR<TRVIR
+MASK_RVIR_BH    = R_TBH<TRVIR
+
+TGAS_POS    = TGAS_POS[MASK_RVIR_GAS]
+TDM_POS     = TDM_POS[MASK_RVIR_DM]
+TSTAR_POS   = TSTAR_POS[MASK_RVIR_STAR]
+TBH_POS     = TBH_POS[MASK_RVIR_BH]
+
+
 # --- GET RELATIVE POSITION BOUNDS
 BOUND          = 2 * max(max(R_TGAS),max(R_TDM),max(R_TSTAR),max(R_TBH))
 
 # PLOT
 fig = plt.figure()
 
-ax1 = fig.add_subplot(111,projection='3d')
+# ax1 = fig.add_subplot(111,projection='3d')
 
-# ax1 = fig.add_subplot(141,projection='3d')
-# ax2 = fig.add_subplot(142,projection='3d')
-# ax3 = fig.add_subplot(143,projection='3d')
-# ax4 = fig.add_subplot(144,projection='3d')
+ax1 = fig.add_subplot(141,projection='3d')
+ax2 = fig.add_subplot(142,projection='3d')
+ax3 = fig.add_subplot(143,projection='3d')
+ax4 = fig.add_subplot(144,projection='3d')
 
-# OFFSET
-TRANSLATE    = numpy.ones(3)*(BOUND/2)
-ZOOM_SCALE          = 1
 
-# PlotCube(ax1,(TGAS_POS*ZOOM_SCALE) +TRANSLATE,BOUND,1,'m')
-# PlotCube(ax1,(TGAS_POS*ZOOM_SCALE) +TRANSLATE,BOUND,1,'c')
-# PlotCube(ax1,(TSTAR_POS*ZOOM_SCALE)+TRANSLATE,BOUND,5,'y')
-PlotCube(ax1,(TBH_POS*ZOOM_SCALE)  +TRANSLATE,BOUND,[100,80],'k')
+
 
 #  For blackhole size scaling
-# bh_mask = (BH_IHIDS==TIHID)
-# bh_mass = SNAP.BlackHole.Mass()[bh_mask]
+bh_mask = (BH_IHIDS==TIHID)
+bh_mass = SNAP.BlackHole.Mass()[bh_mask][MASK_RVIR_BH]
 # print(numpy.log10(bh_mass))
 # For offset_id=1 blackhole mass almost macth
+
+bhs = numpy.int32(100*(bh_mass/numpy.max(bh_mass))**3)
+
+
+# OFFSET
+TRANSLATE    = numpy.ones(3)*(BOUND/2) + 0* numpy.array([0.5,0,-0.8])*(BOUND/2)
+ZOOM_SCALE          = 2
+
+PlotCube(ax1,(TDM_POS*ZOOM_SCALE) +TRANSLATE,BOUND,1,'m')
+PlotCube(ax2,(TGAS_POS*ZOOM_SCALE) +TRANSLATE,BOUND,1,'c',alpha=0.3)
+PlotCube(ax3,(TSTAR_POS*ZOOM_SCALE)+TRANSLATE,BOUND,3,'y',alpha=1)
+PlotCube(ax3,(TBH_POS*ZOOM_SCALE)  +TRANSLATE,BOUND,bhs,'k')
+
 
 
 # --- BEAUTIFY
@@ -106,6 +126,6 @@ for ax in [ax1]:
     ax.set_box_aspect([1.0, 1.0, 1.0])
 
 plt.tight_layout()
-# plt.show()
+plt.show()
 
-plt.savefig(SAVE_PATH,dpi=300)
+# plt.savefig(SAVE_PATH,dpi=300)

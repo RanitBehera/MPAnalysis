@@ -61,8 +61,8 @@ plt.title("L50N640\nz="+str(round(REDSHIFT,2))+"\n$N_{\\text{halo}}$ = "+ str(le
 # --- SAVE
 
 # --- STATIC FRAME
-# plt.show()
-plt.savefig(SAVE_PATH,dpi=200)
+plt.show()
+# plt.savefig(SAVE_PATH,dpi=200)
 
 # --- FOR ANIMATION
 # import os

@@ -1,7 +1,7 @@
 import numpy,os
 import matplotlib.pyplot as plt
 import bagpipes as pipes
-
+import galspec
 
 SAVED_PATH = "/mnt/home/student/cranit/Work/RSGBank/TBSFR_Bank"
 
@@ -14,13 +14,13 @@ def PlotSpectra_and_GetSpectralBeta(offset):
     mass_fromed = float(header.split("*")[-1])
 
     # Validation
-    if(mass_fromed==-numpy.inf):return offset,0, sfh[0]
-    if(len(sfh[sfh!=0]))==0:return offset,0, sfh[0]
+    if(mass_fromed==-numpy.inf):return offset,0
+    if(len(sfh[sfh!=0]))==0:return offset,0
 
     # ===================== BAGPIPES
     goodss_filt_list = numpy.loadtxt("/mnt/home/student/cranit/Repo/MPAnalysis/oldscripts/bagpipes/filters/myfilters.txt", dtype="str")
 
-    dust = {"type":"Calzetti","Av":0.2,"eta":3.}                         
+    dust = {"type":"Calzetti","Av":0.0,"eta":3.}                         
     nebular = {"logU":-3}                             
 
     custom = {}
@@ -75,36 +75,45 @@ def PlotSpectra_and_GetSpectralBeta(offset):
     axes[0].legend(loc='lower center',fontsize=12)
 
 
-
-
     plt.suptitle("UV slope using rest-frame wavelength [1300,2000] redshifted by 8")
+
+
     # plt.show()
     # plt.savefig(SAVE_PATH,dpi=200)
-    plt.savefig("temp/plots/uv_slope.png",dpi=300)
-    # plt.close()
-    # return offset, lum * 10**yscale,sfh[0]  #erg s-1 cm-2 A-1,M0 yr-1
+    # plt.savefig("/mnt/home/student/cranit/Repo/MPAnalysis/temp/plots_mar9/UV_slope_Av_01.png",dpi=300)
+    plt.close()
+    return offset, slope
 
 # --- Single Halo
-PlotSpectra_and_GetSpectralBeta(0)
+# a,b=PlotSpectra_and_GetSpectralBeta(68)
 
 # plt.savefig(SAVED_PATH + "/test5.png",dpi=300)
 
 # --- Multiple Halo Single Core
-if False:
-    table=numpy.zeros((1000,3))
-    for offset in range(1000):
-        print(offset+1,"/",1000,end='',flush=True)
-        off,lum,sfr = PlotSpectra_and_GetLuminosity(offset)
-        table[offset,0]=off
-        table[offset,1]=lum
-        table[offset,2]=sfr
+if True:
+    N=1000
+    table=numpy.zeros((N,3))
+    for offset in range(N):
+        print(offset+1,"/",N,end='',flush=True)
+        halo_offset,beta = PlotSpectra_and_GetSpectralBeta(offset)
+        table[offset,0]=halo_offset
+        table[offset,1]=beta
         print(" : Done",flush=True)
     
+    # top N halos stellar mass
+    box = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L50N640")
+    mvir_sort = numpy.argsort(box.RSG(36).RKSGroups.VirialMass())[::-1]    
+    mbt = box.RSG(36).RKSGroups.MassByTypeInRvirWC()[mvir_sort]
+    stellar_mass = mbt[:N,4]
+    table[:,2]=stellar_mass
+
     mask = (table[:,1]==0)
     out_list = table[~mask]
 
-    OUT_DIR = os.path.join(SAVED_PATH,"luminosities.txt")
-    numpy.savetxt(OUT_DIR,out_list,header="Luminosity(erg s-1 cm-2 ang-1) SFR(M0 yr-1)")
+
+    OUT_DIR = os.path.join("/mnt/home/student/cranit/Repo/MPAnalysis/temp/UV_SLOPE","UV_slope_Av_00.txt")
+
+    numpy.savetxt(OUT_DIR,out_list,header="Halo_offset UV_Slope (beta) Stellar_Mass(M0)",fmt="%d %f %e")
     print("Saved :",OUT_DIR,flush=True)
 
 

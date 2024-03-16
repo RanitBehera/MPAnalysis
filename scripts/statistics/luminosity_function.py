@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 from astropy.cosmology import FlatLambdaCDM
 
 
-LUM_PATH = "/mnt/home/student/cranit/Work/RSGBank/TBSFR_Bank/luminosities.txt"
+# LUM_PATH = "/mnt/home/student/cranit/Work/RSGBank/TBSFR_Bank/luminosities.txt"
+LUM_PATH = "/mnt/home/student/cranit/Repo/MPAnalysis/temp/UV_LUM/Av/lum_Av_00.txt"
 off,ed,sfr = numpy.loadtxt(LUM_PATH).T # erg s-1 cm-2 A-1
 
 
@@ -106,4 +107,4 @@ plt.title("Redshift z~"+str(8))
 plt.grid(alpha=0.2)
 plt.yscale('log')
 # plt.show()
-plt.savefig("temp/plots/lum_fun.png",dpi=300)
+plt.savefig("/mnt/home/student/cranit/Repo/MPAnalysis/temp/plots_mar9/lum_fun.png",dpi=300)

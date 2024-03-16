@@ -1,38 +1,52 @@
 import numpy, galspec
 import matplotlib.pyplot as plt
 
-import matplotlib
-matplotlib.use('Agg')
-
 
 
 # --- SIMULATIONS
 BOX     = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L50N640")
+LBOX    = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/L50N640")
+# LBOX    = galspec.NavigationRoot("/scratch/nkhandai/mp-gadget/50Mpc_640cube_alpha400")
 
-count = BOX.RSG(36).RKSGroups.LengthByTypeInRvirWC()
+if False:
+    # --------------------------------
+    print("rockstar")
+    mass = BOX.RSG(36).Gas.Mass()
+    id = BOX.RSG(36).Gas.ID()
+    print("len id",len(id))
+    print("len mass",len(id))
+    # remove duplicates
+    # u,i = numpy.unique(id,True)
+    # mass=mass[i]
+    # id = id[i]
+    print("len uniq id",len(numpy.unique(id)))
+    print("len uniq mass",len(numpy.unique(mass)))
 
-gas = count[:,0]
-dm = count[:,1]
-st = count[:,4]
+    # -------------------------
+    print("Part")
+    lid = LBOX.PART(36).Gas.ID()
+    lmass = LBOX.PART(36).Gas.Mass()
 
-gas *= BOX.RSG(36).Attribute.MassTable()[0]
-dm *= BOX.RSG(36).Attribute.MassTable()[1]
-st *= BOX.RSG(36).Attribute.MassTable()[4]
+    print("len id :",len(lid))
+    print("len mass :",len(lmass))
+    print("len uniq id",len(numpy.unique(lid)))
+    print("len uniq mass",len(numpy.unique(lmass)))
 
-ratio = (gas+st)/dm
-# ratio = (gas)/(gas+st+0.0001)
+    exit()
+    mask = numpy.isin(numpy.int64(lid),numpy.int64(id))
+    lmass=lmass[mask]
 
-ex_ratio = BOX.RSG(36).Attribute.OmegaBaryon()/BOX.RSG(36).Attribute.Omega0()
-
-plt.hist(ratio,bins=100)
-plt.axvline(ex_ratio,color="k")
-plt.yscale('log')
-# plt.xscale('log')
-
-plt.savefig("/mnt/home/student/cranit/Work/RSGBank/Results/test.png")
-
-
-
-
+    print(len(lmass))
+    print(len(numpy.unique(lmass)))
+if False:
+    h=0.697
+    BH_Mass = LBOX.PART(50).BlackHole.BlackholeMass()/h
+    print(numpy.log10(numpy.max(BH_Mass)*1e10))
+    BH_Mass = LBOX.PIG(50).BlackHole.BlackholeMass()/h
+    print(numpy.log10(numpy.max(BH_Mass)*1e10))
 
 
+
+
+plt.plot([1,2,3])
+plt.show()

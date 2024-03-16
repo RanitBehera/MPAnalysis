@@ -17,7 +17,7 @@ class PP_RSG:
     def StartAll(self):
         if(self.show_progress):print(" GENERATING FIELDS ".center(30,'='))
         self.LengthByTypeWC()
-        self.LengthByTypeInRvirWC()     # Also adds MassByTypeInRvirWC()
+        self.LengthByTypeInRvirWC() # Also outputs MassByTypeInRvirWC
         self.StarFormationRate()
 
 
@@ -56,51 +56,62 @@ class PP_RSG:
 
         gihids = self.RSG.RKSGroups.InternalHaloID()
         LengthBTInRvirWC = numpy.zeros((len(gihids),NUM_TYPES))
+        MassBTInRvirWC = numpy.zeros((len(gihids),NUM_TYPES))
 
         halo_pos = self.RSG.RKSGroups.Position()
         halo_rvir = self.RSG.RKSGroups.VirialRadius()/1000 # Kpc to Mpc
         ihid_pos_map = dict(zip(gihids,halo_pos))
         ihid_rvir_map = dict(zip(gihids,halo_rvir))
 
-        def AddCounts(pihids,ppos,column):
+        def AddCounts(pihids,ppos,pmass,column):
             # Filter for all particle type ihid rows which are there in group ihid
             gmask = numpy.isin(pihids,gihids)
-            pihids,ppos=pihids[gmask],ppos[gmask]
+            pihids,ppos,pmass=pihids[gmask],ppos[gmask],pmass[gmask]
             # initialise opaque rvir mask
             rvir_mask = numpy.zeros((len(pihids)))
-            # form corresponding halo center and rvir column
+            # form corresponding halo center and rvir column - particle wise row
             linked_halo_center = [ihid_pos_map.get(ihid) for ihid in pihids]
             linked_halo_radius = [ihid_rvir_map.get(ihid) for ihid in pihids]
             # update rvir mask by comparing distance
             rvir_mask = numpy.linalg.norm(ppos-linked_halo_center,axis=1)<linked_halo_radius
             # Filter particle type ihids again with rvir mask
             pihids = pihids[rvir_mask]
-            # Then do the same as count without rvir mask
+            # mass lookup table
+            pmass = pmass[rvir_mask]
+
+ 
+            # Then do the same as ordinary count without rvir mask
             upihids, counts = numpy.unique(pihids,return_counts=True)
             upihid_to_count_map=dict(zip(upihids,counts))
             for i,ihid in enumerate(gihids):
                 if ihid in upihids:
                     LengthBTInRvirWC[i,column] += upihid_to_count_map[ihid]
+
+            # Now distribute masses
+            gihid_to_mass_map=dict(zip(gihids,numpy.zeros(len(gihids))))
+            for i,pihid in enumerate(pihids):
+                gihid_to_mass_map[pihid] += pmass[i]
+            MassBTInRvirWC[:,column] = numpy.array(list(gihid_to_mass_map.values()))
                     
         s = self.RSG
-        AddCounts(s.Gas.InternalHaloID(),s.Gas.Position(),0)
-        AddCounts(s.DarkMatter.InternalHaloID(),s.DarkMatter.Position(),1)
-        AddCounts(s.Star.InternalHaloID(),s.Star.Position(),4)
-        AddCounts(s.BlackHole.InternalHaloID(),s.BlackHole.Position(),5)
+        AddCounts(s.Gas.InternalHaloID(),s.Gas.Position(),s.Gas.Mass(),0)
+        AddCounts(s.DarkMatter.InternalHaloID(),s.DarkMatter.Position(),s.DarkMatter.Mass(),1)
+        AddCounts(s.Star.InternalHaloID(),s.Star.Position(),s.Star.Mass(),4)
+        AddCounts(s.BlackHole.InternalHaloID(),s.BlackHole.Position(),s.BlackHole.Mass(),5)
 
         WriteField(os.path.join(self.RSG.path,"RKSGroups"),"LengthByTypeInRvirWC",LengthBTInRvirWC,"Overwrite")
         if(self.show_progress):print("Done")
 
         # MassByTypeInRvirWC
         if(self.show_progress):print("/RKSGroups/MassByTypeInRvirWC : ",end="",flush=True)
-        mass_table = self.RSG.Attribute.MassTable()
-        M_gas   = LengthBTInRvirWC[:,0] * mass_table[0]
-        M_dm    = LengthBTInRvirWC[:,1] * mass_table[1]
-        M_u1    = LengthBTInRvirWC[:,2] * mass_table[2]
-        M_u2    = LengthBTInRvirWC[:,3] * mass_table[3]
-        M_star  = LengthBTInRvirWC[:,4] * mass_table[4]
-        M_bh    = LengthBTInRvirWC[:,5] * mass_table[5]
-        MassBTInRvirWC = numpy.column_stack([M_gas,M_dm,M_u1,M_u2,M_star,M_bh])
+        # mass_table = self.RSG.Attribute.MassTable()
+        # M_gas   = LengthBTInRvirWC[:,0] * mass_table[0]
+        # M_dm    = LengthBTInRvirWC[:,1] * mass_table[1]
+        # M_u1    = LengthBTInRvirWC[:,2] * mass_table[2]
+        # M_u2    = LengthBTInRvirWC[:,3] * mass_table[3]
+        # M_star  = LengthBTInRvirWC[:,4] * mass_table[4]
+        # M_bh    = LengthBTInRvirWC[:,5] * mass_table[5]
+        # MassBTInRvirWC = numpy.column_stack([M_gas,M_dm,M_u1,M_u2,M_star,M_bh])
         WriteField(os.path.join(self.RSG.path,"RKSGroups"),"MassByTypeInRvirWC",MassBTInRvirWC,"Overwrite")
         if(self.show_progress):print("Done")
 
@@ -147,15 +158,74 @@ class PP_RSG:
         # and add it to ihid_sfr_map for that gpihid
         # the last two operations are easily done by the dict we formed
         for gpid,gpihid in numpy.column_stack((gpids,gpihids)):
-            gpsfr=box_gid_sfr_map[gpid]
-            ihid_sfr_map[gpihid] += gpsfr
+            # gpsfr=box_gid_sfr_map[gpid]
+            ihid_sfr_map[gpihid] += box_gid_sfr_map[gpid]
         
         IHID_SFR= list(ihid_sfr_map.values())
         WriteField(os.path.join(self.RSG.path,"RKSGroups"),"StarFormationRate",IHID_SFR,"Overwrite")
         if(self.show_progress):print("Done")
             
 
+    # def MassByTypeInRvirWC(self):
+    #     if(self.show_progress):print("/RKSGroups/MassByTypeInRvirWC2 : ",end="",flush=True)
+        
+    #     # get dumped ihids for filtering suppresed halos
+    #     gihids = self.RSG.RKSGroups.InternalHaloID()
 
+    #     halo_pos = self.RSG.RKSGroups.Position()
+    #     halo_rvir = self.RSG.RKSGroups.VirialRadius() /1000 # Kpc to Mpc
+    #     ihid_pos_map = dict(zip(gihids,halo_pos))
+    #     ihid_rvir_map = dict(zip(gihids,halo_rvir))
+
+
+    #     # Read relavant fields
+    #     gas_ihids   = self.RSG.Gas.InternalHaloID()
+    #     dm_ihids    = self.RSG.DarkMatter.InternalHaloID()
+    #     star_ihids  = self.RSG.Star.InternalHaloID()
+    #     bh_ihids    = self.RSG.BlackHole.InternalHaloID()
+
+    #     gas_mass    = self.RSG.Gas.Mass()
+    #     dm_mass     = self.RSG.DarkMatter.Mass()
+    #     star_mass   = self.RSG.Star.Mass()
+    #     bh_mass     = self.RSG.BlackHole.Mass()
+
+    #     gas_pos     = self.RSG.Gas.Position()
+    #     dm_pos      = self.RSG.DarkMatter.Position()
+    #     star_pos    = self.RSG.Star.Position()
+    #     bh_pos      = self.RSG.BlackHole.Position()
+
+
+    #     # create masks for filtering supressed halos
+    #     gas_mask    = numpy.isin(numpy.int64(gas_ihids),numpy.int64(gihids))
+    #     dm_mask     = numpy.isin(numpy.int64(dm_ihids),numpy.int64(gihids))
+    #     star_mask   = numpy.isin(numpy.int64(star_ihids),numpy.int64(gihids))
+    #     bh_mask     = numpy.isin(numpy.int64(bh_ihids),numpy.int64(gihids))
+
+    #     # filter with the created mask
+    #     gas_ihids,dm_ihids,star_ihids,bh_ihids = gas_ihids[gas_mask],dm_ihids[dm_mask],star_ihids[star_mask],bh_ihids[bh_mask]
+    #     gas_mass,dm_mass,star_mass,bh_mass = gas_mass[gas_mask],dm_mass[dm_mask],star_mass[star_mask],bh_mass[bh_mask]
+
+    #     # distribute mass to corresponding ihid bins
+    #     rows = len(gihids)
+    #     def Distribute(type_ihids,type_masses):
+    #         ihid_tmass_map = dict(zip(gihids,numpy.zeros(rows)))
+    #         for i,tihid in enumerate(type_ihids):
+    #             ihid_tmass_map[tihid] += type_masses[i] 
+    #         return numpy.array(list(ihid_tmass_map.values()))
+
+        
+    #     M_gas   = Distribute(gas_ihids,gas_mass)
+    #     M_dm    = Distribute(dm_ihids,dm_mass)
+    #     M_star  = Distribute(star_ihids,star_mass)
+    #     M_bh    = Distribute(bh_ihids,bh_mass)
+    #     M_u1    = numpy.zeros((rows,1))
+    #     M_u2    = numpy.zeros((rows,1))
+
+    #     MassUnit = 1e10         # <--- Auto detect this 
+
+    #     MassBTInRvirWC = numpy.column_stack([M_gas,M_dm,M_u1,M_u2,M_star,M_bh])/MassUnit
+    #     WriteField(os.path.join(self.RSG.path,"RKSGroups"),"MassByTypeInRvirWC2",MassBTInRvirWC,"Overwrite")
+    #     if(self.show_progress):print("Done") 
 
 
 
