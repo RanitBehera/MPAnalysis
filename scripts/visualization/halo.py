@@ -15,7 +15,7 @@ PARTBOX     = galspec.NavigationRoot("/scratch/cranit/RSGBank/L50N640")
 SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results_PMCAM/halo_bh.png" 
 SNAP_NUM    = 50
 HALO_OFFSET = 0
-
+WITHIN_RVIR  = False
 
 # --- AUTO-FLAGS
 COSMOLOGY   = BOX.GetCosmology("MassFunctionLitrature")
@@ -62,15 +62,11 @@ R_TBH       = numpy.linalg.norm(TBH_POS,axis=1)
 
 
 # --- VIRIAL RADIUS FILTER
-MASK_RVIR_GAS   = R_TGAS<TRVIR
-MASK_RVIR_DM    = R_TDM<TRVIR
-MASK_RVIR_STAR  = R_TSTAR<TRVIR
-MASK_RVIR_BH    = R_TBH<TRVIR
-
-# TGAS_POS    = TGAS_POS[MASK_RVIR_GAS]
-# TDM_POS     = TDM_POS[MASK_RVIR_DM]
-# TSTAR_POS   = TSTAR_POS[MASK_RVIR_STAR]
-# TBH_POS     = TBH_POS[MASK_RVIR_BH]
+if WITHIN_RVIR:
+    TGAS_POS    = TGAS_POS[R_TGAS<TRVIR]
+    TDM_POS     = TDM_POS[R_TDM<TRVIR]
+    TSTAR_POS   = TSTAR_POS[R_TSTAR<TRVIR]
+    TBH_POS     = TBH_POS[R_TBH<TRVIR]
 
 
 # --- GET RELATIVE POSITION BOUNDS
@@ -102,8 +98,8 @@ bhs = numpy.int32(100*(bh_mass/numpy.max(bh_mass))**3)
 TRANSLATE    = numpy.ones(3)*(BOUND/2) + 0* numpy.array([0.5,0,-0.8])*(BOUND/2)
 ZOOM_SCALE          = 2
 
-# PlotCube(ax1,(TDM_POS*ZOOM_SCALE) +TRANSLATE,BOUND,1,'m')
-# PlotCube(ax1,(TGAS_POS*ZOOM_SCALE) +TRANSLATE,BOUND,1,'c',alpha=0.3)
+PlotCube(ax1,(TDM_POS*ZOOM_SCALE) +TRANSLATE,BOUND,1,'m')
+PlotCube(ax1,(TGAS_POS*ZOOM_SCALE) +TRANSLATE,BOUND,1,'c',alpha=1)
 PlotCube(ax1,(TSTAR_POS*ZOOM_SCALE)+TRANSLATE,BOUND,3,'y',alpha=1)
 PlotCube(ax1,(TBH_POS*ZOOM_SCALE)  +TRANSLATE,BOUND,bhs,'k')
 

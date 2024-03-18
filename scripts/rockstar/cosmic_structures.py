@@ -3,8 +3,7 @@ import numpy
 import matplotlib.pyplot as plt
 from galspec.visualization.Matcube import PlotCube
 
-# import matplotlib
-# matplotlib.use('Agg')
+
 
 
 # --- SIMS
@@ -17,7 +16,6 @@ SNAP_NUM    = 36
 
 
 # --- AUTO-FLAGS
-COSMOLOGY   = BOX.GetCosmology("MassFunctionLitrature")
 SNAP        = BOX.RSG(SNAP_NUM)
 PSNAP       = PARTBOX.PART(SNAP_NUM)
 REDSHIFT    = (1/SNAP.Attribute.Time())-1
@@ -31,6 +29,7 @@ HALO_POS    = SNAP.RKSGroups.Position()
 # MASK
 MASK_MASS   = (MVIR>10**10)
 mask        = MASK_MASS
+
 
 
 
@@ -48,7 +47,8 @@ Smin = 2;Smax = 20
 Psize = Smin + ((Smax-Smin)/(logMmax-logMmin))*(logM-logMmin)
 Psize = 20*(Psize/max(Psize))**4
 PlotCube(ax,HALO_POS,BOX_SIZE,Psize,'k',0.3)
-# PlotCube(ax,HALO_POS[~mask],BOX_SIZE,2,'k',0.01)
+# PlotCube(ax,HALO_POS[mask],BOX_SIZE,2,'k',0.3)
+# PlotCube(ax,HALO_POS[~mask],BOX_SIZE,2,'k',0.3)
 
 # --- BEAUTIFY
 ax.set_xlim(0,BOX_SIZE)
