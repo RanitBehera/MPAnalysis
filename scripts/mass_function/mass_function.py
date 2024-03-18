@@ -9,6 +9,7 @@ from galspec.utility.MassFunction import MassFunction, MassFunctionLiterature,LM
 # Make sure corresponding snapshorts are at same time
 
 L50N640     = "/mnt/home/student/cranit/Work/RSGBank/OUT_L50N640"
+L50N1008     = "/mnt/home/student/cranit/Work/RSGBank/OUT_L50N1008"
 L140N700    = "/mnt/home/student/cranit/Work/RSGBank/OUT_L140N700"
 L140N896    = "/mnt/home/student/cranit/Work/RSGBank/OUT_L140N896"
 L140N1008   = "/mnt/home/student/cranit/Work/RSGBank/OUT_L140N1008"
@@ -21,8 +22,9 @@ if ONLY_PIG:
     L140N700    = "/mnt/home/student/cranit/Work/RSGBank/L140N700"
     L140N896    = "/mnt/home/student/cranit/Work/RSGBank/L140N896"
     L140N1008   = "/mnt/home/student/cranit/Work/RSGBank/L140N1008"
-    L50N1008   = "/mnt/home/student/cranit/Work/RSGBank/L50N1008"
+    L50N1008   =  "/mnt/home/student/cranit/Work/RSGBank/L50N1008"
 
+    L50N1008   =  "/mnt/home/student/cranit/Work/RSGBank/L50N1008"
     L50N640_a100 = "/mnt/home/student/cranit/Work/RSGBank/L50N640" 
     L50N640_a200 = "/scratch/nkhandai/mp-gadget/50Mpc_640cube_alpha200" 
     L50N640_a400 = "/scratch/nkhandai/mp-gadget/50Mpc_640cube_alpha400" 
@@ -36,8 +38,9 @@ if ONLY_PIG:ROCKSTAR*=0
 
 # Skip points structure [[fof-dm,fof-gas,fof-star],[vir-dm,vir-gas,vir-star]]
 CURVE_LIST       = [ 
-        [L50N640, 0*FOF + ROCKSTAR, (DM+GAS+STAR),[[1,2,4],[1,1,2]]],
-        [L140N1008, 0*FOF + ROCKSTAR, (DM+GAS+STAR),[[0,0,0],[1,0,0]]],
+        [L50N640, 0*FOF + ROCKSTAR, (DM+GAS+STAR),[[1,2,4],[1,1,4]]],
+        [L140N1008, 0*FOF + ROCKSTAR, (DM+GAS+STAR),[[0,0,0],[1,0,1]]],
+        [L50N1008, 0*FOF + ROCKSTAR, (DM+GAS+STAR),[[1,2,4],[1,1,4]]],
         # [L140N700, 0*FOF + ROCKSTAR, 0*(DM+GAS+STAR)+BH,[[0,0,0],[0,0,0]]],
         # [L140N896, 0*FOF + ROCKSTAR, 0*(DM+GAS+STAR)+BH,[[0,0,0],[0,0,0]]],
         # [L140N1008, 0*FOF + ROCKSTAR, 0*(DM+GAS+STAR)+BH,[[0,0,0],[0,0,0]]],
@@ -48,7 +51,7 @@ CURVE_LIST       = [
     ]
 
 COLORS_FOF  = ['cyan','blue','red','g']
-COLORS_RKS  = ['lime','green','g','g']
+COLORS_RKS  = ['lime','green','m','g']
 COLORS_FOF  = ['tab:blue','tab:orange','tab:green','g']
 
 SNAP_NUM    = 36

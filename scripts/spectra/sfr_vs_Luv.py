@@ -16,10 +16,12 @@ Area = 4*numpy.pi*(DL**2)
 
 # Simulation flux
 DIR = "/mnt/home/student/cranit/Repo/MPAnalysis/temp/UV_LUM/Av"
+DIR = "/mnt/home/student/cranit/Repo/MPAnalysis/temp/spectra/"
 
 def GetLuminosity(filename):
     file = os.path.join(DIR,filename)    
-    halo_offset,flux,sfr=numpy.loadtxt(file).T
+    # halo_offset,flux,sfr=numpy.loadtxt(file).T
+    halo_offset,smass,sfr,beta,flux=numpy.loadtxt(file).T
     luminosity = flux*Area*(1+REDSHIFT) 
     return sfr,luminosity
 
@@ -48,7 +50,7 @@ def PlotObserved():
     # Eq 12 of Harikane Et al.(2023) : https://iopscience.iop.org/article/10.3847/1538-4365/acaaa9
     # SFR (M0 yr-1) = (K_UV) * L_UV(ergs s-1 Hz-1)
     # K_UV = 1.15e-28 ( M0 yr-1 / ergs s-1 Hz-1) : UV = 1500A
-    lam = 1450e-8
+    lam = 1500e-8
     c = 3e10*1e-8
     nu = c/lam
     K_UV = 1.15e-28
@@ -61,9 +63,10 @@ def PlotObserved():
 
 plt.figure(figsize=(10,8))
 
-Plot("lum_Av_00.txt",label="$A_V=0.0$",marker=".",c='k',zorder=3,ms="5",alpha=0.2)
-Plot("lum_Av_01.txt",label="$A_V=0.1$",marker="+",c='k',zorder=2,ms="5",alpha=0.2)
-Plot("lum_Av_02.txt",label="$A_V=0.2$",marker="x",c='r',zorder=1,ms="5",alpha=1.0)
+Plot("bagdata.txt",label="$A_V=0.0$",marker=".",c='k',zorder=3,ms="5",alpha=1)
+# Plot("lum_Av_00.txt",label="$A_V=0.0$",marker=".",c='k',zorder=3,ms="5",alpha=0.2)
+# Plot("lum_Av_01.txt",label="$A_V=0.1$",marker="+",c='k',zorder=2,ms="5",alpha=0.2)
+# Plot("lum_Av_02.txt",label="$A_V=0.2$",marker="x",c='r',zorder=1,ms="5",alpha=1.0)
 
 PlotObserved()
 
@@ -77,5 +80,5 @@ plt.legend()
 
 plt.annotate("$\mathcal{K}_{\\text{UV}}=1.15\\times10^{-28} \\text{erg } \\text{s }^{-1} \\text{Hz}^{-1}/ M_\odot \\text{yr}^{-1}$",xy=(1,0),xycoords="axes fraction",ha="right",va="bottom")
 
-# plt.show()
-plt.savefig("temp/UV_LUM/Av/sfr_LUV_Av_02.png",dpi=300)
+plt.show()
+# plt.savefig("temp/UV_LUM/Av/sfr_LUV_Av_02.png",dpi=300)

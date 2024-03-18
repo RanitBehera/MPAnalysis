@@ -10,7 +10,7 @@ TBSFR_DIR = "/mnt/home/student/cranit/Work/RSGBank/TBSFR_Bank"
 SHOW_SFH_FIGURE     = False
 SHOW_SPECTRA_FIGURE = True
 REDSHIFT = 8
-WAVELENGTH_RANGE = numpy.logspace(4,4.5,10000) # In observed frame
+WAVELENGTH_RANGE = numpy.logspace(3,4.5,10000) # In observed frame
 REST_FRAME = True # Shift to rest frame
 FLUX_UNIT = 1e-20 # In ergs s-1 cm-2 A-1 # Keep the exponent integer
 UV_START        = 1350 # In Angstorm (Rest Frame)
@@ -148,28 +148,29 @@ def GetBagpipes(offset,ShowPlot=True):
     return offset, mass_formed, sfh[0], beta_uv, f_uv*FLUX_UNIT
 
 # Single Call
-# GetBagpipes(10)
+GetBagpipes(0)
 
 # Dump Data for all
-N=1000
-table = numpy.zeros([N,5])
-for offset in range(N):
-    print(offset+1,"/",N,end='',flush=True)
-    table[offset,:] = GetBagpipes(offset,False)
-    print(" : Done",flush=True)
+if False:
+    N=1000
+    table = numpy.zeros([N,5])
+    for offset in range(N):
+        print(offset+1,"/",N,end='',flush=True)
+        table[offset,:] = GetBagpipes(offset,False)
+        print(" : Done",flush=True)
 
-table = table[table[:,0]>0]
+    table = table[table[:,0]>0]
 
-header = "Redshift ="+str(REDSHIFT)
-header += "\nUV Start = " + str(UV_START)
-header += "\nUV Stop = " + str(UV_STOP)
-header += "\nUV Represent = " + str(UV_REPRESENT)
-header += "\n(0)Halo Offset with virial mass sort"
-header += "\n(1)Stellar mass formed : Log10(M/M_solar)"
-header += "\n(2)Star formation rate : (M/M_solar)/yr"
-header += "\n(3)Beta UV Slope"
-header += "\n(4)Observed UV Luminosity : erg s-1 cm-2 AA-1"
+    header = "Redshift ="+str(REDSHIFT)
+    header += "\nUV Start = " + str(UV_START)
+    header += "\nUV Stop = " + str(UV_STOP)
+    header += "\nUV Represent = " + str(UV_REPRESENT)
+    header += "\n(0)Halo Offset with virial mass sort"
+    header += "\n(1)Stellar mass formed : Log10(M/M_solar)"
+    header += "\n(2)Star formation rate : (M/M_solar)/yr"
+    header += "\n(3)Beta UV Slope"
+    header += "\n(4)Observed UV Luminosity : erg s-1 cm-2 AA-1"
 
 
-numpy.savetxt(DATA_SAVE_PATH,table,header=header,fmt="%d %f %e %f %e")
-print("Saved :",DATA_SAVE_PATH,flush=True)
+    numpy.savetxt(DATA_SAVE_PATH,table,header=header,fmt="%d %f %e %f %e")
+    print("Saved :",DATA_SAVE_PATH,flush=True)

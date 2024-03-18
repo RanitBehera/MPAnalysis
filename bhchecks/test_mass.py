@@ -2,14 +2,11 @@ import numpy
 import matplotlib.pyplot as plt
 import galspec
 
-box = galspec.NavigationRoot("/scratch/cranit/RSGBank/L50N640")
-snap = box.RSG(50)
-G_IHID = snap.RKSGroups.InternalHaloID()
-G_MVIR = snap.RKSGroups.VirialMass()
+box = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/L50N640")
+snap = box.PIG(50)
 
 
 tgid = 1
-
 
 #particle
 bh_ids = snap.BlackHole.ID()

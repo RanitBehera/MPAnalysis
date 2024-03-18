@@ -1,15 +1,14 @@
 import numpy
 import matplotlib.pyplot as plt
 
-data = numpy.loadtxt("/mnt/home/student/cranit/Repo/MPAnalysis/temp/UV_SLOPE/UV_slope_Av_00.txt")
+offset,stellar_mass,sfr,beta,Luv = numpy.loadtxt("/mnt/home/student/cranit/Repo/MPAnalysis/temp/spectra/bagdata.txt").T
 
-beta=data[:,1]
-sm=data[:,2]
 
-plt.plot(sm,beta,'.')
+print(stellar_mass)
+plt.plot(stellar_mass,beta,'.')
 
-plt.xscale('log')
+
 plt.ylim(-4,1)
-plt.xlim(1e6,1e12)
+plt.xlim(6,12)
 
 plt.show()
