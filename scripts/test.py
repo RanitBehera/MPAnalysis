@@ -47,6 +47,5 @@ if False:
 
 
 
-
-plt.plot([1,2,3])
-plt.show()
+if True:
+    pass

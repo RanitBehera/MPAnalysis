@@ -7,12 +7,12 @@ from treelib import Tree, Node
 
 
 # --- SIMS
-BOX         = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L50N640/")
-PARTBOX     = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/L50N640/")
+BOX         = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L50N1008/")
+PARTBOX     = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/L50N1008/")
 
 # --- FLAGS : Set flags
-SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results_PMCAM/subhalo_tree_z0.svg" 
-SNAP_NUM    = 171
+SAVE_PATH   = "/mnt/home/student/cranit/Repo/MPAnalysis/temp/subhalo_tree/subhalo_tree_z0" # Add extention while saving
+SNAP_NUM    = 36
 HALO_OFFSET = 0
 
 
@@ -84,6 +84,7 @@ RecursiveAddNode(t,root_ihid)
 out_folder = os.path.dirname(SAVE_PATH)
 gv_file_path    = os.path.join(out_folder,"subhalo_tree.gv")
 t.to_graphviz(filename=gv_file_path, shape=u'circle', graph=u'digraph')
-os.system(f"dot -Tsvg {gv_file_path} -o {SAVE_PATH}")   # (-Tpdf,-Tsvg,-Tpng,-Tgif,-Tjpg,-Tps)
+os.system(f"dot -Tsvg {gv_file_path} -o {SAVE_PATH}.svg")   # (-Tpdf,-Tsvg,-Tpng,-Tgif,-Tjpg,-Tps)
+os.system(f"dot -Tpng {gv_file_path} -o {SAVE_PATH}.png")   # (-Tpdf,-Tsvg,-Tpng,-Tgif,-Tjpg,-Tps)
 print("Please clean temporary file at : " + gv_file_path)
 

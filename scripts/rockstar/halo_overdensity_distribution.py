@@ -26,7 +26,8 @@ Delta_halo = halo_density/rho_m
 
 
 # masks
-Delta_halo = Delta_halo
+mask = (mvir>1e10)
+# Delta_halo = Delta_halo[mask]
 
 print(numpy.where(Delta_halo>250))
 

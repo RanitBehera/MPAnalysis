@@ -25,16 +25,17 @@ def PlotCube(ax:plt.Axes,pos,box_size,point_size,point_color,alpha=1):
     ax.yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
     ax.zaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
     # Draw Sim Cube
-    alp=1
-    ax_cx=numpy.array([0,1,1,0,0,0,0,1,1,0,0])*L
-    ax_cy=numpy.array([0,0,1,1,0,0,0,0,1,1,0])*L
-    ax_cz=numpy.array([0,0,0,0,0,1,1,1,1,1,1])*L
-    ax.plot(ax_cx,ax_cy,ax_cz,'k-',alpha=alp,lw=1)
-    ax.plot([L,L],[0,0],[0,L],'k-',alpha=alp,lw=1)
-    ax.plot([L,L],[L,L],[0,L],'k-',alpha=alp,lw=1)
-    ax.plot([0,0],[L,L],[0,L],'k-',alpha=alp,lw=1)
+    if True:
+        alp=1
+        ax_cx=numpy.array([0,1,1,0,0,0,0,1,1,0,0])*L
+        ax_cy=numpy.array([0,0,1,1,0,0,0,0,1,1,0])*L
+        ax_cz=numpy.array([0,0,0,0,0,1,1,1,1,1,1])*L
+        ax.plot(ax_cx,ax_cy,ax_cz,'k-',alpha=alp,lw=1)
+        ax.plot([L,L],[0,0],[0,L],'k-',alpha=alp,lw=1)
+        ax.plot([L,L],[L,L],[0,L],'k-',alpha=alp,lw=1)
+        ax.plot([0,0],[L,L],[0,L],'k-',alpha=alp,lw=1)
 
     # plt.tight_layout()
     #Rotate view(elev,azim)
-    ax.view_init(20,40)
+    ax.view_init(20,40+35)
     ax.axis("equal")

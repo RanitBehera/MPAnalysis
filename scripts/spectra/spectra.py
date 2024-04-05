@@ -10,7 +10,7 @@ TBSFR_DIR = "/mnt/home/student/cranit/Work/RSGBank/TBSFR_Bank"
 SHOW_SFH_FIGURE     = False
 SHOW_SPECTRA_FIGURE = True
 REDSHIFT = 8
-WAVELENGTH_RANGE = numpy.logspace(3,4.5,10000) # In observed frame
+WAVELENGTH_RANGE = numpy.logspace(3,4.5,100000) # In observed frame
 REST_FRAME = True # Shift to rest frame
 FLUX_UNIT = 1e-20 # In ergs s-1 cm-2 A-1 # Keep the exponent integer
 UV_START        = 1350 # In Angstorm (Rest Frame)
@@ -142,7 +142,12 @@ def GetBagpipes(offset,ShowPlot=True):
             
 
     plt.margins(x=0,y=0)
+    # plt.yscale('log')
+    # plt.ylim(1e-25,1e2)
+    # plt.axvline(912,c='k',ls='--')
+    # plt.axvline(1215,c='k',ls='--')
     if ShowPlot:plt.show()
+    # plt.savefig("/mnt/home/student/cranit/Repo/MPAnalysis/temp/plots/spectra.svg")
     plt.close()
     
     return offset, mass_formed, sfh[0], beta_uv, f_uv*FLUX_UNIT

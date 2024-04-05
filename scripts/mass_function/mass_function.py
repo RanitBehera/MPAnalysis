@@ -38,9 +38,9 @@ if ONLY_PIG:ROCKSTAR*=0
 
 # Skip points structure [[fof-dm,fof-gas,fof-star],[vir-dm,vir-gas,vir-star]]
 CURVE_LIST       = [ 
-        [L50N640, 0*FOF + ROCKSTAR, (DM+GAS+STAR),[[1,2,4],[1,1,4]]],
-        [L140N1008, 0*FOF + ROCKSTAR, (DM+GAS+STAR),[[0,0,0],[1,0,1]]],
-        [L50N1008, 0*FOF + ROCKSTAR, (DM+GAS+STAR),[[1,2,4],[1,1,4]]],
+        [L50N640, FOF , (STAR),[[1,2,4],[1,1,4]]],
+        [L140N1008, FOF, (STAR),[[0,0,0],[1,0,1]]],
+        [L50N1008, FOF , (STAR),[[1,2,2],[0,0,1]]],
         # [L140N700, 0*FOF + ROCKSTAR, 0*(DM+GAS+STAR)+BH,[[0,0,0],[0,0,0]]],
         # [L140N896, 0*FOF + ROCKSTAR, 0*(DM+GAS+STAR)+BH,[[0,0,0],[0,0,0]]],
         # [L140N1008, 0*FOF + ROCKSTAR, 0*(DM+GAS+STAR)+BH,[[0,0,0],[0,0,0]]],
@@ -50,19 +50,19 @@ CURVE_LIST       = [
         # [L50N1008, FOF + 0*ROCKSTAR, GAS+STAR+BH,[[0,0,0],[0,0,0]],"$\\alpha$"]
     ]
 
-COLORS_FOF  = ['cyan','blue','red','g']
-COLORS_RKS  = ['lime','green','m','g']
-COLORS_FOF  = ['tab:blue','tab:orange','tab:green','g']
+COLORS_FOF  = ['cyan','blue','red']
+COLORS_RKS  = ['lime','green','m']
+# COLORS_FOF  = ['tab:blue','tab:orange','tab:green','g']
 
 SNAP_NUM    = 36
 BIN_SIZE    = 0.5
 MASS_HR     = numpy.logspace(7,12,100) # High resolution mass for literature mass function plot
-SAVE_PATH   = "temp/plots/gal_bh_mf_avar.png" 
+SAVE_PATH   = "temp/HMF/test.png" 
 INCLUDE_DEVIATION = False
 # INCLUDE_LMF = True          # Deviation axis and its plot also needs to be adapted. Not implemeted for now.
 
-LEGEND_TITLE    = "Friends-of-Friends"
-# LEGEND_TITLE    = "ROCKSTAR-Galaxies"
+# LEGEND_TITLE    = "Friends-of-Friends"
+LEGEND_TITLE    = "ROCKSTAR-Galaxies"
 
 
 # --- COMMON AUTO-FLAGS
@@ -107,9 +107,9 @@ def Extrapolated_MF(lit_m,lit_mf,mass):
 
 # --- PLOT HANDLES
 if INCLUDE_DEVIATION:
-    fig,ax = plt.subplots(2,1,figsize=(14,8),sharex=True,height_ratios=[3,1])
+    fig,ax = plt.subplots(2,1,figsize=(10,8),sharex=True,height_ratios=[3,1])
 else:
-    fig,ax = plt.subplots(1,1,figsize=(14,8))
+    fig,ax = plt.subplots(1,1,figsize=(10,8))
     ax  =   [ax]    # to use ax[0] syntax
 
 # --- PLOT HELPER FUNCTION
@@ -120,8 +120,8 @@ def PlotLMF(model:LMF_OPTIONS,label:str="",**kwargs):
     ax[0].plot(M,dn_dlogM*HUBBLE,label=model + label,lw=1,**kwargs)
     return M,dn_dlogM*HUBBLE
 
-M_st,mfhr_st = PlotLMF("Seith-Tormen","",ls="--",c='k')
-M_ps,mfhr_ps = PlotLMF("Press-Schechter","",ls=":",c='k')
+# M_st,mfhr_st = PlotLMF("Seith-Tormen","",ls="--",c='k')
+# M_ps,mfhr_ps = PlotLMF("Press-Schechter","",ls=":",c='k')
 # M_ps,mfhr_ps = PlotLMF("Comparat(z=0)","",ls="-",c='k')
 
 # Box mass function
@@ -221,7 +221,7 @@ for i,PLOT in enumerate(CURVE_LIST):
             PlotBMF(M,dn_dlogM,error,(HALO_DEF/8) * MASS_TABLE[4] * MASS_UNIT,RIGHT_SKIP_RKS[2],False,COLORS_RKS[i]," (Star)",marker="*")
         if BH in PLT_TYPE:
             M, dn_dlogM,error = MassFunction(M_BH,BOX_SIZE,BIN_SIZE)
-            PlotBMF(M,dn_dlogM,error, 4e5,0,False,COLORS_FOF[i]," (BH)",marker="x")
+            PlotBMF(M,dn_dlogM,error, 4e5,0,False,COLORS_RKS[i]," (BH)",marker="x")
     
         # log_M, dn_dlogM = MassFunction(MVIR,BOX_SIZE,BIN_SIZE)
         # plt.plot(log_M,dn_dlogM,color="k",label="Virial Mass",lw=2)
@@ -232,22 +232,22 @@ for i,PLOT in enumerate(CURVE_LIST):
 ax[0].set_xscale('log')
 ax[0].set_yscale('log')
 
-ax[0].legend(loc="upper right",ncol=2,title="Dark Matter HMF",fontsize=10,title_fontsize=12,numpoints=2,frameon=False)
+# ax[0].legend(loc="upper right",ncol=2,title="Friends-of-Friends",fontsize=10,title_fontsize=12,numpoints=2,frameon=False)
 # for manual ordering
-if False:
+if True:
     handles, labels = ax[0].get_legend_handles_labels()
-    # order = [0,2,1] # coulmn first
+    order = [0,2,1] # coulmn first
     # order = [0,2,1,3] # coulmn first
     # order = [0,2,3,4,1,5,6,7] # coulmn first
-    order =[0,3,6,1,4,7,2,5,8]
+    # order =[0,3,6,1,4,7,2,5,8]
     oh = [handles[idx] for idx in order]
     ol = [labels[idx] for idx in order]
-    ax[0].legend(oh, ol,loc="upper right",ncol=3,title=LEGEND_TITLE,fontsize=10,title_fontsize=12,numpoints=2,frameon=False)
+    ax[0].legend(oh, ol,loc="upper right",ncol=2,title=LEGEND_TITLE,fontsize=10,title_fontsize=12,numpoints=2,frameon=False)
 
 ax[0].set_ylabel("$dn/d\log(M/M_{\odot})$",fontsize=16)
 ax[0].grid(alpha=0.3)
-# ax[0].set_xlim(left=5*10**5,right=5*10**12)
-# ax[0].set_xlim(left=5*10**8,right=5*10**12)
+ax[0].set_xlim(left=5*10**5,right=5*10**12)
+ax[0].set_xlim(left=5*10**5,right=5*10**10)
 
 # ax[-1] = ax[0] when deviation not included else ax[1]
 ax[-1].set_xlabel("$M/M_{\odot}$",fontsize=16)
@@ -270,9 +270,19 @@ if INCLUDE_DEVIATION:
 
 
 # ax[0].set_title(f"HALO MASS FUNCTION (z={numpy.round(REDSHIFT,2)})",fontsize=18,pad=15)
-ax[0].set_title(f"HALO MASS FUNCTION\nBOX:L50N640 ; z={numpy.round(REDSHIFT,2)}",fontsize=18,pad=15)
+ax[0].set_title(f"HALO MASS FUNCTION (z={numpy.round(REDSHIFT,2)})",fontsize=18,pad=15)
 plt.subplots_adjust(hspace=0)
 
+
+
+# --- Temporary for Astrid SHMF 
+x = [7.012820317195012, 7.262820317195012, 7.512820317195012, 7.762820317195012, 8.025640927828276, 8.301281855656551, 8.532051086425781, 8.762820317195011, 8.961538461538462, 9.173076923076923, 9.371795067420372, 9.512820317195011, 9.66025660588191, 9.80128185565655, 10.012820317195011, 10.365384615384615]
+y = [-1.968912396380584, -2.1968914768212704, -2.445596100707992, -2.7564768805663933, -3.0777206693310246, -3.4196895271752665, -3.7202072981274386, -4.051813621431875, -4.352331866750472, -4.715025793674323, -5.056994651518566, -5.326424818851322, -5.678756211235369, -6.07253916487791, -6.7357508627539335, -7.233160110527377]
+X=numpy.power(10,x)
+Y=numpy.power(10,y)
+plt.plot(X,Y*HUBBLE,lw=2,color='y')
+
+
 # --- SAVE
-# plt.savefig(SAVE_PATH,dpi=300)
-plt.show()
+plt.savefig(SAVE_PATH,dpi=300)
+# plt.show()
