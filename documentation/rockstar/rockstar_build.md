@@ -167,4 +167,4 @@ You may see the error "multiple definition of `final_bg` and `p_bounds`". Add th
 - Open `interleaving.h` file. Change the declaration `struct bgroup *final_bg;` to `extern struct bgroup *final_bg;` (in Line 21). Save it.
 - Open `fun_times.h` file. Change the declaration `struct prev_bounds *p_bounds;` to `extern struct prev_bounds *p_bounds;` (in Line 18). Save it.
 
-This may get fixed in original repoin future. 
+This may get fixed in original repository future. 

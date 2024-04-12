@@ -1,4 +1,9 @@
-import numpy, os,galspec,bigfile
+import numpy, os,galspec
+
+# --- If linux install bigfile
+
+# ---------
+
 from galspec.mpgadget.Field import _Field
 from galspec.mpgadget.Header import _FieldHeader
 

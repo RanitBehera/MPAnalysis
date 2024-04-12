@@ -6,6 +6,7 @@ matplotlib.use('Agg')
 
 # --- CONFIG
 DIR_PATH = "/mnt/home/student/cranit/Work/PID_SFR_Track/RKSG_L50N640c/"
+DIR_PATH = r"C:\Users\ranit\OneDrive\My Drive\4 My Collections\Projects\Python - MPAnalysis\TempResults"
 SNAP=36
 FILE_NAME = "halos_PART_" + '{:03}'.format(SNAP)  +  ".0.particles"
 FILE_PATH = DIR_PATH + os.sep + FILE_NAME
@@ -22,7 +23,7 @@ sorted_ehid = ehid[sorted_args]
 
 
 # --- READ RKS HALO FILE FOR PIDS
-sidx=0 # Selection index : 0 - most massive, 1 - next massive
+sidx=1 # Selection index : 0 - most massive, 1 - next massive
 sehid=sorted_ehid[sidx] # Selected EHID
 with open(FILE_PATH) as f:
     lines=f.readlines()
@@ -47,6 +48,7 @@ with open(FILE_PATH) as f:
 # Acess original box (not rockstar)
 import galspec
 galspec.CONFIG.MPGADGET_OUTPUT_DIR="/mnt/home/student/cranit/Data/MP_Gadget/Nishi/L50Mpc_N640/"
+galspec.CONFIG.MPGADGET_OUTPUT_DIR=r"C:\Users\ranit\OneDrive\My Drive\4 My Collections\Projects\Python - MPAnalysis\TempResults"
 sim = galspec.InitConfig()
 
 
@@ -114,29 +116,39 @@ den_mask  = (dens<10**-6)
 mask4= temp_mask & den_mask
 
 
-mask = mask4
+mask_a = (temp<200) & (dens>3*10**-6)
+mask_b = (temp<400) & (dens<3*10**-6)
+
+mask_com = mask_a | mask_b
+
+mask = mask_a
 
 #------------------------------
 
 
-inv_mask = ~mask
+mask_inv = ~mask_com
 
 plt.plot(dens[~mask],temp[~mask],'o',ms=5,color=(0.8,0.8,0.8),alpha=1,markeredgecolor='none')
-plt.plot(dens[mask],temp[mask],'o',ms=5,color='m',markeredgecolor='none')
+plt.plot(dens[mask_a],temp[mask_a],'o',ms=5,color='m',markeredgecolor='none')
+plt.plot(dens[mask_b],temp[mask_b],'o',ms=5,color='c',markeredgecolor='none')
+plt.plot(dens[mask_inv],temp[mask_inv],'o',ms=5,color='y',markeredgecolor='none')
 plt.yscale("log")
 plt.xscale("log")
 plt.grid(alpha=0.3)
 plt.axis("equal")
 
-plt.savefig("/mnt/home/student/cranit/Work/PID_SFR_Track/Result/test_spat_dist_z8.png",dpi=200)
+# plt.savefig("/mnt/home/student/cranit/Work/PID_SFR_Track/Result/test_spat_dist_z8.png",dpi=200)
+plt.savefig(r"C:\Users\ranit\OneDrive\My Drive\4 My Collections\Projects\Python - MPAnalysis\TempResults\Result\test_spat_dist_z8.png",dpi=200)
 
 import sys
-sys.path.append("/mnt/home/student/cranit/Repo/MPAnalysis/")
+sys.path.append(os.getcwd())
 import galspecold as mp
 
 win=mp.Open3D.GADGET()
-win.DarkMatter(numpy.column_stack((x[mask],y[mask],z[mask])))
-win.Gas(numpy.column_stack((x[inv_mask],y[inv_mask],z[inv_mask])))
+win.DarkMatter(numpy.column_stack((x[mask_a],y[mask_a],z[mask_a])))
+win.Gas(numpy.column_stack((x[mask_b],y[mask_b],z[mask_b])))
+win.Star(numpy.column_stack((x[mask_inv],y[mask_inv],z[mask_inv])))
+
 
 
 win.Run()
