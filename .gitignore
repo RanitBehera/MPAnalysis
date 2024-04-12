@@ -1,4 +1,8 @@
 **/__pycache__
 gsvenv
+gsconda
 src/galspec.egg-info
 .vscode
+env.cfg
+test.py
+temp

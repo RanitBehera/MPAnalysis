@@ -1,7 +1,9 @@
 from .Config import _Config
+from .Config import NavigationRoot,RockstarCFG
+
 
 CONFIG = _Config()
 
-from .Config import InitConfig
-from .mpgadget.Read import _ReadFieldWithNumpy
-from .mpgadget.Read import _ReadFieldWithBigFile
+
+# # For breaking circular import for type hinting
+# from .navigation.MPGADGET.RSG.RSG import _RSG

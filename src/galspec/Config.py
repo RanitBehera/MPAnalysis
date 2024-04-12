@@ -1,33 +1,53 @@
+import galspec,os
+from galspec.navigation.MPGADGET.Sim import _Sim
+from galspec.IO.RockstarCFG import _RockstarCFG
 
 class _Config:
     def __init__(self) -> None:
-            self.SetUserConfig()
-
-    def SetUserConfig(self):
-        self.MPGADGET_OUTPUT_DIR        = "/mnt/home/student/cranit/Data/MP_Gadget/Nishi/L10Mpc_N64c/output" # Remove last '/' if input by validation
-        # self.MPGADGET_OUTPUT_DIR      = "/home/ranitbehera/MyDrive/Data/MP-Gadget/L50N640" # Remove last '/' if input by validation
-        self.MPGADGET_SNAPSHOT_TXT_DIR  = "/mnt/home/student/cranit/Data/MP_Gadget/Nishi/L10Mpc_N64c/txtfiles/Snapshots.txt" # Remove last '/' if input by validation
-        self.CONSISTENT_TREE_OUTPUT_DIR =  "/mnt/home/student/cranit/Work/Merger_Tree_WNum/RKSG_L10N64c/trees"
-        
-        
-        self.READ_FIELD_WITH        = "numpy"   # numpy, bigfile
+        self.SNAPSORT_DIRECTORY = ""
+        self.READ_BINARY_USING  = ""
     
-    def SetConfigFromFile(self,filename:str):
-        pass
 
-    # def GetTemplateConfig(self,dirpath:str):
-        # members = [attr for attr in dir(_Config) if not callable(getattr(example, attr)) and not attr.startswith("__")]
-        # print(dir(_Config))
-        # pass
+    def FromFile(self,path:str):
+        # Get list of class members.
+        class_members = list(vars(self).keys())
+
+        # Read external congif file.
+        with open(path) as cfg:text = cfg.read()
+
+        # Get all lines.
+        lines = text.split("\n")
+
+        # For each line:
+        for i in range(len(lines)):
+            line = lines[i].strip()
+
+            # Filter out blank lines and comments.
+            if line=="" or line.startswith("#"): continue       
+
+            # Form key-value pair.
+            tokens  = line.split("=")
+            key     = tokens[0].strip()
+            value   = tokens[1].strip()
+
+            # Cast to appropiate types
+            # - String
+            if value.startswith('"') and value.endswith('"'):
+                value = str(value[1:-1])
+            # - Integer : Not implemented
+            # - Float : Not implemented
 
 
+            # Set values by validating keys with class member list
+            if key in class_members:setattr(self,key,value)
 
-from galspec.mpgadget.Sim import _Sim
-import galspec
-def InitConfig():
-    # Make it to work from a file,
-    # and my be from dir path
-    # or default
-    sim = _Sim(galspec.CONFIG.MPGADGET_OUTPUT_DIR)
-    return sim
+            
+def NavigationRoot(path:str):
+    if path=="":
+        return _Sim(galspec.CONFIG.SNAPSORT_DIRECTORY)
+    else:
+        return _Sim(path)
 
+
+def RockstarCFG(path:str):
+    return _RockstarCFG(os.path.join(path,"rockstar.cfg"))

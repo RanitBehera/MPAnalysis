@@ -131,4 +131,4 @@ This window has following key-bindings for interactive purpose.
     - O            : Take a capture of current rendering settings.
 - Extra Key Bindings (by registering to callback functions)
   - Keyboard view contrtols
-    - Arrow Keys    : Translate (with forqard and backward capability which is not present in ) 
+    - Arrow Keys    : Translate (with forqard and backward capability which is not present in ) venvconda
