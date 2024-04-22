@@ -16,7 +16,7 @@ FLUX_UNIT = 1e-20 # In ergs s-1 cm-2 A-1 # Keep the exponent integer
 UV_START        = 1350 # In Angstorm (Rest Frame)
 UV_STOP         = 2800 # In Angstorm (Rest Frame)
 UV_REPRESENT    = 1500 # In Angstorm (Rest Frame)
-DATA_SAVE_PATH  = "/mnt/home/student/cranit/Repo/MPAnalysis/temp/spectra/bagdata.txt"
+DATA_SAVE_PATH  = "/mnt/home/student/cranit/Repo/MPAnalysis/temp/spectra/bagdata_Av_M.txt"
 
 # --- Automate
 if not REST_FRAME:
@@ -34,15 +34,15 @@ def GetBagpipes(offset,ShowPlot=True):
     # Bagpipes wants Log_10 total stellar mass formed in M_Solar
     with open(sfhfilepath) as f:
         header = f.readline()
-    mass_formed = float(header.split("*")[-1])
+    mass_formed = float(header.split("*")[-1])  # this is in log
 
     # Validate for invalid sfh
-    invalid_return = [-1, mass_formed, sfh[0], 0, 0]
+    invalid_return = [-1, mass_formed, sfh[0], 0, 0,0]
     if (mass_formed==-numpy.inf): return invalid_return
     if(len(sfh[sfh!=0]))==0:return invalid_return
 
     # --- Bagpipes : Mandatory
-    custom = {"massformed":mass_formed,"metallicity":0.1}
+    custom = {"massformed":mass_formed,"metallicity":(numpy.random.random()*0.9)+0.1}
     custom["history"] = numpy.column_stack((lbage,sfh))
     
     # --- Bagpipes : Create Model
@@ -50,11 +50,37 @@ def GetBagpipes(offset,ShowPlot=True):
     model_components["redshift"] = REDSHIFT
     model_components["custom"] = custom
 
+    if True:
+        pass
+        # burst = {"massformed":4,"metallicity":0.1}
+        # burst["age"] = 0.4
+        # model_components["burst"] = burst
+
+        # constant = {"massformed":10,"metallicity":0.1}
+        # constant["age_max"] = 0.6
+        # constant["age_min"] = 0.0
+        # model_components["constant"] = constant
+
+        # exponential = {"massformed":10,"metallicity":0.1}
+        # exponential["age"] = 0.5
+        # exponential["tau"] = 0.1
+        # model_components["exponential"] = exponential
+
+        # delayed = {"massformed":10,"metallicity":0.1}
+        # delayed["age"] = 0.6
+        # delayed["tau"] = 0.1
+        # model_components["delayed"] = delayed
+
+    def get_Av(mass):   # currently mass is in log
+        Av=0.01*((mass-6)**4)
+        return Av
+
     # --- Bagpipes : Extra
     # model_components["t_bc"] = 0.01         
     # model_components["veldisp"] = 200. 
-    # dust = {"type":"Calzetti","Av":0.2,"eta":3.}                         
-    # model_components["dust"] = dust
+    Av = get_Av(mass_formed)
+    dust = {"type":"Calzetti","Av":Av,"eta":3.}                         
+    model_components["dust"] = dust
     # nebular = {"logU":-3}
     # model_components["nebular"] = nebular
 
@@ -95,7 +121,7 @@ def GetBagpipes(offset,ShowPlot=True):
         if REST_FRAME:ax.set_xlabel("Rest Frame $\lambda / \\AA$")
         else:ax.set_xlabel("Observed Frame $\lambda / \\AA$")
         
-        if True: # Shading
+        def ShadeUVRegion(): # Shading
             # Shade UV range considered for UV slope
             # ax.axvline(UV_START,color='k',ls='--')
             # ax.axvline(UV_STOP,color='k',ls='--')
@@ -104,32 +130,84 @@ def GetBagpipes(offset,ShowPlot=True):
             ax.axvline(UV_REPRESENT,color='k',ls='--',lw=1)
 
         if True: # Fitting
-            # f = f0(lam/lam0)**beta
+            # take a representative point for over all normalisation
+            wave_lower=UV_START
+            wave_upper=UV_STOP
+            wave_refer=UV_REPRESENT
 
-            # take a representative point for over all normalisation initialisation
-            lam_ref=UV_REPRESENT
-            ind_ref = numpy.argmin(numpy.abs(wave-lam_ref))
-            f_ref = numpy.average(flux[ind_ref-10:ind_ref+10])
+            index_refer = numpy.argmin(numpy.abs(wave-wave_refer))
+            flux_refer = numpy.average(flux[index_refer-10:index_refer+10])
             # plt.plot(lam_ref,f_ref,'.k',ms=10)
 
+            # Find Continuum
+            def get_continuum(wave_data,flux_data):
+                span = 100
+                flux_cont = []
+                wave_cont = []
+                for i in range(span,len(wave_data)-span):
+                    # if wave[i]<1250 or wave[i]>1900 : continue
+                    if False:
+                        if (wave[i]>1520 and wave[i]<1570) :continue
+
+                    chunk=flux_data[i-span:i+span+1]
+                    chunk_avg=numpy.average(chunk)
+                    rel_offset = chunk-chunk_avg
+
+                    # sumy = numpy.sum(chunk*numpy.exp(-rel_offset**2/0.0001))
+                    # sumy/= numpy.sum(numpy.exp(-rel_offset**2/0.0001))
+
+                    sumy = numpy.sum(chunk*numpy.exp(rel_offset/0.01))
+                    sumy/= numpy.sum(numpy.exp(rel_offset/0.01))
+
+
+                    flux_cont.append(sumy)
+                    wave_cont.append(wave[i])
+                
+
+                wave_cont = numpy.array(wave_cont)
+                flux_cont = numpy.array(flux_cont)
+                return wave_cont,flux_cont
+            
+            wave, flux = get_continuum(wave,flux)
+            plt.plot(wave,flux)
+   
             #  give only the uv range data for fitting
-            ind_uv_start = numpy.argmin(numpy.abs(wave-UV_START))
-            ind_uv_end = numpy.argmin(numpy.abs(wave-UV_STOP))
+            ind_uv_start = numpy.argmin(numpy.abs(wave-wave_lower))
+            ind_uv_end = numpy.argmin(numpy.abs(wave-wave_upper))
             wave_uv = wave[ind_uv_start:ind_uv_end]
             flux_uv = flux[ind_uv_start:ind_uv_end]
 
-            def fitfun(wave,beta,f0):
-                return f0*numpy.power(wave/lam_ref,beta)
-            pvar,pcov = curve_fit(fitfun,wave_uv,flux_uv,[-2,f_ref])
+            wave_uv_hr = numpy.linspace(wave_lower,wave_upper,1000)
 
-            fitted_flux_uv = fitfun(wave_uv,pvar[0],pvar[1])
-            plt.plot(wave_uv,fitted_flux_uv,'-r',lw=2)
+            if False : # Linear
+                # f = f0*(lam/lam0)^beta
+                def fitfun(wave,beta,f0):
+                    return f0*numpy.power(wave/wave_refer,beta)
+                pvar,pcov = curve_fit(fitfun,wave_uv,flux_uv,[-2.5,flux_refer])
+                fitted_flux_uv_hr = fitfun(wave_uv_hr,pvar[0],pvar[1])
+
+            else : # Logarithimic
+                # log f = beta * log(lam/lam0) + log(f0)
+                # y = beta * log (x/x0) + y0 
+                def fitfun(wave,beta,y0):
+                    return beta * numpy.log10(wave/wave_refer) + y0 
+                pvar,pcov = curve_fit(fitfun,wave_uv,numpy.log10(flux_uv),[-2.5,numpy.log10(flux_refer)])
+                log_fitted_flux_uv_hr = fitfun(wave_uv_hr,pvar[0],pvar[1])
+                fitted_flux_uv_hr = 10**log_fitted_flux_uv_hr
+                
+
+            
+            plt.plot(wave_uv_hr,fitted_flux_uv_hr,'-r',lw=2)
 
             beta_uv= pvar[0]
-            f_uv = fitted_flux_uv[numpy.argmin(numpy.abs(wave_uv-UV_REPRESENT))]
+            f_uv = fitted_flux_uv_hr[numpy.argmin(numpy.abs(wave_uv_hr-wave_refer))]
 
-            plt.plot(UV_REPRESENT,f_uv,'.r',ms=10)
-            plt.plot([plt.xlim()[0],UV_REPRESENT],f_uv*numpy.ones(2),'--r',lw=1)
+            plt.plot(wave_refer,f_uv,'.r',ms=10)
+            plt.plot([plt.xlim()[0],wave_refer],f_uv*numpy.ones(2),'--r',lw=1)
+
+
+
+
 
         if True:
             plt.annotate("$\\beta_{\\text{UV}}$="+str(numpy.round(beta_uv,2)),
@@ -142,22 +220,31 @@ def GetBagpipes(offset,ShowPlot=True):
             
 
     plt.margins(x=0,y=0)
-    # plt.yscale('log')
+    plt.yscale('log')
     # plt.ylim(1e-25,1e2)
+    # plt.ylim(1e-1,2e1)
+    plt.ylim(max(flux)/10,max(flux)*2)
+    plt.xscale('log')
+    plt.xlim(8e2,3e3)
     # plt.axvline(912,c='k',ls='--')
     # plt.axvline(1215,c='k',ls='--')
+    
+    if SHOW_SPECTRA_FIGURE:ShadeUVRegion()
+
     if ShowPlot:plt.show()
     # plt.savefig("/mnt/home/student/cranit/Repo/MPAnalysis/temp/plots/spectra.svg")
     plt.close()
     
-    return offset, mass_formed, sfh[0], beta_uv, f_uv*FLUX_UNIT
+    # Dont forget to update invalid_return
+    # return wave , flux * FLUX_UNIT
+    return [offset, mass_formed, sfh[0], beta_uv, f_uv*FLUX_UNIT,Av]
 
 # Single Call
-GetBagpipes(0)
+# GetBagpipes(0)
 
 # Dump Data for all
 if False:
-    N=1000
+    N=10
     table = numpy.zeros([N,5])
     for offset in range(N):
         print(offset+1,"/",N,end='',flush=True)
@@ -179,3 +266,36 @@ if False:
 
     numpy.savetxt(DATA_SAVE_PATH,table,header=header,fmt="%d %f %e %f %e")
     print("Saved :",DATA_SAVE_PATH,flush=True)
+
+
+#  Dump Parallel Version
+from multiprocessing import Pool
+import tqdm
+if True:
+    def GetBagpipesPool(offset):
+        # print(offset,"Done")
+        return GetBagpipes(offset,False)
+
+    if __name__ == '__main__':
+        N=100
+        offsets = numpy.arange(N)
+        with Pool(25) as p:
+            # table=p.map(GetBagpipesPool, offsets)
+            table=list(tqdm.tqdm(p.imap(GetBagpipesPool, offsets),total=N))
+
+        table = numpy.array(table)
+        table = table[table[:,0]>0]
+
+        header = "Redshift ="+str(REDSHIFT)
+        header += "\nUV Start = " + str(UV_START)
+        header += "\nUV Stop = " + str(UV_STOP)
+        header += "\nUV Represent = " + str(UV_REPRESENT)
+        header += "\n(0)Halo Offset with virial mass sort"
+        header += "\n(1)Stellar mass formed : Log10(M/M_solar)"
+        header += "\n(2)Star formation rate : (M/M_solar)/yr"
+        header += "\n(3)Beta UV Slope"
+        header += "\n(4)Observed UV Luminosity : erg s-1 cm-2 AA-1"
+
+
+        numpy.savetxt(DATA_SAVE_PATH,table,header=header,fmt="%d %f %e %f %e %f")
+        print("Saved :",DATA_SAVE_PATH,flush=True)

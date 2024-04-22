@@ -13,7 +13,7 @@ def Kroupa2001(mgrid=None):
     xi_001_008  = (mgrid**-0.3)*(0.5**-1)*(0.08**-1)
     xi_008_05   = (mgrid**-1.3)*(0.5**-1)
     xi_05_1     = (mgrid**-2.3)*1
-    xi_1_100    = (mgrid**-2.3)*1
+    xi_1_100    = (mgrid**-2.7)*1
 
     mask_001_008 = (0.01<=mgrid) & (mgrid<0.08) 
     mask_008_05 = (0.08<=mgrid) & (mgrid<0.5) 
@@ -101,6 +101,7 @@ if True:
     ax[1].plot(m,xi,label="Kroupa (2001)",color='b')
 
     m,xi = Chabrier2003(imf_type="gal-disk")
+    # m,xi = Chabrier2003(imf_type="globular")
     ax[1].plot(m,xi,color='r',label="Chabrier (2003) - Galactic Disk")
 
     # def Chabrier_Disk(m):
@@ -116,8 +117,10 @@ if True:
 
     mass_boundaries=numpy.append(numpy.logspace(-2,0,10),100)
     imf_val=[Chabrier2003(m)[1] for m in mass_boundaries]
+    # imf_val=[Chabrier2003(m,"globular")[1] for m in mass_boundaries]
 
     ax[1].plot(mass_boundaries,imf_val,'r.',ms=10)
+    # ax[1].plot(mass_boundaries,imf_val,'m.',ms=10)
 
     alpha=[]
     for i in range(len(mass_boundaries)-1):
@@ -140,6 +143,6 @@ for axi in [ax[0],ax[1]]:
     axi.axvline(1,color="k",ls='--',lw=1,alpha=0.2)
     axi.axhline(1,color="k",ls='--',lw=1,alpha=0.2)
 
-ax[1].set_title("EXPONENT : "+alp+"\n"+"BOUNDARIES : "+bnd,fontsize=8)
+# ax[1].set_title("EXPONENT : "+alp+"\n"+"BOUNDARIES : "+bnd,fontsize=8)
 
 plt.show()

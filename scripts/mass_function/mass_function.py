@@ -133,9 +133,8 @@ def PlotBMF(M,dn_dlogM,error,min_mass,right_skip_count,include_deviation,color,l
     num_mask = (dn_dlogM>1e-20)
     mask = mass_mask & num_mask
     M,dn_dlogM,error = M[mask],dn_dlogM[mask],error[mask]
+    
     #Deviation
-
-
     ax[0].plot(M,dn_dlogM,'-',label= BOX_TEXT + leg,lw=2,color=color,marker=marker)
     if include_deviation:
         osmf = (dn_dlogM)                           # Observed simulation mass function (linear)
@@ -270,7 +269,7 @@ if INCLUDE_DEVIATION:
 
 
 # ax[0].set_title(f"HALO MASS FUNCTION (z={numpy.round(REDSHIFT,2)})",fontsize=18,pad=15)
-ax[0].set_title(f"HALO MASS FUNCTION (z={numpy.round(REDSHIFT,2)})",fontsize=18,pad=15)
+ax[0].set_title(f"MASS FUNCTION (z={numpy.round(REDSHIFT,2)})",fontsize=18,pad=15)
 plt.subplots_adjust(hspace=0)
 
 
@@ -283,6 +282,26 @@ Y=numpy.power(10,y)
 plt.plot(X,Y*HUBBLE,lw=2,color='y')
 
 
+# --- Temporary from (arXiv:2403.08872v1) 
+
+# x = [8.51394422310757, 9.00531208499336, 9.476759628154051, 9.921646746347943, 10.346613545816734, 10.638778220451528, 10.884462151394423]
+# y = [-2.7524271844660193, -3.3300970873786406, -3.953074433656958, -4.67799352750809, -5.561488673139158, -6.422330097087379, -7.464401294498382]
+# with LRD
+# x = [8.746347941567064, 9.250996015936256, 9.749003984063744, 10.253652058432936, 10.758300132802125, 11.249667994687915, 11.747675962815405]
+# y = [-3.001618122977346, -3.692556634304207, -4.24757281553398, -4.644012944983819, -5.255663430420712, -5.640776699029126, -5.663430420711974]
+# H+24
+x = [7.770252324037185, 8.938911022576361, 9.98804780876494, 10.539176626826029, 10.864541832669323, 11.136786188579016, 11.349269588313412]
+y = [-2.457928802588996, -3.7605177993527508, -4.983818770226537, -5.7200647249190935, -6.286407766990291, -6.864077669902913, -7.43042071197411]
+#So+16
+x = [7.252324037184595, 8.925630810092962, 10.094289508632137, 10.366533864541832, 10.632138114209827, 10.811420982735724, 11.003984063745019]
+y = [-1.925566343042071, -4.043689320388349, -5.618122977346278, -6.0711974110032365, -6.56957928802589, -6.977346278317152, -7.4870550161812295]
+
+X=numpy.power(10,x)
+Y=numpy.power(10,y)
+plt.plot(X,Y*HUBBLE,lw=2,color='m',label="So+16")
+
+plt.legend()
+
 # --- SAVE
-plt.savefig(SAVE_PATH,dpi=300)
-# plt.show()
+# plt.savefig(SAVE_PATH,dpi=300)
+plt.show()
