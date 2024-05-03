@@ -7,13 +7,16 @@ def Salpeter1955(mgrid=None):
     xi = mgrid**-2.35
     return mgrid,xi
 
-def Kroupa2001(mgrid=None):
+def Kroupa2001(mgrid=None,include_bin=False):
     if mgrid==None:
         mgrid = numpy.logspace(-2,2,100)
     xi_001_008  = (mgrid**-0.3)*(0.5**-1)*(0.08**-1)
     xi_008_05   = (mgrid**-1.3)*(0.5**-1)
     xi_05_1     = (mgrid**-2.3)*1
-    xi_1_100    = (mgrid**-2.7)*1
+    if include_bin:
+        xi_1_100    = (mgrid**-2.7)*1
+    else:
+        xi_1_100    = (mgrid**-2.3)*1
 
     mask_001_008 = (0.01<=mgrid) & (mgrid<0.08) 
     mask_008_05 = (0.08<=mgrid) & (mgrid<0.5) 
@@ -81,6 +84,9 @@ if True:
 
     m,xi = Kroupa2001()
     ax[0].plot(m,xi,label="Kroupa (2001)")
+
+    m,xi = Kroupa2001(include_bin=True)
+    ax[0].plot(m,xi,label="Kroupa (2001) - UB",ls='--')
 
     m,xi = Chabrier2003(imf_type="gal-disk")
     ax[0].plot(m,xi,label="Chabrier (2003) - Galactic Disk")

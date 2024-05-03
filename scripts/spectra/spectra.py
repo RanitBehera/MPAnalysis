@@ -16,9 +16,10 @@ FLUX_UNIT = 1e-20 # In ergs s-1 cm-2 A-1 # Keep the exponent integer
 UV_START        = 1350 # In Angstorm (Rest Frame)
 UV_STOP         = 2800 # In Angstorm (Rest Frame)
 UV_REPRESENT    = 1500 # In Angstorm (Rest Frame)
-DATA_SAVE_PATH  = "/mnt/home/student/cranit/Repo/MPAnalysis/temp/spectra/bagdata_Av_M.txt"
+DATA_SAVE_PATH  = "/mnt/home/student/cranit/Repo/MPAnalysis/temp/spectra/bagdata_Av_M_UZ.txt"
 
 # --- Automate
+numpy.random.seed(0)
 if not REST_FRAME:
     UV_START        *= (1+REDSHIFT)
     UV_STOP         *= (1+REDSHIFT)
@@ -42,6 +43,8 @@ def GetBagpipes(offset,ShowPlot=True):
     if(len(sfh[sfh!=0]))==0:return invalid_return
 
     # --- Bagpipes : Mandatory
+    # custom = {"massformed":mass_formed,"metallicity":0.1}
+    # custom = {"massformed":mass_formed,"metallicity":(numpy.random.random()*2.7)}
     custom = {"massformed":mass_formed,"metallicity":(numpy.random.random()*0.9)+0.1}
     custom["history"] = numpy.column_stack((lbage,sfh))
     

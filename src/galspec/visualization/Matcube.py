@@ -14,7 +14,7 @@ def PlotCube(ax:plt.Axes,pos,box_size,point_size,point_color,alpha=1):
 
     # --- BEAUTIFY
     # Limit Range
-    ax.set_xlim(0,L);ax.set_ylim(0,L);ax.set_zlim(0,L)
+    # ax.set_xlim(0,L);ax.set_ylim(0,L);ax.set_zlim(0,L)
     #Hide axis ticks
     ax.set_axis_off()
     ax.set_xticks([]);ax.set_yticks([]);ax.set_zticks([])
@@ -25,7 +25,7 @@ def PlotCube(ax:plt.Axes,pos,box_size,point_size,point_color,alpha=1):
     ax.yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
     ax.zaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
     # Draw Sim Cube
-    if True:
+    if False:
         alp=1
         ax_cx=numpy.array([0,1,1,0,0,0,0,1,1,0,0])*L
         ax_cy=numpy.array([0,0,1,1,0,0,0,0,1,1,0])*L

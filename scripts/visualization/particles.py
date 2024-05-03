@@ -7,34 +7,22 @@ from galspec.visualization.Matcube import PlotCube
 
 
 # --- SIMS
-BOX         = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L50N640/")
-PARTBOX     = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/L50N640/")
-
-# BOX         = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L10N64/")
-# PARTBOX     = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/L10N64/output/")
+PARTBOX     = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/L10N64/output/")
 
 
 # --- FLAGS : Set flags
 SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results_PMCAM/web_z8.png" 
-SNAP_NUM    = 36
+SNAP_NUM    = 17
 
 
 # --- AUTO-FLAGS
-SNAP        = BOX.RSG(SNAP_NUM)
-PSNAP       = PARTBOX.PART(SNAP_NUM)
+SNAP       = PARTBOX.PART(SNAP_NUM)
 REDSHIFT    = (1/SNAP.Attribute.Time())-1
 BOX_SIZE    = SNAP.Attribute.BoxSize()/1000
 
 
-# FIELDS
-MVIR        = SNAP.RKSGroups.VirialMass()
-HALO_POS    = SNAP.RKSGroups.Position()
-
-# MASK
-MASK_MASS   = (MVIR>10**10)
-mask        = MASK_MASS
-
-
+# --- FIELDS
+PART_POS    = SNAP.DarkMatter.Position()
 
 
 # PLOT
@@ -45,14 +33,7 @@ TRANSLATE    = numpy.zeros(3)
 ZOOM_SCALE   = 1
 
 # SCALE
-logM = numpy.log10(MVIR)
-logMmin = 7;logMmax = 11
-Smin = 2;Smax = 20
-Psize = Smin + ((Smax-Smin)/(logMmax-logMmin))*(logM-logMmin)
-Psize = 20*(Psize/max(Psize))**4
-PlotCube(ax,HALO_POS,BOX_SIZE,Psize,'k',0.3)
-# PlotCube(ax,HALO_POS[mask],BOX_SIZE,2,'k',0.3)
-# PlotCube(ax,HALO_POS[~mask],BOX_SIZE,2,'k',0.3)
+PlotCube(ax,PART_POS/1000,BOX_SIZE,10,'k',0.03)
 
 # --- BEAUTIFY
 ax.set_xlim(0,BOX_SIZE)
@@ -60,7 +41,7 @@ ax.set_ylim(0,BOX_SIZE)
 ax.set_zlim(0,BOX_SIZE)
 ax.set_box_aspect([1.0, 1.0, 1.0])
 # plt.tight_layout()
-plt.title("L50N640\nz="+str(round(REDSHIFT,2))+"\n$N_{\\text{halo}}$ = "+ str(len(MVIR)),fontsize=16)
+# plt.title("L50N640\nz="+str(round(REDSHIFT,2))+"\n$N_{\\text{halo}}$ = "+ str(len(MVIR)),fontsize=16)
 
 # --- SAVE
 

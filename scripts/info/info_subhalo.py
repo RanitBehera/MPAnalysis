@@ -1,8 +1,8 @@
 import numpy
 import galspec
 
-BOX  = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L140N1008")
-SNAP = 150
+BOX  = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L50N640")
+SNAP = 36
 
 # HALO
 ihids       = BOX.RSG(SNAP).RKSGroups.InternalHaloID()
@@ -20,7 +20,7 @@ print(ihids[:10],end="\n\n")
 
 
 # TARGET
-tihid = 4919
+tihid = 209
 print("Target Halo IDs:",tihid,end="\n\n")
 if tihid not in ihids: exit()
 

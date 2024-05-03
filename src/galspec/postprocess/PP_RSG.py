@@ -140,12 +140,13 @@ class PP_RSG:
         # Now get all (id,sfr) pair from corresponding part snap.
         box_gpids = self.PART.Gas.ID()
         box_gpsfr  = self.PART.Gas.StarFormationRate()
+
         # these ids are unique. 
         # So we could zip them now. But we will filter first.
         # So we fiter for those box ids which are present in grouping data.  
         mask = numpy.isin(numpy.int64(box_gpids),numpy.int64(gpids))
         box_gpids = box_gpids[mask]  
-        box_gpsfr  = box_gpsfr[mask]  
+        box_gpsfr  = box_gpsfr[mask]
         # Now we can zip them.
         box_gid_sfr_map = dict(zip(box_gpids,box_gpsfr))
         # Now we can cross check for its length.
@@ -164,7 +165,88 @@ class PP_RSG:
         IHID_SFR= list(ihid_sfr_map.values())
         WriteField(os.path.join(self.RSG.path,"RKSGroups"),"StarFormationRate",IHID_SFR,"Overwrite")
         if(self.show_progress):print("Done")
-            
+
+    def StellarMetallicity(self):
+        if(self.show_progress):print("/RKSGroups/StellarMetallicity : ",flush=True)
+        try:
+            IHID_STAR_COUNT = self.RSG.RKSGroups.LengthByTypeInRvirWC()[:,4]
+        except: 
+            print("ERROR : No LengthByTypeInRVirWC field found,")
+            return
+        
+        # Get (id,ihid) of all Group star particles
+        spids = self.RSG.Star.ID()
+        spihids = self.RSG.Star.InternalHaloID()
+        # Note that these IDs are not unique.
+        # The same particle is again output as child ...
+        # when any of its hierarchical-parent is target for output.
+        # All of those hierarchical-parent have different ihid however.
+        # So get all output ihid, which are unique from group data.
+        ihids = self.RSG.RKSGroups.InternalHaloID()
+        # now we filter gpihids for elements such that its in ihids.
+        # it will remove sub halos which got supressed
+        mask = numpy.isin(spihids,ihids)
+        spids,spihids = spids[mask],spihids[mask]
+        
+        # Our end goal is to assign sfr to these ihids.
+        # So lets form dict to easily update linked sfr, initilised to zero.
+        ihid_met_map = dict(zip(ihids,numpy.zeros(len(ihids))))
+        
+        # Now get all (id,sfr) pair from corresponding part snap.
+        box_spids   = self.PART.Star.ID()
+        box_spmet   = self.PART.Star.Metallicity()
+
+        # these ids are unique. 
+        # So we could zip them now. But we will filter first.
+        # So we fiter for those box ids which are present in grouping data.  
+        mask = numpy.isin(numpy.int64(box_spids),numpy.int64(spids))
+        box_spids   = box_spids[mask]  
+        box_spmet   = box_spmet[mask]
+        # Now we can zip them.
+        box_gid_met_map = dict(zip(box_spids,box_spmet))
+        # Now we can cross check for its length.
+        # Its length should be always less than length of group gpids
+        # as there are no duplicate ids
+        print("   CROSS CHECK 1 : ","Success." if len(box_spids)<=len(spids) else "Failed.",flush=True)
+        if len(box_spids)>len(spids):return
+        # Now we itterate throw for every element of gpids and gpihid 
+        # look where it is in box_gpids, get corresponding box_gpsfr
+        # and add it to ihid_sfr_map for that gpihid
+        # the last two operations are easily done by the dict we formed
+        for spid,spihid in numpy.column_stack((spids,spihids)):
+            # gpsfr=box_gid_sfr_map[gpid]
+            ihid_met_map[spihid] += box_gid_met_map[spid]
+        
+        IHID_SMET = list(ihid_met_map.values())
+
+        # Check if lengths match before dividing for average
+        print("   CROSS CHECK 2 : ","Success." if len(IHID_SMET)==len(IHID_STAR_COUNT) else "Failed.",flush=True)
+        if len(IHID_SMET)!=len(IHID_STAR_COUNT):return
+        
+        # Validate for no stars
+        nostar_mask = (IHID_STAR_COUNT==0.0)
+        val1=sum(IHID_STAR_COUNT[nostar_mask])
+        val2=max(numpy.array(IHID_SMET)[nostar_mask])
+        # val=val1+val2
+
+        for i,val in enumerate(numpy.array(IHID_SMET)[nostar_mask]):
+            if val!=0:
+                print(i,val)
+
+        # print("   CROSS CHECK 3 : ","Success." if val==0 else "Failed.",flush=True)
+        # if val!=0:return
+        
+        # IHID_SMET[~nostar_mask] /= IHID_STAR_COUNT[~nostar_mask]
+        
+        import matplotlib.pyplot as plt
+        plt.hist(numpy.array(IHID_SMET)[nostar_mask],bins=numpy.arange(0,0.25,0.01))
+        plt.show()
+
+        # WriteField(os.path.join(self.RSG.path,"RKSGroups"),"StellarMetallicity",IHID_SMET,"Overwrite")
+        if(self.show_progress):print("Done")
+
+
+
 
     # def MassByTypeInRvirWC(self):
     #     if(self.show_progress):print("/RKSGroups/MassByTypeInRvirWC2 : ",end="",flush=True)

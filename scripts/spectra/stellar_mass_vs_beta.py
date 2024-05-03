@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # offset,stellar_mass,sfr,beta,Luv = numpy.loadtxt("/mnt/home/student/cranit/Repo/MPAnalysis/temp/spectra/bagdata.txt").T
-offset,stellar_mass,sfr,beta,Luv,Av = numpy.loadtxt("/mnt/home/student/cranit/Repo/MPAnalysis/temp/spectra/bagdata_Av_M.txt").T
+offset,stellar_mass,sfr,beta,Luv,Av = numpy.loadtxt("/mnt/home/student/cranit/Repo/MPAnalysis/temp/spectra/bagdata_Av_M_CZ.txt").T
 
 
 ms=numpy.log10(32*0.000153522*1e10)
@@ -13,26 +13,28 @@ stellar_mass,beta,Av = stellar_mass[mask],beta[mask],Av[mask]
 
 
 # -------
-fig = plt.figure(figsize=(6,6))
-sort=numpy.argsort(Av)
-plt.plot(stellar_mass[sort],Av[sort],'.-')
-# plt.yscale("log")
-plt.xlabel("$\log (M_*/M_\odot) $")
-plt.ylabel("$A_V$")
-plt.title("$A_V = 0.01\left[\log\left(\\frac{M_*}{10^6 M_\odot}\\right)\\right]^4$ \n ["
-          + str(round(min(Av),2)) + "," + str(round(max(Av),2))  +"]")
+if True:
+    fig = plt.figure(figsize=(6,6))
+    sort=numpy.argsort(Av)
+    plt.plot(stellar_mass[sort],Av[sort],'.-')
+    # plt.yscale("log")
+    plt.xlabel("$\log (M_*/M_\odot) $")
+    plt.ylabel("$A_V$")
+    plt.title("$A_V = 0.01\left[\log\left(\\frac{M_*}{10^6 M_\odot}\\right)\\right]^4$ \n ["
+            + str(round(min(Av),2)) + "," + str(round(max(Av),2))  +"]")
 # -------
 
 
 # -------
-fig = plt.figure(figsize=(6,6))
-sort=numpy.argsort(Av)
-plt.plot(Av[sort],beta[sort],'.-')
-# plt.yscale("log")
-plt.xlabel("$A_V$")
-plt.ylabel("$\\beta$")
-# plt.title("$A_V = 0.01\left[\log\left(\\frac{M_*}{10^6 M_\odot}\\right)\\right]^4$ \n ["
-        #   + str(round(min(Av),2)) + "," + str(round(max(Av),2))  +"]")
+if True:
+    fig = plt.figure(figsize=(6,6))
+    sort=numpy.argsort(Av)
+    plt.plot(Av[sort],beta[sort],'.-')
+    # plt.yscale("log")
+    plt.xlabel("$A_V$")
+    plt.ylabel("$\\beta$")
+    # plt.title("$A_V = 0.01\left[\log\left(\\frac{M_*}{10^6 M_\odot}\\right)\\right]^4$ \n ["
+            #   + str(round(min(Av),2)) + "," + str(round(max(Av),2))  +"]")
 # -------
 
 

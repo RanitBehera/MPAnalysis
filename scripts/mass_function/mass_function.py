@@ -136,6 +136,9 @@ def PlotBMF(M,dn_dlogM,error,min_mass,right_skip_count,include_deviation,color,l
     
     #Deviation
     ax[0].plot(M,dn_dlogM,'-',label= BOX_TEXT + leg,lw=2,color=color,marker=marker)
+
+    ax[0].fill_between(M,dn_dlogM-error,dn_dlogM+error,color=color,alpha=0.3)
+
     if include_deviation:
         osmf = (dn_dlogM)                           # Observed simulation mass function (linear)
         eelmf = Extrapolated_MF(M_st,mfhr_st,M)     # Expected extrapolated litrarture mass function (linear)
@@ -202,6 +205,7 @@ for i,PLOT in enumerate(CURVE_LIST):
         if STAR in PLT_TYPE:
             M, dn_dlogM,error = MassFunction(M_STAR,BOX_SIZE,BIN_SIZE)
             PlotBMF(M,dn_dlogM,error,(HALO_DEF/16) * MASS_TABLE[4] * MASS_UNIT,RIGHT_SKIP_FOF[2],False,COLORS_FOF[i]," (Star)",marker="*")
+            
 
 
     # Rockstar
@@ -218,6 +222,7 @@ for i,PLOT in enumerate(CURVE_LIST):
         if STAR in PLT_TYPE:
             M, dn_dlogM,error = MassFunction(M_STAR,BOX_SIZE,BIN_SIZE)
             PlotBMF(M,dn_dlogM,error,(HALO_DEF/8) * MASS_TABLE[4] * MASS_UNIT,RIGHT_SKIP_RKS[2],False,COLORS_RKS[i]," (Star)",marker="*")
+            # ax[0].fill_between(M,dn_dlogM-numpy.sqrt(dn_dlogM),dn_dlogM-numpy.sqrt(dn_dlogM),color=COLORS_RKS[i])
         if BH in PLT_TYPE:
             M, dn_dlogM,error = MassFunction(M_BH,BOX_SIZE,BIN_SIZE)
             PlotBMF(M,dn_dlogM,error, 4e5,0,False,COLORS_RKS[i]," (BH)",marker="x")
@@ -279,7 +284,7 @@ x = [7.012820317195012, 7.262820317195012, 7.512820317195012, 7.762820317195012,
 y = [-1.968912396380584, -2.1968914768212704, -2.445596100707992, -2.7564768805663933, -3.0777206693310246, -3.4196895271752665, -3.7202072981274386, -4.051813621431875, -4.352331866750472, -4.715025793674323, -5.056994651518566, -5.326424818851322, -5.678756211235369, -6.07253916487791, -6.7357508627539335, -7.233160110527377]
 X=numpy.power(10,x)
 Y=numpy.power(10,y)
-plt.plot(X,Y*HUBBLE,lw=2,color='y')
+plt.plot(X,Y*HUBBLE,lw=2,color='y',label="Astrid")
 
 
 # --- Temporary from (arXiv:2403.08872v1) 
@@ -303,5 +308,5 @@ plt.plot(X,Y*HUBBLE,lw=2,color='m',label="So+16")
 plt.legend()
 
 # --- SAVE
-# plt.savefig(SAVE_PATH,dpi=300)
-plt.show()
+plt.savefig(SAVE_PATH,dpi=300)
+# plt.show()
