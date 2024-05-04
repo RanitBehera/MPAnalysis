@@ -7,8 +7,9 @@ def get_available_boxes(boxbank_dir):
     return box_list
 
 
-def main(args,env):
+def main(args:list[str],env:dict):
     if "-b" in args:
         boxes = get_available_boxes(env["BOXBANK_DIR"])
         [print(box,end="\t") for box in boxes]
+        print("")
         
