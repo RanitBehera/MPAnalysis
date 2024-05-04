@@ -6,18 +6,23 @@ class Terminal:
     def __init__(self) -> None:
         self.env                = {}
         self.commands_history   = []
+
         # --- Initialise environment
         self.env["TERM_PATH"]   = os.path.realpath(__file__)
         self.env["TERM_DIR"]    = os.path.abspath(os.path.join(os.path.realpath(__file__),os.pardir))
-        self.env["EXEC_DIR"]    = os.path.join(self.env["TERM_DIR"],"commands")
         self.env["BOXBANK_DIR"] = os.path.join(self.env["TERM_DIR"],"registry/boxbank")
         self.env["BOX"]         = ""
         self.env["SNAP"]        = ""
         self.env["HALO"]        = ""
-        # --- Get available executables
-        self.exec_list          = self.get_available_exec(self.env["EXEC_DIR"])
 
-    def get_available_exec(self,exec_dir:str):
+        # --- Get available executables
+        self.exec_list          = []
+        with open(os.path.join(self.env["TERM_DIR"],"registry/path.txt"))as f:
+            paths = f.read().split("\n")
+        for path in paths:
+            self.exec_list += self.get_available_exec(path)
+
+    def get_available_exec(self,exec_dir:str,recursive:bool=True):
         exec_list = []
 
         # Search others
@@ -31,10 +36,11 @@ class Terminal:
             exec_list.append(pyfile.split(".py")[0])
 
         # Include files from sub-folders
-        searchdirs = [os.path.join(exec_dir,d) for d in subdirs if not d.startswith((".","_","__"))]
-        for sdir in searchdirs:
-            sub_exec_list = self.get_available_exec(sdir)       # <--- Recursion
-            exec_list += sub_exec_list
+        if recursive:
+            searchdirs = [os.path.join(exec_dir,d) for d in subdirs if not d.startswith((".","_","__"))]
+            for sdir in searchdirs:
+                sub_exec_list = self.get_available_exec(sdir)       # <--- Recursion
+                exec_list += sub_exec_list
 
         return exec_list
 
@@ -140,4 +146,3 @@ class Terminal:
 # -----------------------------------------------
 t = Terminal()
 print(t.exec_list)
-
