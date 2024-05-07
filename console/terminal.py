@@ -136,13 +136,16 @@ class Terminal:
         if not exec in self.exec_list:
             print(f"Command '{exec}' not recognized.");return
         else:
-            exec_args = command_chunks[1:]
-            submodule = getattr(commands,exec)
-            submodule.main(exec_args,self.env)
+            try:
+                exec_args = command_chunks[1:]
+                submodule = getattr(commands,exec)
+                submodule.main(exec_args,self.env)
+            except:
+                print("ERROR")
 
 
 
 
 # -----------------------------------------------
 t = Terminal()
-print(t.exec_list)
+t.run()
