@@ -11,7 +11,7 @@ PARTBOX     = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/L50N
 # --- FLAGS : Set flags
 SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results_PMCAM/halo_bh.png" 
 SNAP_NUM    = 36
-HALO_OFFSET = 5
+HALO_OFFSET = 1
 WITHIN_RVIR  = True
 
 # --- AUTO-FLAGS

@@ -50,9 +50,9 @@ fig.set_facecolor((0.95,0.95,0.95))
 # FOF
 PlotCube(ax1,GetPosOf(544,False),BOX_SIZE,1,'k',alpha=0.2)
 # Sub
-PlotCube(ax2,GetPosOf(544),BOX_SIZE,1,'r',alpha=0.2)
-PlotCube(ax2,GetPosOf(530),BOX_SIZE,1,'b',alpha=0.2)
-PlotCube(ax2,GetPosOf(542),BOX_SIZE,1,'m',alpha=0.2)
+# PlotCube(ax2,GetPosOf(544),BOX_SIZE,1,'r',alpha=0.2)
+# PlotCube(ax2,GetPosOf(530),BOX_SIZE,1,'b',alpha=0.2)
+# PlotCube(ax2,GetPosOf(542),BOX_SIZE,1,'m',alpha=0.2)
 
 
 

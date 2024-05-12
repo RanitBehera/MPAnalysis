@@ -111,6 +111,7 @@ class Terminal:
         while True:
             print(self.get_prompt(),end=" ",flush=True)
             command=self.get_command()
+            # command=input()
             
             # if current command is to exit, exit immediately
             if command.lower() in ["quit","exit"]:break
@@ -140,8 +141,8 @@ class Terminal:
                 exec_args = command_chunks[1:]
                 submodule = getattr(commands,exec)
                 submodule.main(exec_args,self.env)
-            except:
-                print("ERROR")
+            except Exception as e:
+                print("ERROR","\n",e)
 
 
 

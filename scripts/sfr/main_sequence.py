@@ -2,9 +2,6 @@ import numpy, galspec
 import matplotlib.pyplot as plt
 
 
-import matplotlib
-matplotlib.use('Agg')
-
 
 # --- FLAGS
 SNAP_NUM    = 36
@@ -54,4 +51,5 @@ plt.ylabel("$SFR (M_{\odot} yr^{-1})$")
 # plt.title(f"SFR DISTRIBUTION\n BOX : {BOX_TEXT} ; z={numpy.round(REDSHIFT,2)}")
 
 # --- SAVE
-plt.savefig(SAVE_PATH,dpi=200)
+plt.show()
+# plt.savefig(SAVE_PATH,dpi=200)

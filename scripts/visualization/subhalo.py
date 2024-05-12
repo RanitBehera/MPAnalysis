@@ -7,12 +7,12 @@ from treelib import Tree, Node
 
 
 # --- SIMS
-BOX         = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L50N1008")
-PARTBOX     = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/L50N1008")
+BOX         = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L50N640")
+PARTBOX     = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/L50N640")
 
 # --- FLAGS : Set flags
 SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results_PMCAM/subhalo_tree.png" 
-SNAP_NUM    = 171
+SNAP_NUM    = 36
 HALO_OFFSET = 0
 
 

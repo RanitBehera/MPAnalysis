@@ -4,6 +4,15 @@ import galspec
 import bagpipes as pipes
 from bagpipes.plotting.general import add_z_axis
 from scipy.optimize import curve_fit
+import matplotlib.ticker as ticker
+
+# from matplotlib import rc
+# rc('font',**{'family':'serif','serif':['Roboto']})
+# rc('text', usetex=True)
+
+
+
+
 
 # --- FLAGS
 TBSFR_DIR = "/mnt/home/student/cranit/Work/RSGBank/TBSFR_Bank"
@@ -43,9 +52,9 @@ def GetBagpipes(offset,ShowPlot=True):
     if(len(sfh[sfh!=0]))==0:return invalid_return
 
     # --- Bagpipes : Mandatory
-    # custom = {"massformed":mass_formed,"metallicity":0.1}
+    custom = {"massformed":mass_formed,"metallicity":0.1}
     # custom = {"massformed":mass_formed,"metallicity":(numpy.random.random()*2.7)}
-    custom = {"massformed":mass_formed,"metallicity":(numpy.random.random()*0.9)+0.1}
+    # custom = {"massformed":mass_formed,"metallicity":(numpy.random.random()*0.9)+0.1}
     custom["history"] = numpy.column_stack((lbage,sfh))
     
     # --- Bagpipes : Create Model
@@ -81,9 +90,9 @@ def GetBagpipes(offset,ShowPlot=True):
     # --- Bagpipes : Extra
     # model_components["t_bc"] = 0.01         
     # model_components["veldisp"] = 200. 
-    Av = get_Av(mass_formed)
-    dust = {"type":"Calzetti","Av":Av,"eta":3.}                         
-    model_components["dust"] = dust
+    # Av = get_Av(mass_formed)
+    # dust = {"type":"Calzetti","Av":Av,"eta":3.}                         
+    # model_components["dust"] = dust
     # nebular = {"logU":-3}
     # model_components["nebular"] = nebular
 
@@ -118,7 +127,7 @@ def GetBagpipes(offset,ShowPlot=True):
     if SHOW_SPECTRA_FIGURE:
         fig = plt.figure(figsize=(12, 4))
         ax = plt.subplot()
-        ax.plot(wave,flux)
+        ax.plot(wave,flux,label="Bagpipes")
         ax.set_ylim(bottom=0.)
         ax.set_ylabel("$f_{\lambda}/ 10^{"+ str(int(numpy.log10(FLUX_UNIT))) +"}\\text{erg s}^{-1} \\text{cm}^{-2} \\AA^{-1} $")
         if REST_FRAME:ax.set_xlabel("Rest Frame $\lambda / \\AA$")
@@ -156,11 +165,11 @@ def GetBagpipes(offset,ShowPlot=True):
                     chunk_avg=numpy.average(chunk)
                     rel_offset = chunk-chunk_avg
 
-                    # sumy = numpy.sum(chunk*numpy.exp(-rel_offset**2/0.0001))
-                    # sumy/= numpy.sum(numpy.exp(-rel_offset**2/0.0001))
+                    sumy = numpy.sum(chunk*numpy.exp(-rel_offset**2/0.0001))
+                    sumy/= numpy.sum(numpy.exp(-rel_offset**2/0.0001))
 
-                    sumy = numpy.sum(chunk*numpy.exp(rel_offset/0.01))
-                    sumy/= numpy.sum(numpy.exp(rel_offset/0.01))
+                    # sumy = numpy.sum(chunk*numpy.exp(rel_offset/0.01))
+                    # sumy/= numpy.sum(numpy.exp(rel_offset/0.01))
 
 
                     flux_cont.append(sumy)
@@ -172,7 +181,7 @@ def GetBagpipes(offset,ShowPlot=True):
                 return wave_cont,flux_cont
             
             wave, flux = get_continuum(wave,flux)
-            plt.plot(wave,flux)
+            plt.plot(wave,flux,label="Continuum")
    
             #  give only the uv range data for fitting
             ind_uv_start = numpy.argmin(numpy.abs(wave-wave_lower))
@@ -200,7 +209,7 @@ def GetBagpipes(offset,ShowPlot=True):
                 
 
             
-            plt.plot(wave_uv_hr,fitted_flux_uv_hr,'-r',lw=2)
+            plt.plot(wave_uv_hr,fitted_flux_uv_hr,'-r',lw=2,label="Continuum Fit")
 
             beta_uv= pvar[0]
             f_uv = fitted_flux_uv_hr[numpy.argmin(numpy.abs(wave_uv_hr-wave_refer))]
@@ -228,10 +237,20 @@ def GetBagpipes(offset,ShowPlot=True):
     # plt.ylim(1e-1,2e1)
     plt.ylim(max(flux)/10,max(flux)*2)
     plt.xscale('log')
-    plt.xlim(8e2,3e3)
+    plt.xlim(8e2,4e3)
     # plt.axvline(912,c='k',ls='--')
     # plt.axvline(1215,c='k',ls='--')
-    
+    plt.legend(loc="lower left")
+    plt.annotate(f"$z={numpy.round(REDSHIFT,2)}$",xy=(0,1),xytext=(10,-10),xycoords="axes fraction",textcoords="offset pixels",ha="left",va='top',fontsize=12)
+
+    # Show 3000A instead of 3x10^3A
+    wvtick = [1000,1216,UV_START,UV_REPRESENT,2000,UV_STOP,3000,4000]
+    plt.gca().set_xticks(wvtick,[str(w) for w in wvtick])
+
+    fxtick = [1,5,10]
+    plt.gca().set_yticks(fxtick,[str(f) for f in fxtick])
+   
+
     if SHOW_SPECTRA_FIGURE:ShadeUVRegion()
 
     if ShowPlot:plt.show()
@@ -240,10 +259,10 @@ def GetBagpipes(offset,ShowPlot=True):
     
     # Dont forget to update invalid_return
     # return wave , flux * FLUX_UNIT
-    return [offset, mass_formed, sfh[0], beta_uv, f_uv*FLUX_UNIT,Av]
+    return [offset, mass_formed, sfh[0], beta_uv, f_uv*FLUX_UNIT]#,Av]
 
 # Single Call
-# GetBagpipes(0)
+GetBagpipes(0)
 
 # Dump Data for all
 if False:
@@ -274,7 +293,7 @@ if False:
 #  Dump Parallel Version
 from multiprocessing import Pool
 import tqdm
-if True:
+if False:
     def GetBagpipesPool(offset):
         # print(offset,"Done")
         return GetBagpipes(offset,False)

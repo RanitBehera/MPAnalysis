@@ -4,6 +4,15 @@ import matplotlib.pyplot as plt
 from galspec.navigation.MPGADGET.Sim import _Sim
 
 
+from matplotlib import rc
+rc('font',**{'family':'serif','serif':['Roboto']})
+rc('text', usetex=True)
+
+
+
+
+
+
 # --- FLAGS
 SNAP_NUM    = 36
 SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results_PMCAM/main_sequence_convergence.png" 
@@ -15,21 +24,24 @@ L50N640     = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_
 L140N700    = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L140N700")
 L140N896    = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L140N896")
 L140N1008   = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L140N1008")
+L50N1008   = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/OUT_L50N1008")
 
 # --- LINKING BOX         
 BOX_LIST    = [ [L50N640    ,"L50N640"   ,"r"   ,1.5e10],
+                [L50N1008   ,"L50N1008"  ,"g"   ,9e9],
                 # [L140N700   ,"L140N700"  ,"y"   ,5e10],
                 # [L140N896   ,"L140N896"  ,"c"   ,5e10],
                 [L140N1008  ,"L140N1008" ,"b"   ,5.5e10] ]
 
 # --- MAIN SEQUENCE PLOT
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(figsize=(10,8))
 iax = ax.inset_axes([0.7,0.1,0.31,0.3])
 
 star_mass_min = 0
 star_mass_max = 0
 
 def PlotMS(BOX:_Sim,mask_lim,**kwargs):
+
     # --- AUTO-FLAGS
     SNAP        = BOX.RSG(SNAP_NUM)
     MASS_UNIT   = 10**10
@@ -41,13 +53,8 @@ def PlotMS(BOX:_Sim,mask_lim,**kwargs):
     SFR         = SNAP.RKSGroups.StarFormationRate()
 
     # --- GET BUDGET
-    GAS,DM,U1,U2,STAR,BH = numpy.transpose(LBT)
-    GAS     *=  MASS_TABLE[0]
-    DM      *=  MASS_TABLE[1]
-    STAR    *=  MASS_TABLE[4]
-    BH      *=  MASS_TABLE[5]
-    MTOTAL  = GAS + DM + STAR + BH
-    RATIO = MTOTAL/MVIR
+    STAR = SNAP.RKSGroups.MassByTypeInRvirWC()[:,4]
+    MVIR  = SNAP.RKSGroups.VirialMass()
 
     # --- MASK AND PLOT
 
@@ -125,19 +132,25 @@ GetObs(M_comp,0.76,-6.0,0.07,0.6,lw=1,label="Calabro et al. (2024)")
 # --- BEUTIFY
 ax.set_xscale('log')
 ax.set_yscale('log')
-ax.set_xlabel("Stellar Mass $(M_{*}/M_{\odot})$")
-ax.set_ylabel("Star Formation Rate $(M_{\odot} yr^{-1})$")
+ax.set_xlabel("Stellar Mass $(M_{*}/M_{\odot})$",fontsize=20)
+ax.set_ylabel("Star Formation Rate $(M_{\odot} $yr$^{-1})$",fontsize=20)
+ax.tick_params(axis='both', which='major', labelsize=16)
+ax.tick_params(axis='both', which='minor', labelsize=12)
 
 # iax.set_xscale('log')
 # iax.set_yscale('log')
-iax.set_xlabel("$\log(M_{*}/M_{\odot})$",fontsize=6,labelpad=0)
-iax.set_ylabel("$\log$ sSFR $(yr^{-1})$",fontsize=6,rotation=-90,labelpad=10)
+iax.set_xlabel("$\log(M_{*}/M_{\odot})$",fontsize=12,labelpad=0)
+iax.set_ylabel("$\log$ sSFR $($yr$^{-1})$",fontsize=12,rotation=-90,labelpad=16)
 iax.tick_params(axis='both', labelsize=6)
 iax.yaxis.set_label_position("right")
 iax.yaxis.tick_right()
+iax.tick_params(axis='both', which='major', labelsize=8)
+iax.tick_params(axis='both', which='minor', labelsize=8)
 
-plt.legend(loc="upper left")
-plt.title(f"MAIN SEQUENCE (z={numpy.round(REDSHIFT,2)})")
+plt.legend(loc="upper left",fontsize=14,frameon=False,markerscale=4)
+plt.annotate(f"$z={numpy.round(REDSHIFT,2)}$",xy=(0.5,1),xytext=(0,-10),xycoords="axes fraction",textcoords="offset pixels",ha="center",va='top',fontsize=20)
+# plt.title(f"MAIN SEQUENCE (z={numpy.round(REDSHIFT,2)})")
+
 
 # --- SAVE
 plt.show()

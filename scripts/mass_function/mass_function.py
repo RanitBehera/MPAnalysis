@@ -1,5 +1,17 @@
+from __future__ import annotations
 import numpy, galspec,os
 import matplotlib.pyplot as plt
+import matplotlib.lines as mlines
+import matplotlib.patches as mpatches
+
+
+from matplotlib import rc
+rc('font',**{'family':'serif','serif':['Roboto']})
+rc('text', usetex=True)
+
+
+
+
 
 from galspec.utility.MassFunction import MassFunction, MassFunctionLiterature,LMF_OPTIONS
 
@@ -38,20 +50,17 @@ if ONLY_PIG:ROCKSTAR*=0
 
 # Skip points structure [[fof-dm,fof-gas,fof-star],[vir-dm,vir-gas,vir-star]]
 CURVE_LIST       = [ 
-        [L50N640, FOF , (STAR),[[1,2,4],[1,1,4]]],
-        [L140N1008, FOF, (STAR),[[0,0,0],[1,0,1]]],
-        [L50N1008, FOF , (STAR),[[1,2,2],[0,0,1]]],
-        # [L140N700, 0*FOF + ROCKSTAR, 0*(DM+GAS+STAR)+BH,[[0,0,0],[0,0,0]]],
-        # [L140N896, 0*FOF + ROCKSTAR, 0*(DM+GAS+STAR)+BH,[[0,0,0],[0,0,0]]],
-        # [L140N1008, 0*FOF + ROCKSTAR, 0*(DM+GAS+STAR)+BH,[[0,0,0],[0,0,0]]],
-        # [L50N640_a100, 0*FOF + ROCKSTAR, GAS+STAR+BH,[[1,2,4],[1,1,2]],"$\\alpha=100$"],
-        # [L50N640_a200, FOF + 0*ROCKSTAR, GAS+STAR+BH,[[0,0,0],[0,0,0]],"$\\alpha=200$"],
-        # [L50N640_a400, FOF + 0*ROCKSTAR, GAS+STAR+BH,[[0,0,0],[0,0,0]],"$\\alpha=400$"]
-        # [L50N1008, FOF + 0*ROCKSTAR, GAS+STAR+BH,[[0,0,0],[0,0,0]],"$\\alpha$"]
+        [L50N1008, ROCKSTAR, (DM+GAS+STAR),[[1,2,2],[0,0,1]]],
+        [L50N640, ROCKSTAR, (DM+GAS+STAR),[[1,2,4],[1,1,4]]],
+        [L140N1008, ROCKSTAR, (DM+GAS+STAR),[[0,0,0],[1,0,1]]],
+        [L140N896, ROCKSTAR, (DM+GAS+STAR),[[2,0,0],[0,0,0]]],
+        [L140N700, ROCKSTAR , (DM+GAS+STAR),[[2,0,0],[0,0,0]]],
     ]
 
-COLORS_FOF  = ['cyan','blue','red']
-COLORS_RKS  = ['lime','green','m']
+
+COLORS_FOF  = ['deeppink','deepskyblue','springgreen','gold','magenta']
+# COLORS_RKS  = ['r','lime','b','m','cyan']
+COLORS_RKS = COLORS_FOF
 # COLORS_FOF  = ['tab:blue','tab:orange','tab:green','g']
 
 SNAP_NUM    = 36
@@ -60,6 +69,7 @@ MASS_HR     = numpy.logspace(7,12,100) # High resolution mass for literature mas
 SAVE_PATH   = "temp/HMF/test.png" 
 INCLUDE_DEVIATION = False
 # INCLUDE_LMF = True          # Deviation axis and its plot also needs to be adapted. Not implemeted for now.
+
 
 # LEGEND_TITLE    = "Friends-of-Friends"
 LEGEND_TITLE    = "ROCKSTAR-Galaxies"
@@ -120,8 +130,8 @@ def PlotLMF(model:LMF_OPTIONS,label:str="",**kwargs):
     ax[0].plot(M,dn_dlogM*HUBBLE,label=model + label,lw=1,**kwargs)
     return M,dn_dlogM*HUBBLE
 
-# M_st,mfhr_st = PlotLMF("Seith-Tormen","",ls="--",c='k')
-# M_ps,mfhr_ps = PlotLMF("Press-Schechter","",ls=":",c='k')
+M_st,mfhr_st = PlotLMF("Seith-Tormen","",ls="--",c='k')
+M_ps,mfhr_ps = PlotLMF("Press-Schechter","",ls=":",c='k')
 # M_ps,mfhr_ps = PlotLMF("Comparat(z=0)","",ls="-",c='k')
 
 # Box mass function
@@ -136,8 +146,7 @@ def PlotBMF(M,dn_dlogM,error,min_mass,right_skip_count,include_deviation,color,l
     
     #Deviation
     ax[0].plot(M,dn_dlogM,'-',label= BOX_TEXT + leg,lw=2,color=color,marker=marker)
-
-    ax[0].fill_between(M,dn_dlogM-error,dn_dlogM+error,color=color,alpha=0.3)
+    ax[0].fill_between(M,dn_dlogM-0.9*error,dn_dlogM+0.9*error,color=color,alpha=0.2,ec=None)
 
     if include_deviation:
         osmf = (dn_dlogM)                           # Observed simulation mass function (linear)
@@ -151,6 +160,7 @@ def PlotBMF(M,dn_dlogM,error,min_mass,right_skip_count,include_deviation,color,l
 
 
 # --- PLOT ROUTINE
+
 
 
 
@@ -187,8 +197,6 @@ for i,PLOT in enumerate(CURVE_LIST):
     RIGHT_SKIP_FOF  = PLOT[3][0]
     RIGHT_SKIP_RKS  = PLOT[3][1]
 
-
-    
 
 
     # --- MASS FUNCTION PLOTS
@@ -233,28 +241,75 @@ for i,PLOT in enumerate(CURVE_LIST):
 
 
 # --- BEUTIFY
+
 ax[0].set_xscale('log')
 ax[0].set_yscale('log')
 
 # ax[0].legend(loc="upper right",ncol=2,title="Friends-of-Friends",fontsize=10,title_fontsize=12,numpoints=2,frameon=False)
 # for manual ordering
 if True:
-    handles, labels = ax[0].get_legend_handles_labels()
-    order = [0,2,1] # coulmn first
+    # handles, labels = ax[0].get_legend_handles_labels()
+    # order = [0,2,1] # coulmn first
     # order = [0,2,1,3] # coulmn first
     # order = [0,2,3,4,1,5,6,7] # coulmn first
     # order =[0,3,6,1,4,7,2,5,8]
-    oh = [handles[idx] for idx in order]
-    ol = [labels[idx] for idx in order]
-    ax[0].legend(oh, ol,loc="upper right",ncol=2,title=LEGEND_TITLE,fontsize=10,title_fontsize=12,numpoints=2,frameon=False)
+    # oh = [handles[idx] for idx in order]
+    # ol = [labels[idx] for idx in order]
+    # ax[0].legend(oh, ol,loc="upper right",ncol=2,title=LEGEND_TITLE,fontsize=10,title_fontsize=12,numpoints=2,frameon=False)
+    pass
 
-ax[0].set_ylabel("$dn/d\log(M/M_{\odot})$",fontsize=16)
+# Manual Legend
+if True:
+    dm_leg = False
+    gas_leg = False
+    star_leg = False
+    
+    dm_line = mlines.Line2D([], [], color='k', marker='',markersize=8, label='Dark Matter')
+    star_line = mlines.Line2D([], [], color='k', marker='*',markersize=8, label='Stellar')
+    gas_line = mlines.Line2D([], [], color='k', marker='.',markersize=8, label='Gas')
+    
+    htype=[]
+    hbox=[]
+    for i,PLOT in enumerate(CURVE_LIST):
+        BOX         = PLOT[0]
+        PLT_HALO    = Get_Options_List(PLOT[1])
+        PLT_TYPE    = Get_Options_List(PLOT[2])
+        
+        box_patch = mpatches.Patch(color=COLORS_FOF[i],label=str(BOX).split("_")[-1])
+        hbox.append(box_patch)
+
+
+        if DM in PLT_TYPE and not dm_leg: dm_leg = True
+        if GAS in PLT_TYPE and not gas_leg: gas_leg = True
+        if STAR in PLT_TYPE and not star_leg: star_leg = True
+
+    if dm_leg:htype.append(dm_line)
+    if gas_leg:htype.append(gas_line)
+    if star_leg:htype.append(star_line)
+    
+    leg1=ax[0].legend(handles=htype,fontsize=12, loc='lower left',ncol=1,frameon=False)
+    leg2=ax[0].legend(handles=hbox,fontsize=12, loc='upper right',ncol=1,frameon=True,title=LEGEND_TITLE)
+
+    ax[0].add_artist(leg1)
+    # ax[0].add_artist(leg2)
+
+    
+
+
+
+
+ax[0].set_ylabel("$dn/d\log(M/M_{\odot})$",fontsize=20)
 ax[0].grid(alpha=0.3)
 ax[0].set_xlim(left=5*10**5,right=5*10**12)
-ax[0].set_xlim(left=5*10**5,right=5*10**10)
+# ax[0].set_xlim(left=5*10**5,right=5*10**10)
+ax[0].tick_params(axis='both', which='major', labelsize=16)
+ax[0].tick_params(axis='both', which='minor', labelsize=12)
+
+ax[0].annotate(f"$z={numpy.round(REDSHIFT,2)}$",xy=(0,1),xytext=(10,-10),xycoords="axes fraction",textcoords="offset pixels",ha="left",va='top',fontsize=20)
+
 
 # ax[-1] = ax[0] when deviation not included else ax[1]
-ax[-1].set_xlabel("$M/M_{\odot}$",fontsize=16)
+ax[-1].set_xlabel("$M/M_{\odot}$",fontsize=20)
 
 if INCLUDE_DEVIATION:
     # ax[1].yaxis.set_label_position("right")
@@ -271,10 +326,12 @@ if INCLUDE_DEVIATION:
     ticks= [0.8,1,1.25]
     ax[1].set_yticks(ticks,minor=False)
     ax[1].set_yticklabels(["$\\times$ " + str(t) for t in ticks])
+    ax[1].tick_params(axis='both', which='major', labelsize=16)
+    ax[1].tick_params(axis='both', which='minor', labelsize=12)
 
 
 # ax[0].set_title(f"HALO MASS FUNCTION (z={numpy.round(REDSHIFT,2)})",fontsize=18,pad=15)
-ax[0].set_title(f"MASS FUNCTION (z={numpy.round(REDSHIFT,2)})",fontsize=18,pad=15)
+# ax[0].set_title(f"MASS FUNCTION (z={numpy.round(REDSHIFT,2)})",fontsize=18,pad=15)
 plt.subplots_adjust(hspace=0)
 
 
@@ -284,7 +341,7 @@ x = [7.012820317195012, 7.262820317195012, 7.512820317195012, 7.762820317195012,
 y = [-1.968912396380584, -2.1968914768212704, -2.445596100707992, -2.7564768805663933, -3.0777206693310246, -3.4196895271752665, -3.7202072981274386, -4.051813621431875, -4.352331866750472, -4.715025793674323, -5.056994651518566, -5.326424818851322, -5.678756211235369, -6.07253916487791, -6.7357508627539335, -7.233160110527377]
 X=numpy.power(10,x)
 Y=numpy.power(10,y)
-plt.plot(X,Y*HUBBLE,lw=2,color='y',label="Astrid")
+ax[0].plot(X,Y*HUBBLE,lw=2,color='k',label="Astrid",ls="-.")
 
 
 # --- Temporary from (arXiv:2403.08872v1) 
@@ -295,18 +352,18 @@ plt.plot(X,Y*HUBBLE,lw=2,color='y',label="Astrid")
 # x = [8.746347941567064, 9.250996015936256, 9.749003984063744, 10.253652058432936, 10.758300132802125, 11.249667994687915, 11.747675962815405]
 # y = [-3.001618122977346, -3.692556634304207, -4.24757281553398, -4.644012944983819, -5.255663430420712, -5.640776699029126, -5.663430420711974]
 # H+24
-x = [7.770252324037185, 8.938911022576361, 9.98804780876494, 10.539176626826029, 10.864541832669323, 11.136786188579016, 11.349269588313412]
-y = [-2.457928802588996, -3.7605177993527508, -4.983818770226537, -5.7200647249190935, -6.286407766990291, -6.864077669902913, -7.43042071197411]
+# x = [7.770252324037185, 8.938911022576361, 9.98804780876494, 10.539176626826029, 10.864541832669323, 11.136786188579016, 11.349269588313412]
+# y = [-2.457928802588996, -3.7605177993527508, -4.983818770226537, -5.7200647249190935, -6.286407766990291, -6.864077669902913, -7.43042071197411]
 #So+16
-x = [7.252324037184595, 8.925630810092962, 10.094289508632137, 10.366533864541832, 10.632138114209827, 10.811420982735724, 11.003984063745019]
-y = [-1.925566343042071, -4.043689320388349, -5.618122977346278, -6.0711974110032365, -6.56957928802589, -6.977346278317152, -7.4870550161812295]
+# x = [7.252324037184595, 8.925630810092962, 10.094289508632137, 10.366533864541832, 10.632138114209827, 10.811420982735724, 11.003984063745019]
+# y = [-1.925566343042071, -4.043689320388349, -5.618122977346278, -6.0711974110032365, -6.56957928802589, -6.977346278317152, -7.4870550161812295]
 
-X=numpy.power(10,x)
-Y=numpy.power(10,y)
-plt.plot(X,Y*HUBBLE,lw=2,color='m',label="So+16")
+# X=numpy.power(10,x)
+# Y=numpy.power(10,y)
+# plt.plot(X,Y*HUBBLE,lw=2,color='m',label="So+16")
 
-plt.legend()
+# plt.legend()
 
 # --- SAVE
-plt.savefig(SAVE_PATH,dpi=300)
-# plt.show()
+# plt.savefig(SAVE_PATH,dpi=300)
+plt.show()
