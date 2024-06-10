@@ -21,6 +21,9 @@ make install
 - Find "`gssapi/gssapi.h`" inside "`krb5-1.19.2/src/include/gssapi`".
 - Find libraries inside "`krb5-1.19.2/src/lib`".
 
+If you get `yacc` error, intall `yacc` by `sudo apt-get install bison flex` if you have `sudo` permission. Otherwise: 
+
+
 
 ### 2. tirpc
 Download it from the link https://sourceforge.net/projects/libtirpc/ with `wget`. Extract using `tar`. Navigate inside and run `configure` to produce Makefile. Then run `make` on the generated Makefile to build the library.
