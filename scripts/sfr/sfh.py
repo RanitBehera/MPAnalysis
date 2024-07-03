@@ -13,7 +13,8 @@ SAVED_PATH = "/mnt/home/student/cranit/Work/RSGBank/TBSFR_Bank"
 # Get table
 lbage_in_Myr=[]
 sfr = []
-for offset in range(100):
+N_sample = 100
+for offset in range(N_sample):
     clbage,csfr = numpy.loadtxt(os.path.join(SAVED_PATH,"off_"+str(offset)+".txt")).T
     clbage /= 1e6
 
@@ -26,9 +27,9 @@ sfr = numpy.log10(sfr+1e-10)
 
 # # -----
 # # Gaussian Check
-plt.hist(sfr[:,1])
-plt.show()
-exit()
+# plt.hist(sfr[:,-1],bins=10)
+# plt.show()
+# exit()
 # # -----
 
 # Get stats
@@ -37,11 +38,18 @@ sfh_var     = []
 sfh_max     = []
 sfh_min     = []
 
+quant_values = [0.5-0.997/2,0.5-0.95/2,0.5-0.68/2,0.5,0.5+0.68/2,0.5+0.95/2,0.5+0.997/2]
+sfh_quantile = numpy.empty((7,21))
+# print(numpy.shape(sfr))
+# exit()
+
 for i in range(numpy.shape(sfr)[1]):
     sfh_mean.append(numpy.mean(sfr[:,i]))
     sfh_var.append(numpy.var(sfr[:,i]))
     sfh_max.append(numpy.max(sfr[:,i]))
     sfh_min.append(numpy.min(sfr[:,i]))
+
+    sfh_quantile [:,i] = numpy.quantile(sfr[:,i],quant_values)
 
 sfh_mean = numpy.array(sfh_mean)
 sfh_var = numpy.array(sfh_var)
@@ -56,14 +64,20 @@ fig,ax=plt.subplots(1,1,figsize=(8,6))
     # plt.plot(lbage_in_Myr,sfr[i,:],color='k',alpha=0.05)
 
 
-ax.plot(lbage_in_Myr,sfh_mean,'.-',color='b',alpha=1)
+ax.plot(lbage_in_Myr,sfh_mean,'-',color='b',alpha=1)
 
 ax.plot(lbage_in_Myr,sfh_max,'--',color='k',alpha=0.5,lw=1)
 ax.plot(lbage_in_Myr,sfh_min,'--',color='k',alpha=0.5,lw=1)
-ax.fill_between(lbage_in_Myr,(sfh_max),(sfh_min),color='k',ec=None,alpha=0.05)
+# ax.fill_between(lbage_in_Myr,(sfh_max),(sfh_min),color='k',ec=None,alpha=0.05)
 
-for s in [1,2,3]:
-    ax.fill_between(lbage_in_Myr,(sfh_mean+s*sfh_var),(sfh_mean-s*sfh_var),color='b',ec=None,alpha=0.20-s*0.05)
+# for s in [1,2,3]:
+    # ax.fill_between(lbage_in_Myr,(sfh_mean+s*sfh_var),(sfh_mean-s*sfh_var),color='b',ec=None,alpha=0.20-s*0.05)
+
+# Quantile
+Q_Alpha_map = {0:0.1,1:0.2,2:0.3,3:0.3,4:0.2,5:0.1}
+ax.plot(lbage_in_Myr,sfh_quantile[3],'.-',color="r")
+for i in range(len(sfh_quantile)-1):
+    ax.fill_between(lbage_in_Myr,sfh_quantile[i],sfh_quantile[i+1],color='r',alpha=Q_Alpha_map[i],ec=None)
 
 
 ax.set_xlabel("Lookback Age (Myr)",fontsize=20)
@@ -105,7 +119,7 @@ ax2.tick_params(axis='both', which='minor', labelsize=8)
 
 plt.grid(alpha=0.3)
 plt.annotate("L50N640",(1,0),(-10,10),'axes fraction','offset pixels',ha="right",va="bottom",fontsize=16)
-plt.annotate("$N_{\\textnormal{sample}}=100$",(0,1),(10,-10),'axes fraction','offset pixels',ha="left",va="top",fontsize=12)
+plt.annotate("$N_{\\textnormal{sample}}={"+str(N_sample)+"}$",(0,1),(10,-10),'axes fraction','offset pixels',ha="left",va="top",fontsize=12)
 
 # --- SAVE
 plt.show()

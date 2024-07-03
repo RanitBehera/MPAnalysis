@@ -7,12 +7,12 @@ from galspec.visualization.Matcube import PlotCube
 
 
 # --- SIMS
-PARTBOX     = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/L10N64/output/")
+PARTBOX     = galspec.NavigationRoot("/mnt/home/student/cranit/Work/RSGBank/L50N640/")
 
 
 # --- FLAGS : Set flags
 SAVE_PATH   = "/mnt/home/student/cranit/Work/RSGBank/Results_PMCAM/web_z8.png" 
-SNAP_NUM    = 17
+SNAP_NUM    = 36
 
 
 # --- AUTO-FLAGS
@@ -22,7 +22,7 @@ BOX_SIZE    = SNAP.Attribute.BoxSize()/1000
 
 
 # --- FIELDS
-PART_POS    = SNAP.DarkMatter.Position()
+PART_POS    = PARTBOX.PIG(36).FOFGroups.MassCenterPosition()
 
 
 # PLOT
@@ -33,6 +33,7 @@ TRANSLATE    = numpy.zeros(3)
 ZOOM_SCALE   = 1
 
 # SCALE
+PlotCube(ax,PART_POS/1000,BOX_SIZE,10,'k',0.03)
 PlotCube(ax,PART_POS/1000,BOX_SIZE,10,'k',0.03)
 
 # --- BEAUTIFY

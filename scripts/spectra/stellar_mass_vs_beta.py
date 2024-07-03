@@ -3,6 +3,13 @@ import matplotlib.pyplot as plt
 
 import seaborn as sns
 
+
+from matplotlib import rc
+rc('font',**{'family':'serif','serif':['Roboto']})
+rc('text', usetex=True)
+
+
+
 # offset,stellar_mass,sfr,beta,Luv = numpy.loadtxt("/mnt/home/student/cranit/Repo/MPAnalysis/temp/spectra/bagdata.txt").T
 offset,stellar_mass,sfr,beta,Luv,Av = numpy.loadtxt("/mnt/home/student/cranit/Repo/MPAnalysis/temp/spectra/bagdata_Av_M_CZ.txt").T
 

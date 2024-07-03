@@ -2,7 +2,6 @@ import numpy
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-
 # --- PARTICLES
 numpy.random.seed(10)
 N=100
