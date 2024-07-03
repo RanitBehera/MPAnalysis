@@ -20,6 +20,10 @@ make install
 ```
 - Find "`gssapi/gssapi.h`" inside "`krb5-1.19.2/src/include/gssapi`".
 - Find libraries inside "`krb5-1.19.2/src/lib`".
+- Finf config tool`krb5-config` in "`krb5-1.19.2/src/build-tools`"
+
+If you get `yacc` error, intall `yacc` by `sudo apt-get install bison flex` if you have `sudo` permission. Otherwise: 
+
 
 
 ### 2. tirpc
